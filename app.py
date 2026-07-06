@@ -15,7 +15,7 @@ app.config.from_object(Config)
 # 2. INIT EXTENSIONS
 db.init_app(app)
 jwt = JWTManager(app)
-
+#heloooooo
 # 3. REGISTER BLUEPRINTS (AFTER app exists)
 app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(routes)

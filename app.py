@@ -10,6 +10,7 @@ from routes import routes
 # 1. CREATE APP FIRST
 app = Flask(__name__)
 app.config.from_object(Config)
+#hello 
 
 # 2. INIT EXTENSIONS
 db.init_app(app)

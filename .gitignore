@@ -1,18 +1,11 @@
-# Python cache files
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+# Ignore the massive dependencies folder
+node_modules/
+Backend/node_modules/
 
-# Database (SQLite file)
-database.db
-
-# Environment / virtual environment
-venv/
+# Ignore local environment secrets (passwords, database keys)
 .env
+Backend/.env
 
-# VS Code settings (optional)
-.vscode/
-
-# Logs
-*.log
+# Ignore OS specific files
+.DS_Store
+Thumbs.dbg

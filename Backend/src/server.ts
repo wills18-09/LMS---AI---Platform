@@ -1,7 +1,7 @@
 import 'dotenv/config'; // 🔥 FIX: This MUST be the absolute first line. It loads secrets instantly!
 import express, { Request, Response } from 'express';
 import pool from './db';
-import authRoutes from './routes/authRoutes';
+import authRoutes from './modules/auth/auth.routes';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -11,7 +11,7 @@ console.log("🔍 [DEBUG] Database URL from env is:", process.env.DATABASE_URL);
 app.use(express.json());
 
 // Attach our registration links under the prefix "/api/auth"
-app.use('/api/auth', authRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('LMS AI Platform Backend Engine is running smoothly.');

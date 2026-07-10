@@ -1,21 +1,20 @@
 version: '3.8'
 
 services:
-  # 1. PostgreSQL Database Container with pgvector
   postgres:
-    image: ankane/pgvector:latest # Pre-packaged Postgres image containing the vector extension
+    image: ankane/pgvector:latest
     container_name: lms_ai_postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: your_secure_password_here
+      POSTGRES_PASSWORD: mypostgres
       POSTGRES_DB: lms_ai_db
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ../Backend/src/db/migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  # 2. Redis Container for caching and background queues
   redis:
     image: redis:7-alpine
     container_name: lms_ai_redis

@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 // Tell TypeScript that our Request object can hold our decoded user data
 export interface AuthenticatedRequest extends Request {
   user?: {
-    id: number;
+    id: string;
     role: string;
   };
 }
@@ -23,7 +23,13 @@ export const authenticateToken = (req: AuthenticatedRequest, res: Response, next
 
   try {
     // Verify token hasn't been tampered with
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_key') as { id: number; role: string };
+    const decoded = jwt.verify(
+    token,
+    process.env.JWT_SECRET || 'fallback_secret_key'
+) as {
+    id: string;
+    role: string;
+};
     
     // Attach the user's details to the request object so future routes know who this is
     req.user = decoded;

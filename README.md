@@ -35,4 +35,4 @@ Currently working on:
 
 **Mantasha Shoaib**
 
-Computer Science & Engineering Student
+Backend Development Intern

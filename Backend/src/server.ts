@@ -6,6 +6,10 @@ import authRoutes from './modules/auth/auth.routes';
 import courseRoutes from './modules/courses/course.routes';
 import moduleRoutes from './modules/modules/module.routes';
 import lectureRoutes from './modules/lectures/lecture.routes';
+import enrollmentRoutes from "./modules/enrollments/enrollment.routes";
+
+
+
 
 const app = express();
 
@@ -22,6 +26,8 @@ app.use('/api/v1/courses', courseRoutes);
 app.use('/api/v1/courses', moduleRoutes);
 
 app.use('/api/v1/modules', lectureRoutes);
+
+app.use("/api/v1/enrollments",enrollmentRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {

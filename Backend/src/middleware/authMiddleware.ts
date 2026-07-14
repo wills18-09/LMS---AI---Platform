@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 // Tell TypeScript that our Request object can hold our decoded user data
-export interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest<P = {}> extends Request<P> {
   user?: {
     id: string;
     role: string;

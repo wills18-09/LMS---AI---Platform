@@ -1,19 +1,10 @@
-import { Response } from "express";
-
-import {
-    AuthenticatedRequest
-} from "../../middleware/authMiddleware";
-
-import {
-    EnrollmentService
-} from "./enrollment.service";
+import { Request, Response } from "express";
+import { EnrollmentService } from "./enrollment.service";
 
 
-
-// STUDENT ENROLLS IN COURSE
-
+// POST /courses/:id/enroll
 export const enrollCourse = async (
-    req: AuthenticatedRequest<{ id: string }>,
+    req: Request,
     res: Response
 ) => {
 
@@ -21,7 +12,8 @@ export const enrollCourse = async (
 
         const userId = req.user!.id;
 
-       const courseId = req.params.id;
+        const courseId = req.params.id as string;
+
 
         if (!courseId) {
             res.status(400).json({
@@ -31,29 +23,22 @@ export const enrollCourse = async (
         }
 
 
-        const enrollment =
-            await EnrollmentService.enroll(
-                userId,
-                courseId
-            );
+        const enrollment = await EnrollmentService.enroll(
+            userId,
+            courseId
+        );
 
 
         res.status(201).json({
-
             message: "Course enrolled successfully",
-
             enrollment
-
         });
 
 
     } catch (error: any) {
 
-
         res.status(400).json({
-
             message: error.message
-
         });
 
     }
@@ -62,25 +47,20 @@ export const enrollCourse = async (
 
 
 
-
-
-// GET ALL COURSES ENROLLED BY STUDENT
-
-export const getMyCourses = async (
-    req: AuthenticatedRequest,
+// GET /enrollments/me
+export const getMyEnrollments = async (
+    req: Request,
     res: Response
 ) => {
 
     try {
 
-
         const userId = req.user!.id;
 
 
-        const courses =
-            await EnrollmentService.getMyCourses(
-                userId
-            );
+        const courses = await EnrollmentService.getMyCourses(
+            userId
+        );
 
 
         res.status(200).json(courses);
@@ -88,11 +68,8 @@ export const getMyCourses = async (
 
     } catch (error: any) {
 
-
         res.status(500).json({
-
             message: error.message
-
         });
 
     }
@@ -101,18 +78,15 @@ export const getMyCourses = async (
 
 
 
-
-
-// INSTRUCTOR VIEW STUDENTS OF A COURSE
-
+// GET students enrolled in course
 export const getStudents = async (
-    req: AuthenticatedRequest<{ courseId: string }>,
+    req: Request,
     res: Response
 ) => {
+
     try {
 
-
-        const courseId = req.params.courseId;
+        const courseId = req.params.courseId as string;
 
 
         if (!courseId) {
@@ -123,11 +97,9 @@ export const getStudents = async (
         }
 
 
-
-        const students =
-            await EnrollmentService.getStudents(
-                courseId
-            );
+        const students = await EnrollmentService.getStudents(
+            courseId
+        );
 
 
         res.status(200).json(students);
@@ -135,11 +107,8 @@ export const getStudents = async (
 
     } catch (error: any) {
 
-
         res.status(500).json({
-
             message: error.message
-
         });
 
     }

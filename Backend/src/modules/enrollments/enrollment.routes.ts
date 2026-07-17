@@ -1,28 +1,33 @@
-import {Router} from "express";
+import { Router } from "express";
 
 import {
-enrollCourse
-}
-from "./enrollment.controller";
+    enrollCourse,
+    getMyEnrollments
+} from "./enrollment.controller";
 
 import {
-authenticateToken,
-authorizeRoles
-}
-from "../../middleware/authMiddleware";
+    authenticateToken,
+    authorizeRoles
+} from "../../middleware/authMiddleware";
 
 
-const router=Router();
-
+const router = Router();
 
 
 router.post(
-"/:courseId",
-authenticateToken,
-authorizeRoles("student"),
-enrollCourse
+    "/:id/enroll",
+    authenticateToken,
+    authorizeRoles("student"),
+    enrollCourse
 );
 
+
+router.get(
+    "/me",
+    authenticateToken,
+    authorizeRoles("student"),
+    getMyEnrollments
+);
 
 
 export default router;

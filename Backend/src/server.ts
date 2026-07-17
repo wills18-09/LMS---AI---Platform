@@ -27,7 +27,9 @@ app.use('/api/v1/courses', moduleRoutes);
 
 app.use('/api/v1/modules', lectureRoutes);
 
-app.use("/api/v1/enrollments",enrollmentRoutes);
+app.use("/api/v1/courses", enrollmentRoutes);
+
+app.use("/api/v1/enrollments", enrollmentRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {

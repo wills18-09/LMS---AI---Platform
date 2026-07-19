@@ -3,50 +3,81 @@ import jwt from "jsonwebtoken";
 import { JwtPayload, UserRole } from "../types/auth";
 
 
-// GUARD 1: Verify the user is logged in (Has a valid JWT)
+// GUARD 1: Verify JWT
 export const authenticateToken = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
 
-  const authHeader = req.headers["authorization"];
+  const authHeader = req.headers.authorization;
 
-  // Expected format: Bearer token
-  const token = authHeader && authHeader.split(" ")[1];
+  console.log("🔥 AUTH HEADER:", authHeader);
+
+
+  const token = authHeader?.split(" ")[1];
+
 
   if (!token) {
-    res.status(401).json({
+
+    return res.status(401).json({
       message: "Access Denied: No Token Provided!"
     });
-    return;
+
   }
+
 
   try {
 
+    console.log(
+      "🔥 JWT SECRET EXISTS:",
+      !!process.env.JWT_SECRET
+    );
+
+
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || "fallback_secret_key"
+      process.env.JWT_SECRET!
     ) as JwtPayload;
+
+
+    console.log(
+      "🔥 DECODED USER:",
+      decoded
+    );
 
 
     req.user = decoded;
 
+
     next();
+
 
   } catch (error) {
 
-    res.status(403).json({
+
+    console.error(
+      "🔥 JWT VERIFY ERROR:",
+      error
+    );
+
+
+    return res.status(403).json({
       message: "Access Denied: Invalid or Expired Token!"
     });
-    return;
 
   }
+
 };
 
 
-// GUARD 2: Role-Based Access Control
-export const authorizeRoles = (...allowedRoles: UserRole[]) => {
+
+// GUARD 2: Role Based Access Control
+
+export const authorizeRoles = (
+  ...allowedRoles: UserRole[]
+) => {
+
 
   return (
     req: Request,
@@ -55,25 +86,46 @@ export const authorizeRoles = (...allowedRoles: UserRole[]) => {
   ) => {
 
 
+    console.log(
+      "🔥 USER FROM TOKEN:",
+      req.user
+    );
+
+
+    console.log(
+      "🔥 REQUIRED ROLES:",
+      allowedRoles
+    );
+
+
     if (!req.user) {
-      res.status(401).json({
+
+      return res.status(401).json({
         message: "Unauthorized: No user session found"
       });
-      return;
+
     }
 
 
-    if (!allowedRoles.includes(req.user.role)) {
 
-      res.status(403).json({
-        message: `Forbidden: You do not have permission (${req.user.role})`
+    if (
+      !allowedRoles.includes(
+        req.user.role
+      )
+    ) {
+
+      return res.status(403).json({
+
+        message:
+          `Forbidden: Role ${req.user.role} not allowed`
+
       });
 
-      return;
     }
 
 
     next();
 
   };
+
 };

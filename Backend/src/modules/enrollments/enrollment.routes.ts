@@ -12,7 +12,7 @@ import {
 
 
 const router = Router();
-
+console.log("Enrollment routes loaded");
 
 router.post(
     "/:id/enroll",
@@ -24,6 +24,10 @@ router.post(
 
 router.get(
     "/me",
+    (req, res, next) => {
+        console.log("🔥 /me route hit");
+        next();
+    },
     authenticateToken,
     authorizeRoles("student"),
     getMyEnrollments

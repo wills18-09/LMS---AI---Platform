@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
+import cors from "cors";
 import pool from './db';
 
 import authRoutes from './modules/auth/auth.routes';
@@ -14,6 +15,12 @@ import bookmarksRoutes from "./modules/bookmarks/bookmarks.routes";
 
 
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 const PORT = process.env.PORT || 5000;
 

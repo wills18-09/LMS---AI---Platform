@@ -30,19 +30,47 @@ async findUserCourses(userId:string){
 const result = await pool.query(
 `
 SELECT
-c.id,
-c.title,
-c.description,
-c.thumbnail_url,
-e.enrolled_at,
-e.progress_percent
+    c.id,
+    c.title,
+    c.description,
+    c.thumbnail_url,
+    e.enrolled_at,
+
+    COALESCE(
+        ROUND(
+            (
+                COUNT(lp.id) FILTER (WHERE lp.completed = true)::decimal
+                /
+                NULLIF(COUNT(l.id),0)
+            ) * 100,
+            2
+        ),
+        0
+    ) AS progress_percent
 
 FROM enrollments e
 
 JOIN courses c
-ON e.course_id=c.id
+ON e.course_id = c.id
 
-WHERE e.user_id=$1
+JOIN modules m
+ON m.course_id = c.id
+
+JOIN lectures l
+ON l.module_id = m.id
+
+LEFT JOIN lecture_progress lp
+ON lp.lecture_id = l.id
+AND lp.enrollment_id = e.id
+
+WHERE e.user_id = $1
+
+GROUP BY
+    c.id,
+    c.title,
+    c.description,
+    c.thumbnail_url,
+    e.enrolled_at
 
 `,
 [userId]
@@ -52,7 +80,6 @@ WHERE e.user_id=$1
 return result.rows;
 
 },
-
 
 
 async findStudents(courseId:string){

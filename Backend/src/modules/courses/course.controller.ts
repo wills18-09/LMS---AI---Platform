@@ -118,7 +118,7 @@ export const getCourseById = async (
   try {
     const { id } = req.params;
 
-    const result = await pool.query(
+    const courseResult = await pool.query(
       `
       SELECT 
         c.*,
@@ -131,22 +131,72 @@ export const getCourseById = async (
       [id]
     );
 
-    if (result.rows.length === 0) {
+
+    if (courseResult.rows.length === 0) {
       return res.status(404).json({
         message: "Course not found"
       });
     }
 
+
+    const modulesResult = await pool.query(
+  `
+  SELECT
+    m.id,
+    m.title,
+
+    COALESCE(
+      json_agg(
+        json_build_object(
+          'id', l.id,
+          'title', l.title,
+          'video_url', l.video_url,
+          'transcript', l.transcript,
+          'duration_seconds', l.duration_seconds,
+          'resource_urls', l.resource_urls
+        )
+        ORDER BY l.order_index
+      ) FILTER (WHERE l.id IS NOT NULL),
+      '[]'
+    ) AS lectures
+
+  FROM modules m
+
+  LEFT JOIN lectures l
+    ON l.module_id = m.id
+
+  WHERE m.course_id = $1
+
+  GROUP BY m.id
+
+  ORDER BY m.order_index ASC
+  `,
+  [id]
+);
+
+
+    const course = {
+      ...courseResult.rows[0],
+      modules: modulesResult.rows
+    };
+
+
     return res.status(200).json({
-      course: result.rows[0]
+      course
     });
 
+
   } catch(error) {
-    console.error(error);
+
+    console.error(
+      "GET COURSE ERROR:",
+      error
+    );
 
     return res.status(500).json({
       message: "Server error while fetching course"
     });
+
   }
 };
 

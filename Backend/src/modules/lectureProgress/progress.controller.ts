@@ -12,27 +12,27 @@ export const updateLectureProgress = async (
 
     const lectureId = req.params.id as string;
 
-    if (!lectureId) {
-      res.status(400).json({
-        message: "Lecture ID is required"
-      });
-      return;
-    }
+
+
 
     const {
       watched_seconds,
       completed
     } = req.body;
 
-    if (
-      watched_seconds === undefined ||
-      completed === undefined
-    ) {
-      res.status(400).json({
-        message: "watched_seconds and completed are required"
+
+
+    
+
+    if (!lectureId) {
+
+      return res.status(400).json({
+        message:"Lecture ID required"
       });
-      return;
+
     }
+
+
 
     const progress =
       await ProgressService.updateProgress(
@@ -42,15 +42,26 @@ export const updateLectureProgress = async (
         completed
       );
 
-    res.status(200).json({
-      message: "Lecture progress updated successfully",
+
+
+    
+
+    return res.status(200).json({
+
+      message:
+        "Lecture progress updated successfully",
+
       progress
+
     });
 
-  } catch (error: any) {
 
-    res.status(400).json({
-      message: error.message
+
+  } catch(error:any){
+
+
+    return res.status(400).json({
+      message:error.message
     });
 
   }

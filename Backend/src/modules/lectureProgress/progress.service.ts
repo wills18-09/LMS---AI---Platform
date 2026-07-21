@@ -16,6 +16,19 @@ export const ProgressService = {
       completed
     );
 
+  },
+
+
+  async getProgress(
+    userId: string,
+    lectureId: string
+  ) {
+
+    return await ProgressModel.getProgress(
+      userId,
+      lectureId
+    );
+
   }
 
 };

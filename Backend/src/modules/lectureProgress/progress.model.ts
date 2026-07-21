@@ -9,7 +9,6 @@ export const ProgressModel = {
     completed: boolean
   ) {
 
-    // Find the student's enrollment for this lecture's course
     const enrollmentResult = await pool.query(
       `
       SELECT e.id AS enrollment_id
@@ -33,7 +32,7 @@ export const ProgressModel = {
 
     const enrollmentId = enrollmentResult.rows[0].enrollment_id;
 
-    // Check if progress already exists
+
     const existing = await pool.query(
       `
       SELECT id
@@ -45,7 +44,7 @@ export const ProgressModel = {
       [enrollmentId, lectureId]
     );
 
-    // Update existing progress
+
     if (existing.rows.length > 0) {
 
       const result = await pool.query(
@@ -69,9 +68,11 @@ export const ProgressModel = {
       );
 
       return result.rows[0];
+
     }
 
-    // Insert new progress
+
+
     const result = await pool.query(
       `
       INSERT INTO lecture_progress
@@ -100,7 +101,57 @@ export const ProgressModel = {
       ]
     );
 
+
     return result.rows[0];
+
+  },
+
+
+
+  async getProgress(
+    userId: string,
+    lectureId: string
+  ) {
+
+
+    const result = await pool.query(
+      `
+      SELECT
+        lp.lecture_id,
+        lp.watched_seconds,
+        lp.completed,
+        lp.last_watched_at
+      FROM lecture_progress lp
+
+      JOIN enrollments e
+        ON lp.enrollment_id = e.id
+
+      WHERE
+        e.user_id = $1
+        AND lp.lecture_id = $2
+      `,
+      [
+        userId,
+        lectureId
+      ]
+    );
+
+
+
+    if(result.rows.length === 0){
+
+      return {
+        lecture_id: lectureId,
+        watched_seconds: 0,
+        completed: false,
+        last_watched_at: null
+      };
+
+    }
+
+
+    return result.rows[0];
+
   }
 
 };

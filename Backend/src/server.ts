@@ -1,3 +1,4 @@
+import path from "path";
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import cors from "cors";
@@ -28,6 +29,11 @@ console.log("🔍 [DEBUG] Database URL from env is:", process.env.DATABASE_URL);
 
 app.use(express.json());
 
+app.use(
+  "/videos",
+  express.static(path.join(__dirname, "../videos"))
+);
+
 app.use('/api/v1/auth', authRoutes);
 
 app.use('/api/v1/courses', courseRoutes);
@@ -35,6 +41,8 @@ app.use('/api/v1/courses', courseRoutes);
 app.use('/api/v1/courses', moduleRoutes);
 
 app.use('/api/v1/modules', lectureRoutes);
+
+app.use('/api/v1/lectures', lectureRoutes);
 
 app.use("/api/v1/courses", enrollmentRoutes);
 

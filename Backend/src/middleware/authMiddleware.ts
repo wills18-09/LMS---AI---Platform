@@ -3,16 +3,23 @@ import jwt from "jsonwebtoken";
 import { JwtPayload, UserRole } from "../types/auth";
 
 
+// Custom Express Request with authenticated user
+export interface AuthenticatedRequest extends Request {
+  user?: JwtPayload;
+}
+
+
+
 // GUARD 1: Verify JWT
 export const authenticateToken = (
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ) => {
 
   const authHeader = req.headers.authorization;
 
-  console.log("🔥 AUTH HEADER:", authHeader);
+
 
 
   const token = authHeader?.split(" ")[1];
@@ -29,11 +36,7 @@ export const authenticateToken = (
 
   try {
 
-    console.log(
-      "🔥 JWT SECRET EXISTS:",
-      !!process.env.JWT_SECRET
-    );
-
+    
 
     const decoded = jwt.verify(
       token,
@@ -41,10 +44,7 @@ export const authenticateToken = (
     ) as JwtPayload;
 
 
-    console.log(
-      "🔥 DECODED USER:",
-      decoded
-    );
+    
 
 
     req.user = decoded;
@@ -56,10 +56,7 @@ export const authenticateToken = (
   } catch (error) {
 
 
-    console.error(
-      "🔥 JWT VERIFY ERROR:",
-      error
-    );
+    
 
 
     return res.status(403).json({
@@ -72,6 +69,7 @@ export const authenticateToken = (
 
 
 
+
 // GUARD 2: Role Based Access Control
 
 export const authorizeRoles = (
@@ -80,22 +78,13 @@ export const authorizeRoles = (
 
 
   return (
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response,
     next: NextFunction
   ) => {
 
 
-    console.log(
-      "🔥 USER FROM TOKEN:",
-      req.user
-    );
-
-
-    console.log(
-      "🔥 REQUIRED ROLES:",
-      allowedRoles
-    );
+    
 
 
     if (!req.user) {

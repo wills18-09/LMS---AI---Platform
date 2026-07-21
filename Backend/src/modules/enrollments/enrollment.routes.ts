@@ -12,7 +12,7 @@ import {
 
 
 const router = Router();
-console.log("Enrollment routes loaded");
+
 
 router.post(
     "/:id/enroll",

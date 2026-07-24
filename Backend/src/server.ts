@@ -12,7 +12,7 @@ import enrollmentRoutes from "./modules/enrollments/enrollment.routes";
 import progressRoutes from "./modules/lectureProgress/progress.routes";
 import notesRoutes from "./modules/notes/notes.routes";
 import bookmarksRoutes from "./modules/bookmarks/bookmarks.routes";
-
+import assignmentRoutes from "./modules/assignments/assignments.routes";
 
 
 const app = express();
@@ -53,6 +53,8 @@ app.use("/api/v1/lectures", progressRoutes);
 app.use("/api/v1", notesRoutes);
 
 app.use("/api/v1", bookmarksRoutes);
+
+app.use("/api/v1/assignments", assignmentRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {

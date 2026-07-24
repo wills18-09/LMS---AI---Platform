@@ -14,6 +14,9 @@ import notesRoutes from "./modules/notes/notes.routes";
 import bookmarksRoutes from "./modules/bookmarks/bookmarks.routes";
 import assignmentRoutes from "./modules/assignments/assignments.routes";
 import quizRoutes from "./modules/quizzes/quizzes.routes";
+import certificateRoutes from "./modules/gamification/certificates/certificates.routes";
+import badgeRoutes from "./modules/gamification/badges/badges.routes";
+
 
 const app = express();
 app.use(
@@ -57,6 +60,13 @@ app.use("/api/v1", bookmarksRoutes);
 app.use("/api/v1/assignments", assignmentRoutes);
 
 app.use("/api/v1/quizzes",quizRoutes);
+
+app.use("/api/v1/certificates",certificateRoutes);
+
+app.use("/certificates",express.static(path.join(__dirname, "../certificates")));
+
+app.use("/api/v1/badges",badgeRoutes);
+
 
 app.get('/', (req: Request, res: Response) => {
   res.send('LMS AI Platform Backend Engine is running smoothly.');

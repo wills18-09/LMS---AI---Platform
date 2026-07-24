@@ -13,7 +13,7 @@ import progressRoutes from "./modules/lectureProgress/progress.routes";
 import notesRoutes from "./modules/notes/notes.routes";
 import bookmarksRoutes from "./modules/bookmarks/bookmarks.routes";
 import assignmentRoutes from "./modules/assignments/assignments.routes";
-
+import quizRoutes from "./modules/quizzes/quizzes.routes";
 
 const app = express();
 app.use(
@@ -56,6 +56,7 @@ app.use("/api/v1", bookmarksRoutes);
 
 app.use("/api/v1/assignments", assignmentRoutes);
 
+app.use("/api/v1/quizzes",quizRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('LMS AI Platform Backend Engine is running smoothly.');

@@ -16,7 +16,11 @@ import assignmentRoutes from "./modules/assignments/assignments.routes";
 import quizRoutes from "./modules/quizzes/quizzes.routes";
 import certificateRoutes from "./modules/gamification/certificates/certificates.routes";
 import badgeRoutes from "./modules/gamification/badges/badges.routes";
-
+import streakRoutes from "./modules/gamification/streaks/streaks.routes";
+import analyticsRoutes from "./modules/analytics/analytics.routes";
+import adminRoutes from "./modules/admin/admin.routes";
+import reviewRoutes from "./modules/reviews/reviews.routes";
+import announcementRoutes from "./modules/announcements/announcements.routes";
 
 const app = express();
 app.use(
@@ -66,6 +70,16 @@ app.use("/api/v1/certificates",certificateRoutes);
 app.use("/certificates",express.static(path.join(__dirname, "../certificates")));
 
 app.use("/api/v1/badges",badgeRoutes);
+
+app.use("/api/v1/streaks",streakRoutes);
+
+app.use("/api/v1/analytics",analyticsRoutes);
+
+app.use("/api/v1/admin",adminRoutes);
+
+app.use("/api/v1",reviewRoutes);
+
+app.use("/api/v1",announcementRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {

@@ -1,12 +1,14 @@
-import { Request , Response } from "express";
+import { Request, Response } from "express";
 import pool from "../../db";
 import { AuthenticatedRequest } from "../../middleware/authMiddleware";
+
 
 export const createCourse = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
   try {
+
     const {
       title,
       description,
@@ -16,13 +18,16 @@ export const createCourse = async (
       price,
     } = req.body;
 
+
     if (!title) {
       return res.status(400).json({
         message: "Course title is required.",
       });
     }
 
+
     const instructorId = req.user?.id;
+
 
     const result = await pool.query(
       `
@@ -36,8 +41,10 @@ export const createCourse = async (
         thumbnail_url,
         price
       )
+
       VALUES
       ($1,$2,$3,$4,$5,$6,$7)
+
       RETURNING *;
       `,
       [
@@ -51,134 +58,256 @@ export const createCourse = async (
       ]
     );
 
+
     return res.status(201).json({
       message: "Course created successfully.",
       course: result.rows[0],
     });
-  } catch (error) {
+
+
+  } catch(error) {
+
     console.error(error);
 
     return res.status(500).json({
       message: "Server error while creating course.",
     });
+
   }
 };
+
+
+
+
 
 export const getCourses = async (
   req: Request,
   res: Response
 ) => {
+
   try {
-    const { category, difficulty, q } = req.query;
+
+    const {
+      category,
+      difficulty,
+      q,
+      rating
+    } = req.query;
+
+
 
     let query = `
-      SELECT *
-      FROM courses
-      WHERE status IN ('pending', 'approved')
+      SELECT
+        c.*,
+
+        COALESCE(
+          ROUND(AVG(cr.rating),1),
+          0
+        ) AS rating
+
+      FROM courses c
+
+      LEFT JOIN course_reviews cr
+      ON cr.course_id = c.id
+
+      WHERE c.status IN ('pending','approved')
     `;
 
-    const values: any[] = [];
 
-    if (category) {
+
+    const values:any[] = [];
+
+
+
+    if(category){
+
       values.push(category);
-      query += ` AND category = $${values.length}`;
+
+      query += `
+        AND c.category = $${values.length}
+      `;
+
     }
 
-    if (difficulty) {
+
+
+    if(difficulty){
+
       values.push(difficulty);
-      query += ` AND difficulty = $${values.length}`;
+
+      query += `
+        AND c.difficulty = $${values.length}
+      `;
+
     }
 
-    if (q) {
+
+
+    if(q){
+
       values.push(`%${q}%`);
-      query += ` AND title ILIKE $${values.length}`;
+
+      query += `
+        AND (
+          c.title ILIKE $${values.length}
+          OR c.description ILIKE $${values.length}
+        )
+      `;
+
     }
 
-    query += ` ORDER BY created_at DESC`;
 
-    const result = await pool.query(query, values);
+
+    query += `
+      GROUP BY c.id
+    `;
+
+
+
+    if(rating){
+
+      values.push(Number(rating));
+
+      query += `
+        HAVING AVG(cr.rating) >= $${values.length}
+      `;
+
+    }
+
+
+
+    query += `
+      ORDER BY c.created_at DESC
+    `;
+
+
+
+    const result = await pool.query(
+      query,
+      values
+    );
+
 
     return res.status(200).json({
-      courses: result.rows,
+      courses: result.rows
     });
 
-  } catch (error) {
-    console.error(error);
+
+
+  } catch(error){
+
+    console.error(
+      "GET COURSES ERROR:",
+      error
+    );
+
 
     return res.status(500).json({
-      message: "Server error while fetching courses.",
+      message:"Server error while fetching courses."
     });
+
   }
+
 };
+
+
+
+
+
 
 export const getCourseById = async (
   req: Request,
   res: Response
 ) => {
+
   try {
+
     const { id } = req.params;
+
+
 
     const courseResult = await pool.query(
       `
       SELECT 
         c.*,
         u.full_name AS instructor_name
+
       FROM courses c
-      JOIN users u 
-        ON c.instructor_id = u.id
+
+      JOIN users u
+      ON c.instructor_id = u.id
+
       WHERE c.id = $1
       `,
       [id]
     );
 
 
-    if (courseResult.rows.length === 0) {
+
+    if(courseResult.rows.length === 0){
+
       return res.status(404).json({
-        message: "Course not found"
+        message:"Course not found"
       });
+
     }
 
 
+
+
     const modulesResult = await pool.query(
-  `
-  SELECT
-    m.id,
-    m.title,
+      `
+      SELECT
 
-    COALESCE(
-      json_agg(
-        json_build_object(
-          'id', l.id,
-          'title', l.title,
-          'video_url', l.video_url,
-          'transcript', l.transcript,
-          'duration_seconds', l.duration_seconds,
-          'resource_urls', l.resource_urls
-        )
-        ORDER BY l.order_index
-      ) FILTER (WHERE l.id IS NOT NULL),
-      '[]'
-    ) AS lectures
+        m.id,
+        m.title,
 
-  FROM modules m
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', l.id,
+              'title', l.title,
+              'video_url', l.video_url,
+              'transcript', l.transcript,
+              'duration_seconds', l.duration_seconds,
+              'resource_urls', l.resource_urls
+            )
+            ORDER BY l.order_index
+          )
+          FILTER(
+            WHERE l.id IS NOT NULL
+          ),
+          '[]'
+        ) AS lectures
 
-  LEFT JOIN lectures l
-    ON l.module_id = m.id
 
-  WHERE m.course_id = $1
+      FROM modules m
 
-  GROUP BY m.id
+      LEFT JOIN lectures l
+      ON l.module_id = m.id
 
-  ORDER BY m.order_index ASC
-  `,
-  [id]
-);
+
+      WHERE m.course_id = $1
+
+
+      GROUP BY m.id
+
+
+      ORDER BY m.order_index ASC
+      `,
+      [id]
+    );
+
 
 
     const course = {
+
       ...courseResult.rows[0],
+
       modules: modulesResult.rows
+
     };
+
 
 
     return res.status(200).json({
@@ -186,26 +315,37 @@ export const getCourseById = async (
     });
 
 
-  } catch(error) {
+
+  } catch(error){
 
     console.error(
       "GET COURSE ERROR:",
       error
     );
 
+
     return res.status(500).json({
-      message: "Server error while fetching course"
+      message:"Server error while fetching course"
     });
 
   }
+
 };
+
+
+
+
+
 
 export const updateCourse = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
+
   try {
+
     const { id } = req.params;
+
 
     const {
       title,
@@ -216,38 +356,64 @@ export const updateCourse = async (
       price,
     } = req.body;
 
+
+
     const instructorId = req.user?.id;
 
-    // Check ownership
+
+
     const courseCheck = await pool.query(
       `
       SELECT *
+
       FROM courses
+
       WHERE id = $1
+
       AND instructor_id = $2
       `,
-      [id, instructorId]
+      [
+        id,
+        instructorId
+      ]
     );
 
-    if (courseCheck.rows.length === 0) {
+
+
+    if(courseCheck.rows.length === 0){
+
       return res.status(403).json({
-        message: "You are not allowed to update this course."
+        message:"You are not allowed to update this course."
       });
+
     }
+
 
 
     const result = await pool.query(
       `
       UPDATE courses
+
       SET
-        title = COALESCE($1, title),
-        description = COALESCE($2, description),
-        category = COALESCE($3, category),
-        difficulty = COALESCE($4, difficulty),
-        thumbnail_url = COALESCE($5, thumbnail_url),
-        price = COALESCE($6, price),
-        updated_at = NOW()
+
+      title = COALESCE($1,title),
+
+      description = COALESCE($2,description),
+
+      category = COALESCE($3,category),
+
+      difficulty = COALESCE($4,difficulty),
+
+      thumbnail_url = COALESCE($5,thumbnail_url),
+
+      price = COALESCE($6,price),
+
+      updated_at = NOW()
+
+
       WHERE id = $7
+
+
       RETURNING *
       `,
       [
@@ -262,63 +428,114 @@ export const updateCourse = async (
     );
 
 
+
     return res.status(200).json({
-      message: "Course updated successfully.",
-      course: result.rows[0]
+
+      message:"Course updated successfully.",
+
+      course:result.rows[0]
+
     });
 
 
-  } catch(error) {
-  console.error("UPDATE COURSE ERROR:", error);
 
-  return res.status(500).json({
-    message: "Server error while updating course.",
-    error: error
-  });
-}
+  } catch(error){
+
+
+    console.error(
+      "UPDATE COURSE ERROR:",
+      error
+    );
+
+
+    return res.status(500).json({
+
+      message:"Server error while updating course.",
+
+      error
+
+    });
+
+  }
+
 };
+
+
+
+
+
 
 export const approveCourse = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
+
   const { id } = req.params;
-  const { decision, comment } = req.body;
+
+  const {
+    decision,
+    comment
+  } = req.body;
+
+
 
   try {
+
+
     const adminId = req.user?.id;
 
-    if (!["approved", "rejected"].includes(decision)) {
+
+
+    if(!["approved","rejected"].includes(decision)){
+
       return res.status(400).json({
-        message: "Decision must be approved or rejected"
+
+        message:"Decision must be approved or rejected"
+
       });
+
     }
+
+
 
     const courseResult = await pool.query(
       `
       SELECT *
+
       FROM courses
-      WHERE id = $1
+
+      WHERE id=$1
       `,
       [id]
     );
 
-    if (courseResult.rows.length === 0) {
+
+
+    if(courseResult.rows.length===0){
+
       return res.status(404).json({
-        message: "Course not found"
+
+        message:"Course not found"
+
       });
+
     }
+
+
 
 
     await pool.query(
       `
       INSERT INTO course_approvals
+
       (
         course_id,
         reviewed_by,
         decision,
         comment
       )
+
+
       VALUES
       ($1,$2,$3,$4)
       `,
@@ -331,11 +548,15 @@ export const approveCourse = async (
     );
 
 
+
+
     await pool.query(
       `
       UPDATE courses
-      SET status = $1
-      WHERE id = $2
+
+      SET status=$1
+
+      WHERE id=$2
       `,
       [
         decision,
@@ -344,17 +565,30 @@ export const approveCourse = async (
     );
 
 
-    res.status(200).json({
-      message: `Course ${decision} successfully`
+
+    return res.status(200).json({
+
+      message:`Course ${decision} successfully`
+
     });
 
 
-  } catch(error) {
-    console.error("APPROVAL ERROR:", error);
 
-    res.status(500).json({
-      message: "Server error while approving course"
+  } catch(error){
+
+
+    console.error(
+      "APPROVAL ERROR:",
+      error
+    );
+
+
+    return res.status(500).json({
+
+      message:"Server error while approving course"
+
     });
+
   }
-};
 
+};

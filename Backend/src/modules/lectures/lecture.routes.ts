@@ -12,15 +12,19 @@ import {
 } from "../../middleware/authMiddleware";
 
 
+import { upload } from "../uploads/uploads.middleware";
+
+
 const router = Router();
 
 
 
-// CREATE LECTURE
+// CREATE LECTURE WITH VIDEO UPLOAD
 router.post(
   "/:moduleId/lectures",
   authenticateToken as RequestHandler,
   authorizeRoles("instructor") as RequestHandler,
+  upload.single("video"),
   createLecture as RequestHandler
 );
 

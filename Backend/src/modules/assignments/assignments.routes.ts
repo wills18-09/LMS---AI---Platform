@@ -4,8 +4,11 @@ import {
   authenticateToken,
   authorizeRoles,
 } from "../../middleware/authMiddleware";
+import { upload } from "../uploads/uploads.middleware";
+
 
 const router = Router();
+
 
 // Instructor creates an assignment
 router.post(
@@ -15,6 +18,7 @@ router.post(
   AssignmentController.createAssignment
 );
 
+
 // Student views assignments for a course
 router.get(
   "/course/:id",
@@ -23,13 +27,16 @@ router.get(
   AssignmentController.getAssignmentsByCourse
 );
 
-// Student submits assignment
+
+// Student submits assignment with file upload
 router.post(
   "/:id/submit",
   authenticateToken,
   authorizeRoles("student"),
+  upload.single("file"),
   AssignmentController.submitAssignment
 );
+
 
 // Instructor grades submission
 router.put(
@@ -38,5 +45,6 @@ router.put(
   authorizeRoles("instructor"),
   AssignmentController.gradeSubmission
 );
+
 
 export default router;

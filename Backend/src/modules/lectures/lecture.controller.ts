@@ -3,7 +3,9 @@ import pool from "../../db";
 import { AuthenticatedRequest } from "../../middleware/authMiddleware";
 
 
-// CREATE LECTURE
+
+// CREATE LECTURE WITH VIDEO UPLOAD
+
 export const createLecture = async (
   req: AuthenticatedRequest,
   res: Response
@@ -16,7 +18,6 @@ export const createLecture = async (
 
     const {
       title,
-      video_url,
       transcript,
       duration_seconds,
       order_index,
@@ -24,43 +25,73 @@ export const createLecture = async (
     } = req.body;
 
 
-    const instructorId = req.user?.id;
+
+    const instructorId =
+      req.user?.id;
 
 
 
     if (!title || order_index === undefined) {
 
       return res.status(400).json({
-        message: "Title and order_index are required."
+
+        message:
+        "Title and order_index are required."
+
       });
 
     }
 
 
 
-    // Check module belongs to instructor's course
+    let video_url = null;
 
-    const moduleCheck = await pool.query(
-      `
-      SELECT m.id
-      FROM modules m
-      JOIN courses c
-      ON m.course_id = c.id
-      WHERE m.id = $1
-      AND c.instructor_id = $2
-      `,
-      [
-        moduleId,
-        instructorId
-      ]
-    );
+
+
+    if (req.file) {
+
+      video_url =
+      `/uploads/${req.file.filename}`;
+
+    }
+
+
+
+
+    // Check module belongs to instructor
+
+    const moduleCheck =
+      await pool.query(
+
+        `
+        SELECT m.id
+        FROM modules m
+
+        JOIN courses c
+        ON m.course_id = c.id
+
+        WHERE m.id = $1
+
+        AND c.instructor_id = $2
+        `,
+
+        [
+          moduleId,
+          instructorId
+        ]
+
+      );
+
 
 
 
     if (moduleCheck.rows.length === 0) {
 
       return res.status(403).json({
-        message: "You are not the owner of this course."
+
+        message:
+        "You are not the owner of this course."
+
       });
 
     }
@@ -68,42 +99,56 @@ export const createLecture = async (
 
 
 
-    const result = await pool.query(
-      `
-      INSERT INTO lectures
-      (
-        module_id,
-        title,
-        video_url,
-        transcript,
-        duration_seconds,
-        order_index,
-        resource_urls
-      )
-      VALUES
-      ($1,$2,$3,$4,$5,$6,$7)
-      RETURNING *
-      `,
-      [
-        moduleId,
-        title,
-        video_url,
-        transcript,
-        duration_seconds,
-        order_index,
-        resource_urls
-      ]
-    );
+
+    const result =
+      await pool.query(
+
+        `
+        INSERT INTO lectures
+        (
+          module_id,
+          title,
+          video_url,
+          transcript,
+          duration_seconds,
+          order_index,
+          resource_urls
+        )
+
+        VALUES
+        ($1,$2,$3,$4,$5,$6,$7)
+
+        RETURNING *
+        `,
+
+
+        [
+          moduleId,
+          title,
+          video_url,
+          transcript,
+          duration_seconds,
+          order_index,
+          resource_urls
+        ]
+
+      );
+
+
 
 
 
     return res.status(201).json({
 
-      message: "Lecture created successfully.",
+      message:
+      "Lecture created successfully.",
 
-      lecture: result.rows[0]
+
+      lecture:
+      result.rows[0]
 
     });
+
 
 
 
@@ -118,13 +163,18 @@ export const createLecture = async (
 
     return res.status(500).json({
 
-      message: "Server error while creating lecture."
+      message:
+      "Server error while creating lecture."
 
     });
+
 
   }
 
 };
+
+
+
 
 
 
@@ -142,28 +192,36 @@ export const getLectureById = async (
   try {
 
 
-    const { id } = req.params;
+    const { id } =
+      req.params;
 
 
 
-    const result = await pool.query(
-      `
-      SELECT
-        id,
-        module_id,
-        title,
-        video_url,
-        transcript,
-        duration_seconds,
-        order_index,
-        resource_urls
-      FROM lectures
-      WHERE id = $1
-      `,
-      [
-        id
-      ]
-    );
+    const result =
+      await pool.query(
+
+        `
+        SELECT
+          id,
+          module_id,
+          title,
+          video_url,
+          transcript,
+          duration_seconds,
+          order_index,
+          resource_urls
+
+        FROM lectures
+
+        WHERE id = $1
+        `,
+
+        [
+          id
+        ]
+
+      );
+
 
 
 
@@ -172,7 +230,8 @@ export const getLectureById = async (
 
       return res.status(404).json({
 
-        message: "Lecture not found"
+        message:
+        "Lecture not found"
 
       });
 
@@ -181,11 +240,14 @@ export const getLectureById = async (
 
 
 
+
     return res.status(200).json({
 
-      lecture: result.rows[0]
+      lecture:
+      result.rows[0]
 
     });
+
 
 
 
@@ -201,7 +263,8 @@ export const getLectureById = async (
 
     return res.status(500).json({
 
-      message: "Server error while fetching lecture"
+      message:
+      "Server error while fetching lecture"
 
     });
 

@@ -21,6 +21,8 @@ import analyticsRoutes from "./modules/analytics/analytics.routes";
 import adminRoutes from "./modules/admin/admin.routes";
 import reviewRoutes from "./modules/reviews/reviews.routes";
 import announcementRoutes from "./modules/announcements/announcements.routes";
+import uploadRoutes from "./modules/uploads/uploads.routes";
+
 
 const app = express();
 app.use(
@@ -40,6 +42,14 @@ app.use(
   "/videos",
   express.static(path.join(__dirname, "../videos"))
 );
+
+app.use(
+  "/uploads",
+  express.static(
+    path.join(__dirname, "../uploads")
+  )
+);
+
 
 app.use('/api/v1/auth', authRoutes);
 
@@ -80,6 +90,8 @@ app.use("/api/v1/admin",adminRoutes);
 app.use("/api/v1",reviewRoutes);
 
 app.use("/api/v1",announcementRoutes);
+
+app.use("/api/v1",uploadRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {

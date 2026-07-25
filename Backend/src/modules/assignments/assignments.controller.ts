@@ -1,123 +1,318 @@
-import { Request, Response } from "express";
+import { Response } from "express";
+import { AuthenticatedRequest } from "../../middleware/authMiddleware";
 import { AssignmentService } from "./assignments.service";
+
 
 export class AssignmentController {
 
-  // Instructor
+
+  // Instructor creates assignment
   static async createAssignment(
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
+
     try {
 
+      const {
+        course_id,
+        title,
+        instructions,
+        rubric,
+        due_date
+      } = req.body;
+
+
       const assignment =
-        await AssignmentService.createAssignment(
-          req.body
-        );
+        await AssignmentService.createAssignment({
+
+          course_id,
+          title,
+          instructions,
+          rubric,
+          due_date
+
+        });
+
+
 
       return res.status(201).json({
-        message: "Assignment created successfully",
-        assignment,
+
+        message:
+        "Assignment created successfully",
+
+        assignment
+
       });
 
-    } catch (error: any) {
+
+
+    } catch(error:any) {
+
+
+      console.error(
+        "CREATE ASSIGNMENT ERROR:",
+        error
+      );
+
 
       return res.status(500).json({
-        message: error.message,
+
+        message:
+        error.message ||
+        "Server error"
+
       });
 
     }
+
   }
 
-  // Student
+
+
+
+
+
+  // Student gets assignments for a course
   static async getAssignmentsByCourse(
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
+
     try {
 
-      const courseId = Array.isArray(req.params.id)
-        ? req.params.id[0]
-        : req.params.id;
+
+      const courseId =
+        req.params.id as string;
+
+
 
       const assignments =
         await AssignmentService.getAssignmentsByCourse(
           courseId
         );
 
-      return res.json(assignments);
 
-    } catch (error: any) {
+
+      return res.status(200).json({
+
+        assignments
+
+      });
+
+
+
+    } catch(error:any) {
+
+
+      console.error(
+        "GET ASSIGNMENTS ERROR:",
+        error
+      );
+
 
       return res.status(500).json({
-        message: error.message,
+
+        message:
+        error.message ||
+        "Server error"
+
       });
 
     }
+
   }
 
-  // Student
+
+
+
+
+
+
+  // Student submits assignment with file
   static async submitAssignment(
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
+
     try {
 
-      const assignmentId = Array.isArray(req.params.id)
-        ? req.params.id[0]
-        : req.params.id;
+
+      const assignmentId =
+        req.params.id as string;
+
+
+
+      const userId =
+        req.user?.id;
+
+
+
+      if(!userId){
+
+        return res.status(401).json({
+
+          message:
+          "Unauthorized"
+
+        });
+
+      }
+
+
+
+
+      if(!req.file){
+
+        return res.status(400).json({
+
+          message:
+          "Assignment file is required"
+
+        });
+
+      }
+
+
+
+
+      const fileUrl =
+        `/uploads/${req.file.filename}`;
+
+
+
+
 
       const submission =
         await AssignmentService.submitAssignment({
-          assignment_id: assignmentId,
-          user_id: req.user!.id,
-          file_url: req.body.file_url,
+
+          assignment_id:
+          assignmentId,
+
+          user_id:
+          userId,
+
+          file_url:
+          fileUrl
+
         });
+
+
+
+
 
       return res.status(201).json({
-        message: "Assignment submitted successfully",
-        submission,
+
+        message:
+        "Assignment submitted successfully",
+
+        submission
+
       });
 
-    } catch (error: any) {
+
+
+    } catch(error:any) {
+
+
+      console.error(
+        "SUBMIT ASSIGNMENT ERROR:",
+        error
+      );
+
 
       return res.status(500).json({
-        message: error.message,
+
+        message:
+        error.message ||
+        "Server error"
+
       });
 
+
     }
+
   }
 
-  // Instructor
+
+
+
+
+
+
+
+  // Instructor grades submission
   static async gradeSubmission(
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
+
     try {
 
-      const submissionId = Array.isArray(req.params.id)
-        ? req.params.id[0]
-        : req.params.id;
+
+      const submissionId =
+        req.params.id as string;
+
+
+
+      const {
+        grade,
+        feedback
+
+      } = req.body;
+
+
+
+
 
       const submission =
-        await AssignmentService.gradeSubmission({
-          id: submissionId,
-          grade: req.body.grade,
-          feedback: req.body.feedback,
-        });
+  await AssignmentService.gradeSubmission({
 
-      return res.json({
-        message: "Submission graded successfully",
-        submission,
+    id: submissionId,
+
+    grade,
+
+    feedback
+
+  });
+
+
+
+
+
+      return res.status(200).json({
+
+        message:
+        "Submission graded successfully",
+
+        submission
+
       });
 
-    } catch (error: any) {
+
+
+    } catch(error:any) {
+
+
+      console.error(
+        "GRADE SUBMISSION ERROR:",
+        error
+      );
+
 
       return res.status(500).json({
-        message: error.message,
+
+        message:
+        error.message ||
+        "Server error"
+
       });
 
+
     }
+
   }
+
+
 
 }

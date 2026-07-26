@@ -1,0 +1,61 @@
+.assignment-container {
+
+padding:30px;
+
+max-width:700px;
+
+}
+
+
+
+.assignment-container h1 {
+
+margin-bottom:20px;
+
+}
+
+
+
+.assignment-container input,
+.assignment-container textarea,
+.assignment-container select {
+
+
+display:block;
+
+width:100%;
+
+margin-bottom:15px;
+
+padding:12px;
+
+border-radius:8px;
+
+border:1px solid #ddd;
+
+
+}
+
+
+
+.assignment-container textarea {
+
+height:120px;
+
+}
+
+
+
+.assignment-container button {
+
+
+padding:12px 20px;
+
+cursor:pointer;
+
+border:none;
+
+border-radius:8px;
+
+
+}

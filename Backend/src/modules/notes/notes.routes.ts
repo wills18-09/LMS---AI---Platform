@@ -6,11 +6,21 @@ import { authenticateToken } from "../../middleware/authMiddleware";
 const router = Router();
 
 
+
 router.post(
-"/lectures/:id/notes",
-authenticateToken,
-NotesController.createNote
+  "/lectures/:id/notes",
+  authenticateToken,
+  NotesController.createNote
 );
+
+
+
+router.get(
+  "/lectures/:id/notes",
+  authenticateToken,
+  NotesController.getNotes
+);
+
 
 
 export default router;

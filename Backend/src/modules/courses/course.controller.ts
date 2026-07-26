@@ -588,6 +588,98 @@ export const approveCourse = async (
       message:"Server error while approving course"
 
     });
+    
+
+  }
+
+  
+
+};
+
+export const getInstructorCourses = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+
+  try {
+
+    const instructorId = req.user?.id;
+
+
+    if(!instructorId){
+
+      return res.status(401).json({
+
+        message:
+        "Unauthorized"
+
+      });
+
+    }
+
+
+
+    const result = await pool.query(
+
+      `
+      SELECT
+
+        c.id,
+        c.title,
+        c.description,
+        c.category,
+        c.difficulty,
+        c.thumbnail_url,
+        c.price,
+        c.status,
+        c.created_at
+
+
+      FROM courses c
+
+
+      WHERE c.instructor_id = $1
+
+
+      ORDER BY c.created_at DESC
+
+      `,
+
+      [
+        instructorId
+      ]
+
+    );
+
+
+
+
+    return res.status(200).json({
+
+      courses:
+      result.rows
+
+    });
+
+
+
+  } catch(error){
+
+
+    console.error(
+      "GET INSTRUCTOR COURSES ERROR:",
+      error
+    );
+
+
+
+    return res.status(500).json({
+
+      message:
+      "Server error while fetching instructor courses"
+
+    });
+
 
   }
 

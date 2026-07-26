@@ -1,0 +1,136 @@
+.instructor-course-card {
+
+
+background:#f8f9ff;
+
+padding:25px;
+
+border-radius:22px;
+
+transition:.3s;
+
+
+}
+
+
+
+.instructor-course-card:hover {
+
+
+transform:translateY(-5px);
+
+box-shadow:
+0 12px 25px rgba(0,0,0,.1);
+
+
+}
+
+
+
+.course-status {
+
+
+display:inline-block;
+
+background:#e8f7ed;
+
+color:#28a745;
+
+padding:7px 15px;
+
+border-radius:20px;
+
+font-size:13px;
+
+margin-bottom:15px;
+
+
+}
+
+
+
+.instructor-course-card h2 {
+
+
+margin-bottom:15px;
+
+
+}
+
+
+
+.instructor-course-card p {
+
+
+color:#666;
+
+line-height:1.5;
+
+
+}
+
+
+
+.course-info {
+
+
+display:flex;
+
+gap:10px;
+
+margin-top:15px;
+
+
+}
+
+
+
+.course-info span {
+
+
+background:white;
+
+padding:8px 12px;
+
+border-radius:12px;
+
+font-size:14px;
+
+
+}
+
+
+
+.instructor-course-card button {
+
+
+margin-top:20px;
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:15px;
+
+background:#667eea;
+
+color:white;
+
+font-weight:bold;
+
+cursor:pointer;
+
+
+}
+
+
+
+.instructor-course-card button:hover {
+
+
+background:#5563d8;
+
+
+}

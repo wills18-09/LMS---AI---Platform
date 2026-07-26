@@ -211,30 +211,86 @@ export const logout = async (req: Request, res: Response) => {
   }
 };
 
-export const getMe = async (req: Request, res: Response) => {
+export const getMe = async (
+  req: Request,
+  res: Response
+) => {
+
   try {
+
+
     const userId = (req as any).user.id;
 
+
+
     const result = await pool.query(
-      `SELECT id, full_name, email 
-       FROM users 
-       WHERE id = $1`,
-      [userId]
+      `
+      SELECT
+
+        u.id,
+
+        u.full_name,
+
+        u.email,
+
+        r.name AS role
+
+
+      FROM users u
+
+
+      JOIN user_roles ur
+
+      ON u.id = ur.user_id
+
+
+      JOIN roles r
+
+      ON ur.role_id = r.id
+
+
+      WHERE u.id = $1
+
+      `,
+      [
+        userId
+      ]
     );
 
-    if (result.rows.length === 0) {
+
+
+
+    if(result.rows.length === 0){
+
       return res.status(404).json({
-        message: "User not found"
+        message:"User not found"
       });
+
     }
 
-    res.status(200).json(result.rows[0]);
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "Server error"
-    });
+
+
+    return res.status(200).json(
+      result.rows[0]
+    );
+
+
+
   }
-};
+  catch(error){
 
+    console.error(
+      "GET ME ERROR:",
+      error
+    );
+
+
+    return res.status(500).json({
+      message:"Server error"
+    });
+
+
+  }
+
+};

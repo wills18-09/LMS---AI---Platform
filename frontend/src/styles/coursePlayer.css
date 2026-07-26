@@ -1,0 +1,606 @@
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.player-container {
+
+    min-height:100vh;
+
+    background:#f6f7fb;
+
+    padding:35px 50px;
+
+    font-family:
+    "Inter",
+    sans-serif;
+
+}
+
+
+
+
+/* =========================
+   TITLE
+========================= */
+
+.player-title {
+
+    font-size:32px;
+
+    font-weight:700;
+
+    color:#1f2937;
+
+    margin-bottom:30px;
+
+}
+
+
+
+
+
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+
+.player-layout {
+
+    display:grid;
+
+    grid-template-columns:
+    2fr 1fr;
+
+    gap:30px;
+
+    align-items:start;
+
+}
+
+
+
+
+
+
+/* =========================
+   VIDEO SECTION
+========================= */
+
+
+.video-section {
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:24px;
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,0.08);
+
+}
+
+
+
+
+
+.video-player {
+
+    width:100%;
+
+    height:520px;
+
+    border-radius:18px;
+
+    background:black;
+
+}
+
+
+
+
+
+
+.video-section p {
+
+    margin-top:15px;
+
+    color:#555;
+
+    font-size:15px;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   PROGRESS BAR
+========================= */
+
+
+.progress-bar {
+
+
+    width:100%;
+
+    height:12px;
+
+    background:#e5e7eb;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    margin-top:20px;
+
+
+}
+
+
+
+
+.progress-fill {
+
+
+    height:100%;
+
+    background:
+    linear-gradient(
+        90deg,
+        #667eea,
+        #764ba2
+    );
+
+    border-radius:20px;
+
+    transition:0.3s;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   COURSE CONTENT SIDEBAR
+========================= */
+
+
+.course-sidebar {
+
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:25px;
+
+    max-height:620px;
+
+    overflow-y:auto;
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,0.08);
+
+
+}
+
+
+
+.course-sidebar h2 {
+
+    margin-bottom:20px;
+
+    font-size:22px;
+
+}
+
+
+
+
+
+
+
+/* MODULES */
+
+
+.module {
+
+
+    margin-bottom:25px;
+
+
+}
+
+
+
+
+
+.module h3 {
+
+
+    font-size:16px;
+
+    color:#374151;
+
+    margin-bottom:12px;
+
+}
+
+
+
+
+
+/* LECTURE ITEMS */
+
+
+.lecture-item {
+
+
+    padding:12px 15px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    margin-bottom:8px;
+
+    color:#555;
+
+    transition:0.25s;
+
+}
+
+
+
+
+
+.lecture-item:hover {
+
+
+    background:#eef2ff;
+
+    color:#667eea;
+
+
+}
+
+
+
+
+
+
+
+.active-lecture {
+
+
+    background:
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
+
+
+    color:white;
+
+
+    font-weight:600;
+
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+ NOTES PANEL
+========================= */
+
+
+.side-panel {
+
+
+    grid-column:
+    1 / -1;
+
+
+    background:white;
+
+
+    margin-top:10px;
+
+
+    padding:30px;
+
+
+    border-radius:24px;
+
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,0.08);
+
+
+}
+
+
+
+
+
+
+
+/* TABS */
+
+
+.tabs {
+
+
+    display:flex;
+
+
+    gap:15px;
+
+
+    border-bottom:
+    1px solid #eee;
+
+
+    padding-bottom:15px;
+
+
+    margin-bottom:25px;
+
+
+}
+
+
+
+
+.tabs button {
+
+
+    padding:10px 20px;
+
+
+    border:none;
+
+
+    background:#f1f3ff;
+
+
+    color:#667eea;
+
+
+    border-radius:20px;
+
+
+    cursor:pointer;
+
+
+    font-weight:600;
+
+
+    transition:0.2s;
+
+
+}
+
+
+
+
+
+.tabs button:hover {
+
+
+    background:#667eea;
+
+    color:white;
+
+
+}
+
+
+
+
+
+
+
+/* INPUT */
+
+
+.side-panel input {
+
+
+    width:70%;
+
+
+    padding:14px 18px;
+
+
+    border-radius:12px;
+
+
+    border:
+
+    1px solid #ddd;
+
+
+    outline:none;
+
+
+    font-size:15px;
+
+
+}
+
+
+
+
+
+.side-panel input:focus {
+
+
+    border-color:#667eea;
+
+
+}
+
+
+
+
+
+
+
+
+.side-panel button {
+
+
+    margin-left:10px;
+
+
+    padding:12px 20px;
+
+
+    border:none;
+
+
+    background:#667eea;
+
+
+    color:white;
+
+
+    border-radius:12px;
+
+
+    cursor:pointer;
+
+
+}
+
+
+
+
+
+
+
+/* NOTES / BOOKMARK CARDS */
+
+
+.item {
+
+
+    background:#f8f9ff;
+
+
+    padding:18px;
+
+
+    margin-top:15px;
+
+
+    border-radius:15px;
+
+
+    display:flex;
+
+
+    justify-content:space-between;
+
+
+    align-items:center;
+
+
+}
+
+
+
+
+.item p {
+
+
+    margin:0;
+
+    color:#444;
+
+
+}
+
+
+
+
+
+
+
+
+
+/* LINKS */
+
+
+.side-panel a {
+
+
+    color:#667eea;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+ RESPONSIVE
+========================= */
+
+
+@media(max-width:1000px){
+
+
+.player-layout {
+
+
+    grid-template-columns:1fr;
+
+
+}
+
+
+
+.video-player {
+
+
+    height:350px;
+
+
+}
+
+
+.player-container {
+
+
+    padding:20px;
+
+
+}
+
+
+}

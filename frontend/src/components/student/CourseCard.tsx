@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import "../../styles/CourseCard.css";
 
 type CourseCardProps = {
   id: string;
@@ -7,6 +8,7 @@ type CourseCardProps = {
   progress: string;
 };
 
+
 function CourseCard({
   id,
   title,
@@ -14,43 +16,94 @@ function CourseCard({
   progress,
 }: CourseCardProps) {
 
+
   const navigate = useNavigate();
 
+
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        padding: "20px",
-        marginTop: "20px",
-        borderRadius: "10px",
-        width: "350px",
-      }}
-    >
 
-      <h2>
-        {title}
-      </h2>
+    <div className="course-card">
 
 
-      <p>
-        {description}
-      </p>
+      <div className="course-image">
+
+        🎬
+
+      </div>
 
 
-      <p>
-        Progress: {progress}%
-      </p>
+
+      <div className="course-content">
 
 
-      <button
-        onClick={() => navigate(`/courses/${id}`)}
-      >
-        Continue Learning
-      </button>
+        <h2>
+          {title}
+        </h2>
+
+
+        <p>
+          {description}
+        </p>
+
+
+
+        <div className="progress-section">
+
+
+          <div className="progress-text">
+
+            <span>
+              Progress
+            </span>
+
+            <span>
+              {progress}%
+            </span>
+
+          </div>
+
+
+
+          <div className="progress-bar">
+
+
+            <div
+              className="progress-fill"
+              style={{
+                width:`${progress}%`
+              }}
+            />
+
+
+          </div>
+
+
+        </div>
+
+
+
+
+        <button
+          onClick={() =>
+            navigate(`/courses/${id}`)
+          }
+        >
+
+          Continue Learning →
+
+        </button>
+
+
+
+      </div>
+
 
 
     </div>
+
   );
+
 }
+
 
 export default CourseCard;

@@ -1,48 +1,199 @@
-import { Request, Response } from "express";
-import { BookmarksService } from "./bookmarks.service";
+import { Response } from "express";
+import pool from "../../db";
+import { AuthenticatedRequest } from "../../middleware/authMiddleware";
 
 
-export const BookmarksController = {
+
+export class BookmarksController {
 
 
-async createBookmark(
-req:Request,
-res:Response
-){
 
-try{
+  // CREATE BOOKMARK
 
-const userId = req.user!.id;
+  static async createBookmark(
 
-const lectureId = req.params.id as string;
+    req: AuthenticatedRequest,
+    res: Response
 
-const {
-timestamp_seconds
-} = req.body;
+  ){
+
+    try {
 
 
-const bookmark = await BookmarksService.createBookmark(
-    userId,
-    lectureId,
-    timestamp_seconds ?? null
-);
+      const userId = req.user!.id;
+
+      const lectureId = req.params.id;
 
 
-res.status(201).json({
-    message:"Lecture bookmarked successfully",
-    bookmark
-});
+
+      const {
+        timestamp_seconds
+      } = req.body;
 
 
-}catch(error:any){
 
-res.status(500).json({
-    message:error.message
-});
+
+      if(!lectureId){
+
+        return res.status(400).json({
+
+          message:
+          "Lecture id required"
+
+        });
+
+      }
+
+
+
+
+      const result = await pool.query(
+
+        `
+        INSERT INTO bookmarks
+        (
+          user_id,
+          lecture_id,
+          timestamp_seconds
+        )
+
+        VALUES
+        ($1,$2,$3)
+
+        RETURNING *
+        `,
+
+
+        [
+          userId,
+          lectureId,
+          timestamp_seconds || null
+        ]
+
+      );
+
+
+
+
+
+      return res.status(201).json({
+
+        message:
+        "Bookmark created successfully",
+
+        bookmark:
+        result.rows[0]
+
+      });
+
+
+
+    }catch(error){
+
+
+      console.error(
+        "CREATE BOOKMARK ERROR:",
+        error
+      );
+
+
+
+      return res.status(500).json({
+
+        message:
+        "Failed creating bookmark"
+
+      });
+
+
+    }
+
+
+  }
+
+
+
+
+
+
+
+  // GET BOOKMARKS FOR LECTURE
+
+  static async getBookmarks(
+
+    req: AuthenticatedRequest,
+    res: Response
+
+  ){
+
+    try {
+
+
+      const userId =
+      req.user!.id;
+
+
+      const lectureId =
+      req.params.id;
+
+
+
+
+
+      const result = await pool.query(
+
+        `
+        SELECT *
+        FROM bookmarks
+
+        WHERE user_id=$1
+        AND lecture_id=$2
+
+        ORDER BY created_at DESC
+        `,
+
+        [
+          userId,
+          lectureId
+        ]
+
+      );
+
+
+
+
+      return res.status(200).json({
+
+        bookmarks:
+        result.rows
+
+      });
+
+
+
+    }catch(error){
+
+
+      console.error(
+        "GET BOOKMARKS ERROR:",
+        error
+      );
+
+
+
+      return res.status(500).json({
+
+        message:
+        "Failed fetching bookmarks"
+
+      });
+
+
+    }
+
+
+  }
+
+
 
 }
-
-}
-
-
-};

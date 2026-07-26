@@ -1,0 +1,159 @@
+.instructor-course-page {
+
+padding:40px;
+
+background:#f5f7fb;
+
+min-height:100vh;
+
+}
+
+
+
+.course-header {
+
+background:white;
+
+padding:35px;
+
+border-radius:25px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:30px;
+
+}
+
+
+
+.course-header h1 {
+
+font-size:36px;
+
+}
+
+
+
+.course-header p {
+
+color:#666;
+
+max-width:700px;
+
+}
+
+
+
+.course-status {
+
+background:#667eea;
+
+color:white;
+
+padding:12px 20px;
+
+border-radius:30px;
+
+}
+
+
+
+
+
+.course-info-box {
+
+background:white;
+
+padding:25px;
+
+border-radius:20px;
+
+margin-bottom:30px;
+
+}
+
+
+
+
+
+.section-top {
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+}
+
+
+
+.section-top button {
+
+background:#667eea;
+
+color:white;
+
+border:none;
+
+padding:12px 20px;
+
+border-radius:12px;
+
+cursor:pointer;
+
+}
+
+
+
+
+
+.module-card {
+
+background:white;
+
+padding:25px;
+
+margin-top:20px;
+
+border-radius:20px;
+
+box-shadow:0 5px 15px rgba(0,0,0,0.05);
+
+}
+
+
+
+.module-card button {
+
+margin-top:10px;
+
+padding:10px 15px;
+
+border-radius:10px;
+
+border:none;
+
+background:#eef0ff;
+
+color:#667eea;
+
+}
+
+
+
+.lecture-row {
+
+margin-top:15px;
+
+padding:12px;
+
+background:#f8f9ff;
+
+border-radius:10px;
+
+}

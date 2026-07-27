@@ -1,7 +1,18 @@
-import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useState
+} from "react";
+
+import {
+  useParams,
+  Link,
+  useNavigate
+} from "react-router-dom";
+
 import api from "../services/axios";
+
 import "../styles/CourseDetails.css";
+
 
 
 type Lecture = {
@@ -14,36 +25,46 @@ type Lecture = {
 
  description?:string;
 
+ quiz_id?:string;
+
 };
+
 
 
 type Module = {
 
-  id: string;
+ id:string;
 
-  title: string;
+ title:string;
 
-  lectures: Lecture[];
+ lectures:Lecture[];
+
+ quizzes?: {
+
+  id:string;
+
+  title:string;
+
+ }[];
 
 };
-
 
 
 type Course = {
 
-  id: string;
+ id:string;
 
-  title: string;
+ title:string;
 
-  description: string;
+ description:string;
 
-  category: string;
+ category:string;
 
-  difficulty?: string;
+ difficulty?:string;
 
-  instructor_name?: string;
+ instructor_name?:string;
 
-  modules: Module[];
+ modules:Module[];
 
 };
 
@@ -51,464 +72,405 @@ type Course = {
 
 
 
-function CourseDetails() {
+function CourseDetails(){
 
 
-  const { id } = useParams();
+const {id}=useParams();
 
-  const navigate = useNavigate();
+const navigate=useNavigate();
 
 
+const [course,setCourse]=
+useState<Course|null>(null);
 
-  const [course, setCourse] =
-    useState<Course | null>(null);
 
 
+useEffect(()=>{
 
 
-  useEffect(() => {
+const fetchCourse=async()=>{
 
 
-    const fetchCourse = async () => {
+try{
 
 
-      try {
+const response =
+await api.get(
+`/courses/${id}`
+);
 
 
-        const response =
-          await api.get(
-            `/courses/${id}`
-          );
+console.log(
+"Course details:",
+response.data
+);
 
 
-        console.log(
-          "Course details:",
-          response.data
-        );
+setCourse(
+response.data.course
+);
 
 
+}
+catch(error){
 
-        setCourse(
-          response.data.course
-        );
+console.error(
+"Failed loading course",
+error
+);
 
+}
 
 
-      } catch(error) {
+};
 
 
-        console.error(
-          "Failed to load course:",
-          error
-        );
+if(id){
 
+fetchCourse();
 
-      }
+}
 
 
-    };
+},[id]);
 
 
 
-    if(id) {
 
-      fetchCourse();
 
-    }
+if(!course){
 
+return(
 
-  }, [id]);
+<div className="loading">
 
+Loading course...
 
+</div>
 
+);
 
+}
 
 
-  if(!course) {
 
 
-    return (
 
-      <div className="loading">
 
-        Loading course...
+const firstLecture =
+course.modules?.[0]?.lectures?.[0];
 
-      </div>
 
-    );
 
-  }
 
 
+return(
 
 
+<div className="course-details-page">
 
 
-  const firstLecture =
-    course.modules?.[0]?.lectures?.[0];
 
+<div className="course-hero">
 
 
+<div className="course-info">
 
 
+<div className="course-category">
 
-  return (
+🎓 {course.category}
 
+</div>
 
-    <div className="course-details-page">
 
 
+<h1>
 
+{course.title}
 
+</h1>
 
-      {/* HERO */}
 
 
+<p className="course-description">
 
-      <div className="course-hero">
+{course.description}
 
+</p>
 
 
-        <div className="course-info">
 
 
 
-          <span className="course-tag">
+<div className="course-details-row">
 
-            🎓 {course.category}
 
-          </span>
+{
+course.difficulty &&
 
+<div className="info-pill">
 
+🎯 {course.difficulty}
 
+</div>
 
-          <h1>
+}
 
-            {course.title}
 
-          </h1>
 
+{
+course.instructor_name &&
 
+<div className="info-pill">
 
+👨‍🏫 {course.instructor_name}
 
-          <p>
+</div>
 
-            {course.description}
+}
 
-          </p>
 
 
+<div className="info-pill">
 
+📚 {course.modules.length} Modules
 
+</div>
 
-          <div className="course-meta">
 
 
-            {
-              course.difficulty && (
+</div>
 
-                <span>
 
-                  🎯 {course.difficulty}
 
-                </span>
 
-              )
-            }
 
 
 
-            {
-              course.instructor_name && (
+{
+firstLecture &&
 
-                <span>
+<button
 
-                  👨‍🏫 {course.instructor_name}
+className="start-learning-btn"
 
-                </span>
+onClick={()=>navigate(
+`/courses/${course.id}/lectures/${firstLecture.id}`
+)}
 
-              )
-            }
+>
 
+<span>
 
+🚀
 
-          </div>
+</span>
 
+Start Learning
 
+</button>
 
+}
 
 
-          {
-            firstLecture && (
+</div>
 
 
-              <button
 
-                className="start-button"
+<div className="course-image">
 
-                onClick={() =>
-                  navigate(
-                    `/courses/${course.id}/lectures/${firstLecture.id}`
-                  )
-                }
+🎥
 
-              >
+</div>
 
-                Start Learning 🚀
 
-              </button>
+</div>
 
 
-            )
 
-          }
 
 
 
-        </div>
 
 
 
+<div className="content-section">
 
 
 
-        <div className="course-image">
+<div className="section-header">
 
+<h2>
 
-          🎥
+📚 Course Content
 
+</h2>
 
-        </div>
 
+<span>
 
+{course.modules?.length || 0} Modules
 
+</span>
 
 
-      </div>
+</div>
 
 
 
 
 
+{
 
+course.modules?.map(module=>(
 
 
+<div
 
-      {/* COURSE CONTENT */}
+className="module-card"
 
+key={module.id}
 
+>
 
-      <div className="content-section">
 
+<h3>
 
+📂 {module.title}
 
-        <div className="section-header">
+</h3>
 
 
-          <h2>
 
-            📚 Course Content
 
-          </h2>
 
+{
 
+module.lectures.map(lecture=>(
 
-          <span>
 
-            {course.modules?.length || 0} Modules
+<div
 
-          </span>
+key={lecture.id}
 
+>
 
 
-        </div>
+<Link
 
+className="lecture-link"
 
+to={
+`/courses/${course.id}/lectures/${lecture.id}`
+}
 
+>
 
+▶ {lecture.title}
 
+</Link>
 
 
-        {
-          course.modules &&
-          course.modules.length > 0 ? (
 
 
 
-            course.modules.map((module)=>(
+{
+module.quizzes &&
+module.quizzes.length > 0 &&
 
 
+<Link
 
-              <div
+className="quiz-button"
 
-                className="module-card"
+to={`/quizzes/${module.quizzes[0].id}`}
 
-                key={module.id}
+>
 
-              >
+📝 Take Quiz
 
+</Link>
 
+}
 
 
-                <h3>
 
-                  📂 {module.title}
 
-                </h3>
+</div>
 
 
-
-
-
-
-                {
-                  module.lectures &&
-                  module.lectures.length > 0 ? (
-
-
-
-                    module.lectures.map((lecture)=>(
-
-
-
-                      <Link
-
-                        key={lecture.id}
-
-                        className="lecture-link"
-
-                        to={
-                          `/courses/${course.id}/lectures/${lecture.id}`
-                        }
-
-                      >
-
-                        ▶ {lecture.title}
-
-
-                      </Link>
-
-
-
-                    ))
-
-
-
-                  ) : (
-
-
-
-                    <p>
-
-                      No lectures available.
-
-                    </p>
-
-
-
-                  )
-
-                }
-
-
-
-              </div>
-
-
-
-            ))
-
-
-
-          ) : (
-
-
-
-            <div className="empty">
-
-
-              No modules available yet.
-
-
-            </div>
-
-
-          )
-
-        }
-
-
-
-
-
-      </div>
-
-
-
-
-
-
-
-
-
-      {/* ASSIGNMENTS */}
-
-
-
-      <div className="assignment-box">
-
-
-
-        <h2>
-
-          📝 Assignments
-
-        </h2>
-
-
-
-
-        <p>
-
-          Complete assignments and submit your work.
-
-        </p>
-
-
-
-
-        <Link
-
-          className="assignment-button"
-
-          to={`/courses/${course.id}/assignments`}
-
-        >
-
-          View Assignments →
-
-        </Link>
-
-
-
-
-      </div>
-
-
-
-
-
-
-    </div>
-
-
-  );
+))
 
 
 }
 
 
 
+</div>
+
+
+))
+
+
+}
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div className="assignment-box">
+
+
+<h2>
+
+📝 Assignments
+
+</h2>
+
+
+<p>
+
+Complete assignments and submit your work.
+
+</p>
+
+
+
+<Link
+
+className="assignment-button"
+
+to={`/courses/${course.id}/assignments`}
+
+>
+
+View Assignments →
+
+</Link>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+);
+
+
+}
 
 
 export default CourseDetails;

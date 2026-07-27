@@ -210,11 +210,6 @@ export const getCourses = async (
 
 };
 
-
-
-
-
-
 export const getCourseById = async (
   req: Request,
   res: Response
@@ -223,7 +218,6 @@ export const getCourseById = async (
   try {
 
     const { id } = req.params;
-
 
 
     const courseResult = await pool.query(
@@ -243,7 +237,6 @@ export const getCourseById = async (
     );
 
 
-
     if(courseResult.rows.length === 0){
 
       return res.status(404).json({
@@ -254,46 +247,94 @@ export const getCourseById = async (
 
 
 
-
     const modulesResult = await pool.query(
       `
       SELECT
 
-        m.id,
-        m.title,
+      m.id,
+      m.title,
 
-        COALESCE(
-          json_agg(
-            json_build_object(
-              'id', l.id,
-              'title', l.title,
-              'video_url', l.video_url,
-              'transcript', l.transcript,
-              'duration_seconds', l.duration_seconds,
-              'resource_urls', l.resource_urls
-            )
-            ORDER BY l.order_index
+
+      COALESCE(
+      (
+        SELECT json_agg(
+
+          jsonb_build_object(
+
+            'id',
+            l.id,
+
+            'title',
+            l.title,
+
+            'video_url',
+            l.video_url,
+
+            'transcript',
+            l.transcript,
+
+            'duration_seconds',
+            l.duration_seconds,
+
+            'resource_urls',
+            l.resource_urls
+
           )
-          FILTER(
-            WHERE l.id IS NOT NULL
-          ),
-          '[]'
-        ) AS lectures
+
+          ORDER BY l.order_index
+
+        )
+
+        FROM lectures l
+
+        WHERE l.module_id = m.id
+
+      ),
+      '[]'
+      ) AS lectures,
+
+
+
+      COALESCE(
+      (
+        SELECT json_agg(
+
+          jsonb_build_object(
+
+            'id',
+            q.id,
+
+            'title',
+            q.title,
+
+            'is_ai_generated',
+            q.is_ai_generated,
+
+            'generated_from_lecture_id',
+            q.generated_from_lecture_id
+
+          )
+
+        )
+
+        FROM quizzes q
+
+        WHERE q.module_id = m.id
+
+      ),
+      '[]'
+      ) AS quizzes
+
 
 
       FROM modules m
-
-      LEFT JOIN lectures l
-      ON l.module_id = m.id
 
 
       WHERE m.course_id = $1
 
 
-      GROUP BY m.id
-
-
       ORDER BY m.order_index ASC
+
       `,
       [id]
     );
@@ -318,6 +359,7 @@ export const getCourseById = async (
 
   } catch(error){
 
+
     console.error(
       "GET COURSE ERROR:",
       error
@@ -328,14 +370,10 @@ export const getCourseById = async (
       message:"Server error while fetching course"
     });
 
+
   }
 
 };
-
-
-
-
-
 
 export const updateCourse = async (
   req: AuthenticatedRequest,

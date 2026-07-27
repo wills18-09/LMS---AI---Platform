@@ -46,6 +46,7 @@ export class QuizController {
 
 
 
+
   // Instructor adds question
   static async addQuestion(
     req: Request,
@@ -92,6 +93,8 @@ export class QuizController {
     }
 
   }
+
+
 
 
 
@@ -148,6 +151,55 @@ export class QuizController {
 
 
 
+
+  // Instructor views quiz questions
+  static async getQuestions(
+    req: Request,
+    res: Response
+  ){
+
+    try {
+
+      const quizId =
+        req.params.id as string;
+
+
+
+      const questions =
+        await QuizService.getQuestions(
+          quizId
+        );
+
+
+
+      res.status(200).json({
+        questions
+      });
+
+
+
+    } catch(error){
+
+      console.error(
+        "GET QUESTIONS ERROR:",
+        error
+      );
+
+
+      res.status(500).json({
+        message:"Failed to fetch questions"
+      });
+
+    }
+
+  }
+
+
+
+
+
+
+
   // Student starts attempt
   static async startAttempt(
     req: Request,
@@ -192,54 +244,162 @@ export class QuizController {
 
   }
 
+
+
+
+
   static async submitAttempt(
-  req: Request,
-  res: Response
-){
+    req: Request,
+    res: Response
+  ){
 
-  try {
+    try {
 
-    const attemptId =
-      req.params.id as string;
-
-
-    const {
-      answers
-    } = req.body;
+      const attemptId =
+        req.params.id as string;
 
 
-
-    const result =
-      await QuizService.submitAttempt(
-        attemptId,
+      const {
         answers
+      } = req.body;
+
+
+
+      const result =
+        await QuizService.submitAttempt(
+          attemptId,
+          answers
+        );
+
+
+      res.json({
+        message:
+        "Quiz submitted successfully",
+        result
+      });
+
+
+
+    } catch(error){
+
+      console.error(
+        "SUBMIT QUIZ ERROR:",
+        error
       );
 
 
-    res.json({
-      message:
-      "Quiz submitted successfully",
-      result
-    });
+      res.status(500).json({
+        message:
+        "Failed to submit quiz"
+      });
 
-
-
-  } catch(error){
-
-    console.error(
-      "SUBMIT QUIZ ERROR:",
-      error
-    );
-
-
-    res.status(500).json({
-      message:
-      "Failed to submit quiz"
-    });
+    }
 
   }
 
-}
+
+
+
+
+  static async getQuiz(
+    req:Request,
+    res:Response
+  ){
+
+    try{
+
+
+      const quizId =
+        req.params.id as string;
+
+
+
+      const quiz =
+        await QuizService.getQuizById(
+          quizId
+        );
+
+
+
+      res.json({
+        quiz
+      });
+
+
+
+    }
+    catch(error){
+
+      console.error(
+        "GET QUIZ ERROR",
+        error
+      );
+
+
+      res.status(500).json({
+        message:"Failed loading quiz"
+      });
+
+
+    }
+
+  }
+
+
+
+
+
+
+  // Get quizzes by module (Instructor)
+  static async getQuizzesByModule(
+    req: Request,
+    res: Response
+  ){
+
+    try {
+
+
+      const moduleId =
+        req.params.moduleId as string;
+
+
+
+      const quizzes =
+        await QuizService.getQuizzesByModule(
+          moduleId
+        );
+
+
+
+      res.status(200).json({
+
+        quizzes
+
+      });
+
+
+
+    }
+    catch(error){
+
+
+      console.error(
+        "GET MODULE QUIZZES ERROR:",
+        error
+      );
+
+
+      res.status(500).json({
+
+        message:
+        "Failed to fetch quizzes"
+
+      });
+
+
+    }
+
+  }
 
 
 }

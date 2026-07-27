@@ -8,10 +8,12 @@ export class QuizService {
     moduleId: string,
     title: string
   ) {
+
     return await QuizModel.createQuiz(
       moduleId,
       title
     );
+
   }
 
 
@@ -22,13 +24,16 @@ export class QuizService {
     questionType: string,
     orderIndex: number
   ) {
+
     return await QuizModel.addQuestion(
       quizId,
       questionText,
       questionType,
       orderIndex
     );
+
   }
+
 
 
 
@@ -37,12 +42,16 @@ export class QuizService {
     optionText: string,
     isCorrect: boolean
   ) {
+
     return await QuizModel.addOption(
       questionId,
       optionText,
       isCorrect
     );
+
   }
+
+
 
 
 
@@ -50,72 +59,142 @@ export class QuizService {
     quizId: string,
     userId: string
   ) {
+
     return await QuizModel.createAttempt(
       quizId,
       userId
     );
+
   }
 
+
+
+
+
   static async submitAttempt(
-  attemptId: string,
-  answers: any[]
-) {
-
-  let score = 0;
+    attemptId: string,
+    answers: any[]
+  ) {
 
 
-  for (const answer of answers) {
+    let score = 0;
 
 
-    const correctOptions =
-      await QuizModel.getCorrectOptions(
-        answer.question_id
-      );
+
+    for (const answer of answers) {
 
 
-    const selected =
-      answer.selected_option_ids
+
+      const correctOptions =
+        await QuizModel.getCorrectOptions(
+          answer.question_id
+        );
+
+
+
+      const selected =
+        [...answer.selected_option_ids]
         .sort();
 
 
-    const correct =
-      correctOptions.sort();
+
+      const correct =
+        [...correctOptions]
+        .sort();
 
 
 
-    const isCorrect =
-      JSON.stringify(selected)
-      ===
-      JSON.stringify(correct);
+
+      const isCorrect =
+        JSON.stringify(selected)
+        ===
+        JSON.stringify(correct);
 
 
 
-    if(isCorrect){
-      score++;
+
+      if(isCorrect){
+
+        score++;
+
+      }
+
+
+
+
+
+      await QuizModel.saveAnswer(
+        attemptId,
+        answer.question_id,
+        answer.selected_option_ids,
+        isCorrect
+      );
+
+
+
     }
 
 
 
-    await QuizModel.saveAnswer(
-      attemptId,
-      answer.question_id,
-      answer.selected_option_ids,
-      isCorrect
+
+    const updatedAttempt =
+      await QuizModel.updateScore(
+        attemptId,
+        score
+      );
+
+
+
+    return updatedAttempt;
+
+
+
+  }
+
+
+
+
+
+
+
+  static async getQuizById(
+    quizId:string
+  ) {
+
+    return await QuizModel.getQuizById(
+      quizId
     );
 
   }
 
 
 
-  const updatedAttempt =
-    await QuizModel.updateScore(
-      attemptId,
-      score
+
+
+
+
+  // Get quizzes for instructor module view
+
+  static async getQuizzesByModule(
+    moduleId:string
+  ) {
+
+    return await QuizModel.getQuizzesByModule(
+      moduleId
     );
 
+  }
 
-  return updatedAttempt;
+
+static async getQuestions(
+  quizId:string
+){
+
+  return await QuizModel.getQuestions(
+    quizId
+  );
 
 }
+
 
 }

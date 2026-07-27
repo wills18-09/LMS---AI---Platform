@@ -6,8 +6,10 @@ import CourseDetails from "../pages/CourseDetails";
 import CoursePlayer from "../pages/coursePlayer/CoursePlayer";
 
 import ProtectedRoute from "./ProtectedRoutes";
+
 import AssignmentList from "../pages/assignments/AssignmentList";
 import AssignmentSubmit from "../pages/assignments/AssignmentSubmit";
+
 import CreateAssignment from "../pages/instructor/createAssignment";
 import InstructorDashboard from "../pages/instructor/InstructorDashboard";
 import InstructorCourseDetails from "../pages/instructor/instructorCourseDetails";
@@ -15,214 +17,391 @@ import InstructorLectureDetails from "../pages/instructor/instructorLectureDetai
 import AssignmentSubmissions from "../pages/instructor/assignmentSubmissions";
 import InstructorAssignments from "../pages/instructor/instructorAssignments";
 
+import QuizAttempt from "../pages/student/quizAttempt";
+
+import QuizBuilder from "../pages/instructor/quizBuilder";
+import CreateQuiz from "../pages/instructor/createQuiz";
+import InstructorQuiz from "../pages/instructor/instructorQuiz";
+
 
 function AppRoutes() {
 
 
-  return (
+return (
 
-    <Routes>
-
-
-      <Route
-
-        path="/login"
-
-        element={<Login />}
-
-      />
+<Routes>
 
 
 
-      <Route
+<Route
 
-        path="/dashboard"
+path="/login"
 
-        element={
+element={<Login />}
 
-          <ProtectedRoute>
-
-            <Dashboard />
-
-          </ProtectedRoute>
-
-        }
-
-      />
+/>
 
 
 
-      <Route
-
-        path="/courses/:id"
-
-        element={
-
-          <ProtectedRoute>
-
-            <CourseDetails />
-
-          </ProtectedRoute>
-
-        }
-
-      />
 
 
-      <Route
-      
-      path="/instructor/assignments/create"
-      
-      element={
-      
-      <ProtectedRoute>
-        
-        <CreateAssignment />
-        
-        </ProtectedRoute>
-        }
-        
-        />
+<Route
 
+path="/dashboard"
 
+element={
 
-      <Route
+<ProtectedRoute>
 
-        path="/courses/:courseId/lectures/:lectureId"
+<Dashboard />
 
-        element={
-
-          <ProtectedRoute>
-
-            <CoursePlayer />
-
-          </ProtectedRoute>
-
-        }
-
-      />
-      
-      <Route
-      path="/courses/:id/assignments"
-      element={
-
-      <ProtectedRoute>
-
-        <AssignmentList />
-
-        </ProtectedRoute>
-        }
-        
-        
-        />
-
-        <Route
-        path="/assignments/:id"
-        element={
-        
-        <ProtectedRoute>
-          
-          <AssignmentSubmit />
-          
-          </ProtectedRoute>
-          }
-          
-          />
-
-
-          <Route
-          
-          path="/instructor/dashboard"
-          
-          element={
-          
-          <ProtectedRoute>
-            
-            <InstructorDashboard />
-            
-            </ProtectedRoute>
-            
-          }
-          
-          />
-
-          <Route
-          
-          path="/instructor/courses/:id"
-          
-          element={
-          
-          <ProtectedRoute>
-            
-            <InstructorCourseDetails />
-            
-            </ProtectedRoute>
-            
-          }
-          
-          />
-
-          <Route
-          
-          path="/instructor/lectures/:id"
-          
-          element={
-          
-          <ProtectedRoute>
-            
-            <InstructorLectureDetails />
-            
-            </ProtectedRoute>
-            }
-            
-            />
-
-      <Route
-      
-      path="/instructor/assignments/:id/submissions"
-      
-      element={
-      
-      <ProtectedRoute>
-        
-        <AssignmentSubmissions />
-        
-        
-        </ProtectedRoute>
-        
-      }
-      
-      
-      />
-
-
-      <Route
-      
-      path="/instructor/courses/:id/assignments"
-      
-      element={
-      
-      <ProtectedRoute>
-        
-        <InstructorAssignments />
-        
-        </ProtectedRoute>
-        
-      }
-      
-      />
-        
-
-
-          
-
-    </Routes>
-
-  );
-
-  
+</ProtectedRoute>
 
 }
+
+/>
+
+
+
+
+
+<Route
+
+path="/courses/:id"
+
+element={
+
+<ProtectedRoute>
+
+<CourseDetails />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+<Route
+
+path="/courses/:courseId/lectures/:lectureId"
+
+element={
+
+<ProtectedRoute>
+
+<CoursePlayer />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+
+
+{/* Student Assignments */}
+
+
+
+<Route
+
+path="/courses/:id/assignments"
+
+element={
+
+<ProtectedRoute>
+
+<AssignmentList />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+<Route
+
+path="/assignments/:id"
+
+element={
+
+<ProtectedRoute>
+
+<AssignmentSubmit />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+
+
+
+
+{/* Instructor Dashboard */}
+
+
+
+<Route
+
+path="/instructor/dashboard"
+
+element={
+
+<ProtectedRoute>
+
+<InstructorDashboard />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+<Route
+
+path="/instructor/courses/:id"
+
+element={
+
+<ProtectedRoute>
+
+<InstructorCourseDetails />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+<Route
+
+path="/instructor/lectures/:id"
+
+element={
+
+<ProtectedRoute>
+
+<InstructorLectureDetails />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+
+
+
+{/* Instructor Assignments */}
+
+
+
+<Route
+
+path="/instructor/assignments/create"
+
+element={
+
+<ProtectedRoute>
+
+<CreateAssignment />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+<Route
+
+path="/instructor/assignments/:id/submissions"
+
+element={
+
+<ProtectedRoute>
+
+<AssignmentSubmissions />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+<Route
+
+path="/instructor/courses/:id/assignments"
+
+element={
+
+<ProtectedRoute>
+
+<InstructorAssignments />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+
+
+
+
+{/* Student Quiz */}
+
+
+
+<Route
+
+path="/quizzes/:id"
+
+element={
+
+<ProtectedRoute>
+
+<QuizAttempt />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+
+
+
+{/* Create Quiz */}
+
+
+
+<Route
+
+path="/instructor/modules/:moduleId/quiz/create"
+
+element={
+
+<ProtectedRoute>
+
+<CreateQuiz />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+
+
+{/* Instructor View Quiz Questions */}
+
+
+
+<Route
+
+path="/instructor/quizzes/:quizId"
+
+element={
+
+<ProtectedRoute>
+
+<InstructorQuiz />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+
+
+
+{/* Instructor Quiz Builder */}
+
+
+
+<Route
+
+path="/instructor/quizzes/:quizId/builder"
+
+element={
+
+<ProtectedRoute>
+
+<QuizBuilder />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+
+
+
+
+</Routes>
+
+
+);
+
+
+}
+
 
 
 export default AppRoutes;

@@ -29,6 +29,15 @@ type Lecture = {
 
 
 
+type Quiz = {
+
+  id:string;
+
+  title:string;
+
+};
+
+
 
 type Module = {
 
@@ -38,9 +47,9 @@ type Module = {
 
   lectures:Lecture[];
 
+  quizzes:Quiz[];
+
 };
-
-
 
 
 type Course = {
@@ -70,15 +79,10 @@ type Course = {
 function InstructorCourseDetails(){
 
 
-
-const { id } =
-useParams();
+const { id } = useParams();
 
 
-
-const navigate =
-useNavigate();
-
+const navigate = useNavigate();
 
 
 
@@ -103,9 +107,7 @@ useState<string | null>(null);
 
 const loadCourse = async()=>{
 
-
 try{
-
 
 if(!id){
 
@@ -114,12 +116,10 @@ return;
 }
 
 
-
 const response =
 await api.get(
 `/courses/${id}`
 );
-
 
 
 console.log(
@@ -128,26 +128,20 @@ response.data
 );
 
 
-
 setCourse(
 response.data.course
 );
 
 
-
 }
 catch(error){
-
 
 console.error(
 "Loading course failed:",
 error
 );
 
-
-
 }
-
 
 
 };
@@ -157,12 +151,9 @@ error
 
 
 
-
 useEffect(()=>{
 
-
 loadCourse();
-
 
 },[id]);
 
@@ -173,23 +164,75 @@ loadCourse();
 
 
 
-const openAssignments = ()=>{
+const createQuiz = async(moduleId:string)=>{
+
+try{
 
 
-if(!course){
+const title =
+prompt(
+"Enter quiz title"
+);
+
+
+if(!title){
 
 return;
 
 }
 
 
-navigate(
-`/instructor/courses/${course.id}/assignments`
+
+const response =
+await api.post(
+"/quizzes",
+{
+module_id:moduleId,
+title
+}
 );
 
 
-};
 
+console.log(
+"Quiz created:",
+response.data
+);
+
+
+
+alert(
+"Quiz created successfully 🎉"
+);
+
+
+
+navigate(
+`/instructor/quizzes/${response.data.quiz.id}`
+);
+
+
+
+}
+catch(error){
+
+
+console.error(
+"Quiz creation failed:",
+error
+);
+
+
+
+alert(
+"Failed creating quiz"
+);
+
+
+}
+
+
+};
 
 
 
@@ -203,16 +246,15 @@ if(!course){
 
 return (
 
-<h2>
+<div className="loading">
 
 Loading course...
 
-</h2>
+</div>
 
 );
 
 }
-
 
 
 
@@ -231,18 +273,18 @@ return (
 
 
 
-
-
-
-{/* COURSE HEADER */}
-
-
-
 <div className="course-header">
 
 
-
 <div>
+
+
+<span className="instructor-course-tag">
+
+📚 Instructor Course
+
+</span>
+
 
 
 <h1>
@@ -266,33 +308,20 @@ return (
 
 
 
-
-
-
 <div className="course-status">
-
 
 {course.status || "Draft"}
 
+</div>
+
 
 </div>
 
 
 
-</div>
 
 
 
-
-
-
-
-
-
-
-
-
-{/* COURSE INFO */}
 
 
 
@@ -300,30 +329,49 @@ return (
 
 
 
-<p>
+<div className="info-item">
 
 🎓 Category:
 
-{" "}
+<strong>
 
 {course.category}
 
-</p>
+</strong>
+
+</div>
 
 
 
 
 
-<p>
+<div className="info-item">
 
 ⚡ Difficulty:
 
-{" "}
+<strong>
 
 {course.difficulty || "Not set"}
 
-</p>
+</strong>
 
+</div>
+
+
+
+
+
+<div className="info-item">
+
+📦 Modules:
+
+<strong>
+
+{course.modules.length}
+
+</strong>
+
+</div>
 
 
 
@@ -337,11 +385,6 @@ return (
 
 
 
-
-
-
-
-{/* ASSIGNMENTS SECTION */}
 
 <div className="assignment-management-card">
 
@@ -381,35 +424,31 @@ Create assignments and review student submissions.
 
 
 
+
+
 <div className="assignment-actions">
 
 
 
 <button
 
-
 className="create-assignment-btn"
 
-
-
 onClick={()=>{
-
 
 navigate(
 "/instructor/assignments/create"
 );
 
-
 }}
-
 
 >
 
-
 ➕ Create Assignment
 
-
 </button>
+
+
 
 
 
@@ -436,7 +475,6 @@ navigate(
 
 
 
-
 </div>
 
 
@@ -447,15 +485,6 @@ navigate(
 
 
 
-
-
-
-
-
-
-
-
-{/* MODULES */}
 
 
 
@@ -466,9 +495,7 @@ navigate(
 
 
 
-
 <div className="section-top">
-
 
 
 <h2>
@@ -476,7 +503,6 @@ navigate(
 📚 Course Modules
 
 </h2>
-
 
 
 
@@ -528,6 +554,74 @@ key={module.id}
 
 
 
+{/* QUIZZES */}
+
+<div className="quiz-section">
+
+
+<div className="quiz-header">
+
+
+<h4>
+
+📝 Quizzes
+
+</h4>
+
+
+
+
+
+{
+
+module.quizzes &&
+module.quizzes.length > 0 && (
+
+
+<button
+
+className="view-quiz-btn"
+
+onClick={()=>{
+
+
+navigate(
+
+`/instructor/quizzes/${module.quizzes[0].id}`
+
+);
+
+
+}}
+
+>
+
+View Questions →
+
+</button>
+
+
+)
+
+
+}
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div className="module-title-row">
 
 
 <h3>
@@ -538,29 +632,129 @@ key={module.id}
 
 
 
-
-
+<div className="quiz-management">
 
 
 
 <button
 
+className="add-quiz-btn"
 
-onClick={()=>
+onClick={()=>{
+
+navigate(
+
+`/instructor/modules/${module.id}/quiz/create`
+
+)
+
+}}
+
+>
+
+➕ Create Quiz
+
+</button>
 
 
-setSelectedModule(module.id)
+
+
+
+
+
+{
+
+module.quizzes &&
+
+module.quizzes.map((quiz)=>(
+
+
+<div
+
+key={quiz.id}
+
+className="quiz-item"
+
+>
+
+
+📝 {quiz.title}
+
+
+
+<button
+
+onClick={()=>{
+
+
+navigate(
+
+`/instructor/quizzes/${quiz.id}`
+
+)
+
+
+}}
+
+>
+
+Manage
+
+</button>
+
+
+
+</div>
+
+
+))
 
 
 }
 
 
 
+</div>
+
+
+
+
+
+<span>
+
+{module.lectures?.length || 0} Lectures
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div className="module-actions">
+
+
+
+<button
+
+onClick={()=>setSelectedModule(module.id)}
+
 >
 
-+ Add Lecture
+🎥 Add Lecture
 
 </button>
+
+
+
+</div>
 
 
 
@@ -580,13 +774,11 @@ module.lectures.length > 0 ?
 module.lectures.map(lecture=>(
 
 
-
 <div
 
 className="lecture-row"
 
 key={lecture.id}
-
 
 
 onClick={()=>{
@@ -601,18 +793,6 @@ navigate(
 
 }}
 
-
-
-style={{
-
-
-cursor:"pointer"
-
-
-}}
-
-
-
 >
 
 
@@ -625,10 +805,10 @@ cursor:"pointer"
 ))
 
 
-
 :
 
-<p>
+
+<p className="empty-text">
 
 No lectures yet.
 
@@ -643,9 +823,6 @@ No lectures yet.
 
 
 
-
-
-
 </div>
 
 
@@ -653,11 +830,7 @@ No lectures yet.
 ))
 
 
-
-
-
 :
-
 
 
 
@@ -674,12 +847,7 @@ No modules created yet.
 </div>
 
 
-
 }
-
-
-
-
 
 
 
@@ -695,53 +863,29 @@ No modules created yet.
 
 
 
-
-
-
-
-
-
-
-{/* ADD MODULE */}
-
-
-
 {
 
 showModule && (
 
 
-
 <AddModuleModal
-
-
 
 courseId={course.id}
 
-
-
 close={()=>setShowModule(false)}
-
-
 
 refresh={()=>{
 
-
 setShowModule(false);
-
 
 loadCourse();
 
-
 }}
-
-
 
 />
 
 
 )
-
 
 }
 
@@ -750,17 +894,6 @@ loadCourse();
 
 
 
-
-
-
-
-
-
-
-
-
-
-{/* ADD LECTURE */}
 
 
 
@@ -769,42 +902,26 @@ loadCourse();
 selectedModule && (
 
 
-
 <AddLectureModal
-
-
 
 moduleId={selectedModule}
 
-
-
 close={()=>setSelectedModule(null)}
-
-
 
 refresh={()=>{
 
-
 setSelectedModule(null);
-
 
 loadCourse();
 
-
 }}
-
-
 
 />
 
 
 )
 
-
 }
-
-
-
 
 
 
@@ -820,11 +937,7 @@ loadCourse();
 );
 
 
-
 }
-
-
-
 
 
 

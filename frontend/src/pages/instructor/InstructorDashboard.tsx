@@ -30,6 +30,27 @@ type Course = {
 
 
 
+type Analytics = {
+
+  total_courses:number;
+
+  total_students:number;
+
+  total_assignments:number;
+
+  total_submissions:number;
+
+  pending_reviews:number;
+
+  average_grade:string;
+
+};
+
+
+
+
+
+
 
 function InstructorDashboard(){
 
@@ -40,13 +61,15 @@ useState<Course[]>([]);
 
 
 
-const [students,setStudents] =
-useState(0);
+const [analytics,setAnalytics] =
+useState<Analytics | null>(null);
 
 
 
 const [loading,setLoading] =
 useState(true);
+
+
 
 
 
@@ -65,11 +88,12 @@ try{
 
 
 
+// Courses
+
 const coursesResponse =
 await api.get(
 "/courses/my"
 );
-
 
 
 
@@ -89,22 +113,27 @@ coursesResponse.data.courses
 
 
 
-const studentsResponse =
+
+
+
+// Analytics
+
+const analyticsResponse =
 await api.get(
-"/courses/my/students"
+"/analytics/instructor"
 );
 
 
 
 console.log(
-"Instructor students:",
-studentsResponse.data
+"Instructor analytics:",
+analyticsResponse.data
 );
 
 
 
-setStudents(
-studentsResponse.data.students
+setAnalytics(
+analyticsResponse.data
 );
 
 
@@ -121,6 +150,7 @@ error
 );
 
 
+
 }
 finally{
 
@@ -132,6 +162,7 @@ setLoading(false);
 
 
 };
+
 
 
 
@@ -165,7 +196,6 @@ Loading instructor dashboard...
 
 
 }
-
 
 
 
@@ -243,16 +273,11 @@ Manage your courses, lectures and students.
 
 
 
-
-
-
-
-{/* STATS */}
+{/* ANALYTICS */}
 
 
 
 <div className="instructor-stats">
-
 
 
 
@@ -271,7 +296,9 @@ Manage your courses, lectures and students.
 
 <p>
 
-{courses.length}
+{
+analytics?.total_courses || 0
+}
 
 </p>
 
@@ -300,7 +327,9 @@ Manage your courses, lectures and students.
 
 <p>
 
-{students}
+{
+analytics?.total_students || 0
+}
 
 </p>
 
@@ -329,7 +358,9 @@ Manage your courses, lectures and students.
 
 <p>
 
-0
+{
+analytics?.total_assignments || 0
+}
 
 </p>
 
@@ -343,6 +374,29 @@ Manage your courses, lectures and students.
 
 
 
+
+
+<div className="instructor-stat-card">
+
+
+<h3>
+
+📤 Submissions
+
+</h3>
+
+
+
+<p>
+
+{
+analytics?.total_submissions || 0
+}
+
+</p>
+
+
+
 </div>
 
 
@@ -352,6 +406,69 @@ Manage your courses, lectures and students.
 
 
 
+
+<div className="instructor-stat-card">
+
+
+<h3>
+
+⏳ Pending Reviews
+
+</h3>
+
+
+
+<p>
+
+{
+analytics?.pending_reviews || 0
+}
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div className="instructor-stat-card">
+
+
+<h3>
+
+⭐ Average Grade
+
+</h3>
+
+
+
+<p>
+
+{
+analytics?.average_grade || 0
+}
+
+%
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+</div>
 
 
 
@@ -366,6 +483,8 @@ Manage your courses, lectures and students.
 
 
 <div className="my-courses-section">
+
+
 
 
 
@@ -404,11 +523,8 @@ className="create-course-btn"
 
 
 
+
 </div>
-
-
-
-
 
 
 
@@ -481,6 +597,7 @@ courses.map(course=>(
 
 
 
+
 <InstructorCourseCard
 
 
@@ -522,6 +639,7 @@ course={course}
 
 
 
+
 </div>
 
 
@@ -541,6 +659,7 @@ course={course}
 
 
 }
+
 
 
 

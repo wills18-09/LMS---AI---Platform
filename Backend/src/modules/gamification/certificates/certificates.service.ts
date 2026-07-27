@@ -1,6 +1,7 @@
 import { CertificateModel } from "./certificates.model";
 import { CertificateGenerator } from "./certificates.generator";
 import pool from "../../../db";
+import { BadgeService } from "../badges/badges.service";
 
 
 export class CertificateService {
@@ -140,17 +141,30 @@ export class CertificateService {
 
 
     // Create certificate record
-    const certificate =
-      await CertificateModel.createCertificate(
-        userId,
-        courseId,
-        certificateUrl
-      );
+const certificate =
+  await CertificateModel.createCertificate(
+    userId,
+    courseId,
+    certificateUrl
+  );
 
 
 
-    return certificate;
 
+// Award course completion badge
+// Change this ID after checking your badges table
+const COURSE_COMPLETION_BADGE_ID = 1;
+
+
+
+await BadgeService.awardBadge(
+  userId,
+  COURSE_COMPLETION_BADGE_ID
+);
+
+
+
+return certificate;
   }
 
 

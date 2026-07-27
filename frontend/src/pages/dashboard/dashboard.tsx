@@ -18,6 +18,11 @@ import CourseCard from "../../components/student/CourseCard";
 import "../../styles/dashboard.css";
 
 
+import {
+  getMyBadges
+} from "../../services/badge.service";
+
+
 
 type Course = {
 
@@ -45,6 +50,22 @@ type Certificate = {
 
 
 
+type Badge = {
+
+  id:number;
+
+  name:string;
+
+  description:string;
+
+  icon_url:string;
+
+  earned_at:string;
+
+};
+
+
+
 
 
 function Dashboard(){
@@ -61,12 +82,15 @@ useState<Certificate[]>([]);
 
 
 
+const [badges,setBadges] =
+useState<Badge[]>([]);
+
+
 
 
 
 
 useEffect(()=>{
-
 
 
 const loadDashboard = async()=>{
@@ -99,7 +123,6 @@ coursesResponse.data
 
 
 
-
 const certificateResponse =
 await api.get(
 "/certificates/me"
@@ -116,6 +139,27 @@ certificateResponse.data
 
 setCertificates(
 certificateResponse.data.certificates || []
+);
+
+
+
+
+
+
+const badgesResponse =
+await getMyBadges();
+
+
+
+console.log(
+"My badges:",
+badgesResponse
+);
+
+
+
+setBadges(
+badgesResponse.badges || []
 );
 
 
@@ -151,8 +195,8 @@ loadDashboard();
 
 
 
-
 return(
+
 
 
 <div className="student-dashboard">
@@ -161,7 +205,10 @@ return(
 
 
 
+
+
 <div className="dashboard-header">
+
 
 
 <div>
@@ -174,6 +221,7 @@ Welcome back 👋
 </h1>
 
 
+
 <p>
 
 Continue your learning journey and keep improving.
@@ -182,6 +230,7 @@ Continue your learning journey and keep improving.
 
 
 </div>
+
 
 
 
@@ -236,7 +285,6 @@ Continue your learning journey and keep improving.
 
 
 
-
 <div className="stat-card">
 
 
@@ -255,7 +303,6 @@ Active
 
 
 </div>
-
 
 
 
@@ -288,6 +335,30 @@ Active
 
 
 
+<div className="stat-card">
+
+
+<h3>
+
+🏅 Badges
+
+</h3>
+
+
+<p>
+
+{badges.length}
+
+</p>
+
+
+</div>
+
+
+
+
+
+
 </div>
 
 
@@ -305,6 +376,9 @@ certificates.length > 0 &&
 <div className="certificate-dashboard-box">
 
 
+<div>
+
+
 <h2>
 
 🏆 Your Achievements
@@ -318,6 +392,9 @@ certificates.length > 0 &&
 You have earned {certificates.length} certificate.
 
 </p>
+
+
+</div>
 
 
 
@@ -348,7 +425,168 @@ View Certificates →
 
 
 
+{
+badges.length > 0 &&
+
+
+<div className="badges-dashboard-box">
+
+
+
+<div className="section-header">
+
+
+<h2>
+
+🏅 Your Badges
+
+</h2>
+
+
+
+<span>
+
+{badges.length} earned
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div className="badges-grid">
+
+
+
+{
+
+badges.map((badge)=>(
+
+
+
+<div
+
+key={badge.id}
+
+className="badge-card"
+
+>
+
+
+
+
+
+<div className="badge-icon">
+
+
+{
+
+badge.icon_url ? (
+
+
+<img
+
+src={badge.icon_url}
+
+alt={badge.name}
+
+/>
+
+
+)
+
+:
+
+(
+
+<span>
+
+🏅
+
+</span>
+
+
+)
+
+}
+
+
+
+</div>
+
+
+
+
+
+
+
+<h3>
+
+{badge.name}
+
+</h3>
+
+
+
+
+<p>
+
+{badge.description}
+
+</p>
+
+
+
+
+<small>
+
+Earned 🎉
+
+</small>
+
+
+
+
+
+</div>
+
+
+
+))
+
+
+}
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+}
+
+
+
+
+
+
+
+
+
 <div className="courses-section">
+
+
 
 
 
@@ -396,6 +634,7 @@ courses.length > 0 ? (
 courses.map((course)=>(
 
 
+
 <CourseCard
 
 key={course.id}
@@ -411,6 +650,7 @@ progress={course.progress_percent}
 />
 
 
+
 ))
 
 
@@ -422,11 +662,14 @@ progress={course.progress_percent}
 
 
 
-):(
+)
+
+:(
 
 
 
 <div className="empty-state">
+
 
 
 <h3>
@@ -436,11 +679,13 @@ No courses yet 📚
 </h3>
 
 
+
 <p>
 
 Start learning by enrolling into a course.
 
 </p>
+
 
 
 </div>
@@ -452,6 +697,7 @@ Start learning by enrolling into a course.
 
 
 }
+
 
 
 

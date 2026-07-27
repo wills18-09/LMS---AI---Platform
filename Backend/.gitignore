@@ -3,6 +3,7 @@ node_modules/
 dist/
 videos/
 uploads/
+Backend/certificates/*.pdf
 *.zip
 
 /src/generated/prisma

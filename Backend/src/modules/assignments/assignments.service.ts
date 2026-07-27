@@ -1,69 +1,152 @@
-import { AssignmentModel } from "./assignments.model";
+import pool from "../../db";
+
 
 export class AssignmentService {
 
-  static async createAssignment(data: {
-    course_id: string;
-    title: string;
-    instructions: string;
-    rubric?: any;
-    due_date?: string;
-  }) {
 
-    return await AssignmentModel.createAssignment(data);
+
+  static async createAssignment(
+    data:any
+  ){
+
+    // keep your existing create code here
 
   }
+
+
+
+
 
 
 
   static async getAssignmentsByCourse(
-    courseId: string
-  ) {
+  courseId:string
+){
 
-    return await AssignmentModel.getAssignmentsByCourse(courseId);
+  const result = await pool.query(
+
+    `
+    SELECT
+
+      id,
+
+      title,
+
+      instructions,
+
+      rubric,
+
+      due_date
+
+
+    FROM assignments
+
+
+    WHERE course_id = $1
+
+
+    ORDER BY due_date ASC
+
+    `,
+
+    [
+      courseId
+    ]
+
+  );
+
+
+  return result.rows;
+
+}
+
+
+
+
+
+  static async submitAssignment(
+    data:any
+  ){
+
+    // keep your existing submit code here
 
   }
 
 
 
-  static async submitAssignment(data: {
-    assignment_id: string;
-    user_id: string;
-    file_url: string;
-  }) {
 
-    const assignment =
-      await AssignmentModel.getAssignmentById(
-        data.assignment_id
-      );
 
-    if (!assignment) {
-      throw new Error("Assignment not found");
-    }
 
-    return await AssignmentModel.submitAssignment(data);
+
+
+  static async gradeSubmission(
+    data:any
+  ){
+
+    // keep your existing grade code here
 
   }
 
 
 
-  static async gradeSubmission(data: {
-    id: string;
-    grade: number;
-    feedback: string;
-  }) {
 
-    const submission =
-      await AssignmentModel.getSubmissionById(
-        data.id
-      );
 
-    if (!submission) {
-      throw new Error("Submission not found");
-    }
 
-    return await AssignmentModel.gradeSubmission(data);
+
+
+  // Student gets his own submissions
+
+  static async getMySubmissions(
+    userId:string
+  ){
+
+
+    const result = await pool.query(
+
+
+      `
+      SELECT
+
+        s.id,
+
+        s.assignment_id,
+
+        s.user_id,
+
+        s.file_url,
+
+        s.grade,
+
+        s.feedback,
+
+        s.submitted_at
+
+
+      FROM assignment_submissions s
+
+
+      WHERE s.user_id = $1
+
+
+      ORDER BY s.submitted_at DESC
+
+      `,
+
+
+      [
+        userId
+      ]
+
+
+    );
+
+
+
+    return result.rows;
+
 
   }
+
+
 
 }

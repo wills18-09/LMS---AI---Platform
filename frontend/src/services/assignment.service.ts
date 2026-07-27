@@ -124,3 +124,22 @@ return response.data;
 
 
 };
+
+// ================================
+// STUDENT SUBMISSIONS
+// ================================
+
+
+export const getMySubmissions = async()=>{
+
+
+  const response =
+    await api.get(
+      "/assignments/submissions/me"
+    );
+
+
+  return response.data;
+
+
+};

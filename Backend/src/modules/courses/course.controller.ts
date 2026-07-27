@@ -684,3 +684,77 @@ export const getInstructorCourses = async (
   }
 
 };
+
+export const getInstructorStudentCount = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+
+  try {
+
+    const instructorId = req.user?.id;
+
+
+    if(!instructorId){
+
+      return res.status(401).json({
+        message:"Unauthorized"
+      });
+
+    }
+
+
+
+    const result = await pool.query(
+
+      `
+      SELECT
+        COUNT(DISTINCT e.user_id) AS student_count
+
+      FROM enrollments e
+
+
+      JOIN courses c
+
+      ON e.course_id = c.id
+
+
+      WHERE c.instructor_id = $1
+
+      `,
+
+      [
+        instructorId
+      ]
+
+    );
+
+
+
+
+    return res.status(200).json({
+
+      students:
+      Number(result.rows[0].student_count)
+
+    });
+
+
+  }
+  catch(error){
+
+    console.error(
+      "GET INSTRUCTOR STUDENTS ERROR:",
+      error
+    );
+
+
+    return res.status(500).json({
+
+      message:"Server error"
+
+    });
+
+  }
+
+};

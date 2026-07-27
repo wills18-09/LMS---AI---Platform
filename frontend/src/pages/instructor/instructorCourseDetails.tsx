@@ -4,7 +4,8 @@ import {
 } from "react";
 
 import {
-  useParams
+  useParams,
+  useNavigate
 } from "react-router-dom";
 
 import api from "../../services/axios";
@@ -74,6 +75,10 @@ const { id } =
 useParams();
 
 
+const navigate =
+useNavigate();
+
+
 
 
 const [course,setCourse] =
@@ -88,6 +93,7 @@ useState(false);
 
 const [selectedModule,setSelectedModule] =
 useState<string | null>(null);
+
 
 
 
@@ -139,11 +145,13 @@ error
 );
 
 
+
 }
 
 
 
 };
+
 
 
 
@@ -166,6 +174,8 @@ loadCourse();
 
 
 
+
+
 if(!course){
 
 
@@ -178,7 +188,6 @@ Loading course...
 </h2>
 
 );
-
 
 }
 
@@ -303,12 +312,15 @@ return (
 
 
 
+
+
 {/* MODULES */}
 
 
 
 
 <div className="modules-section">
+
 
 
 
@@ -323,6 +335,7 @@ return (
 📚 Course Modules
 
 </h2>
+
 
 
 
@@ -387,7 +400,6 @@ key={module.id}
 
 
 
-
 <button
 
 
@@ -427,6 +439,22 @@ className="lecture-row"
 
 key={lecture.id}
 
+onClick={()=>{
+
+navigate(
+
+`/instructor/lectures/${lecture.id}`
+
+);
+
+}}
+
+style={{
+
+cursor:"pointer"
+
+}}
+
 >
 
 
@@ -436,9 +464,7 @@ key={lecture.id}
 </div>
 
 
-
 ))
-
 
 
 :
@@ -494,8 +520,8 @@ No modules created yet.
 
 
 
-</div>
 
+</div>
 
 
 
@@ -562,6 +588,7 @@ loadCourse();
 
 
 
+
 {/* ADD LECTURE */}
 
 
@@ -611,6 +638,7 @@ loadCourse();
 
 
 
+
 </div>
 
 
@@ -619,6 +647,7 @@ loadCourse();
 
 
 }
+
 
 
 

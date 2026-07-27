@@ -1,0 +1,37 @@
+.instructor-lecture-page {
+
+padding:40px;
+
+}
+
+
+.lecture-box {
+
+display:flex;
+
+flex-direction:column;
+
+gap:15px;
+
+max-width:600px;
+
+}
+
+
+.lecture-box input,
+.lecture-box textarea {
+
+padding:10px;
+
+font-size:16px;
+
+}
+
+
+.lecture-box button {
+
+padding:12px;
+
+cursor:pointer;
+
+}

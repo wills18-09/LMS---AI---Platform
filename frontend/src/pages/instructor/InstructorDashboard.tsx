@@ -40,6 +40,11 @@ useState<Course[]>([]);
 
 
 
+const [students,setStudents] =
+useState(0);
+
+
+
 const [loading,setLoading] =
 useState(true);
 
@@ -53,15 +58,14 @@ useEffect(()=>{
 
 
 
-const loadCourses = async()=>{
-
+const loadDashboard = async()=>{
 
 
 try{
 
 
 
-const response =
+const coursesResponse =
 await api.get(
 "/courses/my"
 );
@@ -71,15 +75,39 @@ await api.get(
 
 console.log(
 "Instructor courses:",
-response.data
+coursesResponse.data
 );
-
 
 
 
 setCourses(
-response.data.courses
+coursesResponse.data.courses
 );
+
+
+
+
+
+
+const studentsResponse =
+await api.get(
+"/courses/my/students"
+);
+
+
+
+console.log(
+"Instructor students:",
+studentsResponse.data
+);
+
+
+
+setStudents(
+studentsResponse.data.students
+);
+
+
 
 
 
@@ -87,12 +115,10 @@ response.data.courses
 catch(error){
 
 
-
 console.error(
-"Failed loading instructor courses:",
+"Failed loading instructor dashboard:",
 error
 );
-
 
 
 }
@@ -105,17 +131,17 @@ setLoading(false);
 }
 
 
-
 };
 
 
 
 
-loadCourses();
+loadDashboard();
 
 
 
 },[]);
+
 
 
 
@@ -139,6 +165,8 @@ Loading instructor dashboard...
 
 
 }
+
+
 
 
 
@@ -178,6 +206,7 @@ Welcome back 👋
 
 
 
+
 <p>
 
 Manage your courses, lectures and students.
@@ -186,6 +215,7 @@ Manage your courses, lectures and students.
 
 
 </div>
+
 
 
 
@@ -227,6 +257,7 @@ Manage your courses, lectures and students.
 
 
 
+
 <div className="instructor-stat-card">
 
 
@@ -237,6 +268,7 @@ Manage your courses, lectures and students.
 </h3>
 
 
+
 <p>
 
 {courses.length}
@@ -244,7 +276,10 @@ Manage your courses, lectures and students.
 </p>
 
 
+
 </div>
+
+
 
 
 
@@ -262,14 +297,18 @@ Manage your courses, lectures and students.
 </h3>
 
 
+
 <p>
 
-0
+{students}
 
 </p>
 
 
+
 </div>
+
+
 
 
 
@@ -287,6 +326,7 @@ Manage your courses, lectures and students.
 </h3>
 
 
+
 <p>
 
 0
@@ -294,13 +334,21 @@ Manage your courses, lectures and students.
 </p>
 
 
+
+</div>
+
+
+
+
+
+
+
 </div>
 
 
 
 
 
-</div>
 
 
 
@@ -323,6 +371,8 @@ Manage your courses, lectures and students.
 
 
 
+
+
 <div className="section-title">
 
 
@@ -337,7 +387,14 @@ Your Courses
 
 
 
-<button className="create-course-btn">
+
+
+
+<button
+
+className="create-course-btn"
+
+>
 
 + Create Course
 
@@ -346,7 +403,12 @@ Your Courses
 
 
 
+
 </div>
+
+
+
+
 
 
 
@@ -364,7 +426,9 @@ courses.length === 0 ?
 
 (
 
+
 <div className="empty-course">
+
 
 
 <h3>
@@ -374,6 +438,8 @@ courses.length === 0 ?
 </h3>
 
 
+
+
 <p>
 
 Create your first course and start teaching.
@@ -381,9 +447,14 @@ Create your first course and start teaching.
 </p>
 
 
+
 </div>
 
+
+
 )
+
+
 
 
 
@@ -391,16 +462,22 @@ Create your first course and start teaching.
 
 
 
+
+
 (
+
 
 
 <div className="instructor-course-grid">
 
 
 
+
+
 {
 
 courses.map(course=>(
+
 
 
 
@@ -417,6 +494,7 @@ course={course}
 
 
 
+
 ))
 
 
@@ -424,7 +502,12 @@ course={course}
 
 
 
+
+
+
 </div>
+
+
 
 
 )
@@ -438,7 +521,10 @@ course={course}
 
 
 
+
 </div>
+
+
 
 
 
@@ -455,6 +541,8 @@ course={course}
 
 
 }
+
+
 
 
 

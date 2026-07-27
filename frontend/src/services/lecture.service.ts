@@ -171,3 +171,38 @@ export const createLectureBookmark = async (
 
 
 };
+
+
+// =============================
+// CREATE LECTURE
+// =============================
+
+
+export const createLecture = async (
+
+  moduleId:string,
+
+  data:FormData
+
+)=>{
+
+
+  const response =
+    await api.post(
+
+      `/modules/${moduleId}/lectures`,
+
+      data,
+
+      {
+        headers:{
+          "Content-Type":"multipart/form-data"
+        }
+      }
+
+    );
+
+
+  return response.data;
+
+};

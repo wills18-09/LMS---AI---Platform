@@ -7,6 +7,7 @@ import {
   updateCourse,
   approveCourse,
   getInstructorCourses,
+  getInstructorStudentCount,
 } from "./course.controller";
 
 
@@ -31,6 +32,7 @@ const router = Router();
 
 // GET /api/v1/courses
 // Public course listing
+
 router.get(
   "/",
   getCourses as RequestHandler
@@ -40,8 +42,12 @@ router.get(
 
 
 
+
+
+
 // GET /api/v1/courses/my
 // Instructor's own courses
+
 router.get(
   "/my",
   authenticateToken as RequestHandler,
@@ -53,8 +59,28 @@ router.get(
 
 
 
+
+
+// GET /api/v1/courses/my/students
+// Instructor total enrolled students
+
+router.get(
+  "/my/students",
+  authenticateToken as RequestHandler,
+  authorizeRoles("instructor") as RequestHandler,
+  getInstructorStudentCount as RequestHandler
+);
+
+
+
+
+
+
+
+
 // GET /api/v1/courses/:id
 // Single course details
+
 router.get(
   "/:id",
   getCourseById as RequestHandler
@@ -64,8 +90,12 @@ router.get(
 
 
 
+
+
+
 // POST /api/v1/courses
 // Instructor creates course
+
 router.post(
   "/",
   authenticateToken as RequestHandler,
@@ -77,8 +107,12 @@ router.post(
 
 
 
+
+
+
 // POST /api/v1/courses/:id/approve
 // Admin approves/rejects course
+
 router.post(
   "/:id/approve",
   authenticateToken as RequestHandler,
@@ -90,14 +124,21 @@ router.post(
 
 
 
+
+
+
 // PUT /api/v1/courses/:id
 // Instructor updates course
+
 router.put(
   "/:id",
   authenticateToken as RequestHandler,
   authorizeRoles("instructor") as RequestHandler,
   updateCourse as RequestHandler
 );
+
+
+
 
 
 
@@ -110,12 +151,15 @@ router.put(
 
 
 // Student enrolls in course
+
 router.post(
   "/:id/enroll",
   authenticateToken as RequestHandler,
   authorizeRoles("student") as RequestHandler,
   enrollCourse as RequestHandler
 );
+
+
 
 
 

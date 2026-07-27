@@ -964,7 +964,11 @@ onEnded={()=>updateProgress(true)}
 
 <source
 
-src={lecture.video_url}
+src={
+  lecture.video_url.startsWith("http")
+    ? lecture.video_url
+    : `http://localhost:5000${lecture.video_url}`
+}
 
 type="video/mp4"
 

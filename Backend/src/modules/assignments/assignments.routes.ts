@@ -1,22 +1,49 @@
 import { Router } from "express";
+
 import { AssignmentController } from "./assignments.controller";
+
 import {
   authenticateToken,
   authorizeRoles,
 } from "../../middleware/authMiddleware";
+
 import { upload } from "../uploads/uploads.middleware";
 
 
 const router = Router();
 
 
-// Instructor creates an assignment
+
+// ================================
+// INSTRUCTOR
+// ================================
+
+
+// Instructor creates assignment
 router.post(
   "/",
   authenticateToken,
   authorizeRoles("instructor"),
   AssignmentController.createAssignment
 );
+
+
+
+// Instructor grades submission
+router.put(
+  "/submissions/:id/grade",
+  authenticateToken,
+  authorizeRoles("instructor"),
+  AssignmentController.gradeSubmission
+);
+
+
+
+
+
+// ================================
+// STUDENT
+// ================================
 
 
 // Student views assignments for a course
@@ -28,7 +55,9 @@ router.get(
 );
 
 
-// Student submits assignment with file upload
+
+
+// Student submits assignment
 router.post(
   "/:id/submit",
   authenticateToken,
@@ -38,13 +67,16 @@ router.post(
 );
 
 
-// Instructor grades submission
-router.put(
-  "/submissions/:id/grade",
+
+
+// Student gets submitted assignments
+router.get(
+  "/submissions/me",
   authenticateToken,
-  authorizeRoles("instructor"),
-  AssignmentController.gradeSubmission
+  authorizeRoles("student"),
+  AssignmentController.getMySubmissions
 );
+
 
 
 export default router;

@@ -1,11 +1,20 @@
-import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import {
+  useEffect,
+  useState
+} from "react";
 
 import {
-  getAssignmentsByCourse
+  useParams,
+  Link
+} from "react-router-dom";
+
+import {
+  getAssignmentsByCourse,
+  getMySubmissions
 } from "../../services/assignment.service";
 
 import "../../styles/assignment.css";
+
 
 
 type Assignment = {
@@ -22,24 +31,64 @@ type Assignment = {
 
 
 
+
+type Submission = {
+
+  id:string;
+
+  assignment_id:string;
+
+  file_url:string;
+
+  status?:string;
+
+  grade?:number|null;
+
+};
+
+
+
+
+
 function AssignmentList(){
 
 
-const { id } = useParams();
+
+const {
+  id
+}=useParams();
 
 
-const [assignments,setAssignments] =
+
+
+
+const [assignments,setAssignments]
+=
 useState<Assignment[]>([]);
 
 
-const [loading,setLoading] =
+
+
+const [submissions,setSubmissions]
+=
+useState<Submission[]>([]);
+
+
+
+
+const [loading,setLoading]
+=
 useState(true);
 
 
 
 
 
+
+
+
 useEffect(()=>{
+
 
 
 const loadAssignments = async()=>{
@@ -56,14 +105,55 @@ return;
 
 
 
+
+
 const response =
 await getAssignmentsByCourse(id);
 
 
 
-setAssignments(
-response.assignments
+
+console.log(
+"Assignments API:",
+response
 );
+
+
+
+
+setAssignments(
+
+response?.assignments || []
+
+);
+
+
+
+
+
+
+
+const submissionResponse =
+await getMySubmissions();
+
+
+
+
+console.log(
+"Submission API:",
+submissionResponse
+);
+
+
+
+
+setSubmissions(
+
+submissionResponse?.submissions || []
+
+);
+
+
 
 
 
@@ -75,6 +165,7 @@ console.error(
 "Failed loading assignments",
 error
 );
+
 
 
 }
@@ -92,10 +183,16 @@ setLoading(false);
 
 
 
+
 loadAssignments();
 
 
+
 },[id]);
+
+
+
+
 
 
 
@@ -125,13 +222,19 @@ Loading assignments...
 
 
 
+
 return (
+
 
 <div className="assignments-page">
 
 
 
+
+
+
 <div className="assignments-header">
+
 
 
 <div>
@@ -142,6 +245,7 @@ return (
 📝 Assignments
 
 </h1>
+
 
 
 <p>
@@ -156,19 +260,33 @@ Complete your tasks and submit your work.
 
 
 
+
+
+
 <div className="assignment-count">
 
+
 {
-assignments.length
+
+assignments?.length || 0
+
 }
+
+
+{" "}
 
 Tasks
 
+
+</div>
+
+
+
+
+
 </div>
 
 
-
-</div>
 
 
 
@@ -177,7 +295,8 @@ Tasks
 
 
 {
-assignments.length === 0 ?
+
+(assignments?.length || 0) === 0 ?
 
 
 
@@ -207,7 +326,11 @@ Your instructor has not added any assignments.
 
 
 
+
+
 :
+
+
 
 
 
@@ -219,9 +342,12 @@ Your instructor has not added any assignments.
 
 
 
+
+
 {
 
-assignments.map((assignment)=>(
+assignments?.map((assignment)=>(
+
 
 
 <div
@@ -234,17 +360,48 @@ key={assignment.id}
 
 
 
+
+
+
+
 <div className="assignment-top">
+
 
 
 <span className="assignment-status">
 
-Pending
+
+
+{
+
+submissions.some(
+
+submission =>
+
+submission.assignment_id === assignment.id
+
+)
+
+?
+
+"✅ Submitted"
+
+:
+
+"⏳ Pending"
+
+}
+
+
 
 </span>
 
 
+
 </div>
+
+
+
 
 
 
@@ -260,6 +417,8 @@ Pending
 
 
 
+
+
 <p className="instructions">
 
 {assignment.instructions}
@@ -270,7 +429,10 @@ Pending
 
 
 
+
+
 <div className="assignment-info">
+
 
 
 <span>
@@ -280,18 +442,27 @@ Pending
 </span>
 
 
+
 <strong>
 
 {
+
 new Date(
+
 assignment.due_date
+
 ).toLocaleDateString()
+
 }
+
 
 </strong>
 
 
+
 </div>
+
+
 
 
 
@@ -308,7 +479,27 @@ to={`/assignments/${assignment.id}`}
 >
 
 
-Submit Assignment →
+
+{
+
+submissions.some(
+
+submission =>
+
+submission.assignment_id === assignment.id
+
+)
+
+?
+
+"View Submission →"
+
+:
+
+"Submit Assignment →"
+
+}
+
 
 
 </Link>
@@ -316,13 +507,22 @@ Submit Assignment →
 
 
 
+
+
+
+
 </div>
+
 
 
 ))
 
 
+
 }
+
+
+
 
 
 
@@ -332,7 +532,13 @@ Submit Assignment →
 
 )
 
+
+
 }
+
+
+
+
 
 
 
@@ -344,6 +550,7 @@ Submit Assignment →
 
 
 }
+
 
 
 

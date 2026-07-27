@@ -35,12 +35,17 @@ useState("");
 
 
 
-const [videoUrl,setVideoUrl] =
-useState("");
+const [video,setVideo] =
+useState<File | null>(null);
 
 
 
 const [duration,setDuration] =
+useState("");
+
+
+
+const [orderIndex,setOrderIndex] =
 useState("");
 
 
@@ -52,26 +57,71 @@ useState("");
 
 
 
+
 const createLecture = async()=>{
 
 
 try{
 
 
+
+const formData = new FormData();
+
+
+
+formData.append(
+"title",
+title
+);
+
+
+
+formData.append(
+"duration_seconds",
+duration
+);
+
+
+
+formData.append(
+"order_index",
+orderIndex
+);
+
+
+
+formData.append(
+"transcript",
+transcript
+);
+
+
+
+
+
+if(video){
+
+formData.append(
+"video",
+video
+);
+
+}
+
+
+
+
+
 await api.post(
 
 `/modules/${moduleId}/lectures`,
 
+formData,
+
 {
-
-title,
-
-video_url:videoUrl,
-
-duration_seconds:Number(duration),
-
-transcript
-
+headers:{
+"Content-Type":"multipart/form-data"
+}
 }
 
 );
@@ -95,11 +145,14 @@ error
 );
 
 
+
 }
 
 
 
 };
+
+
 
 
 
@@ -118,11 +171,15 @@ return (
 
 
 
+
+
 <h2>
 
 Create Lecture
 
 </h2>
+
+
 
 
 
@@ -145,17 +202,24 @@ e=>setTitle(e.target.value)
 
 
 
+
+
 <input
 
-placeholder="Video URL"
+type="file"
 
-value={videoUrl}
+accept="video/*"
 
 onChange={
-e=>setVideoUrl(e.target.value)
+e=>
+setVideo(
+e.target.files?.[0] || null
+)
 }
 
 />
+
+
 
 
 
@@ -170,6 +234,24 @@ value={duration}
 
 onChange={
 e=>setDuration(e.target.value)
+}
+
+/>
+
+
+
+
+
+
+
+<input
+
+placeholder="Order index"
+
+value={orderIndex}
+
+onChange={
+e=>setOrderIndex(e.target.value)
 }
 
 />
@@ -198,6 +280,7 @@ e=>setTranscript(e.target.value)
 
 
 
+
 <button
 
 onClick={createLecture}
@@ -213,6 +296,7 @@ Create Lecture
 
 
 
+
 <button
 
 onClick={close}
@@ -222,6 +306,8 @@ onClick={close}
 Cancel
 
 </button>
+
+
 
 
 

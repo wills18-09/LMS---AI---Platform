@@ -6,12 +6,15 @@ import "../styles/CourseDetails.css";
 
 type Lecture = {
 
-  id: string;
+ id:string;
 
-  title: string;
+ title:string;
+
+ video_url:string;
+
+ description?:string;
 
 };
-
 
 
 type Module = {

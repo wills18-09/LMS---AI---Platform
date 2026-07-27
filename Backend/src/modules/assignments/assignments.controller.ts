@@ -73,6 +73,7 @@ export class AssignmentController {
 
 
 
+
   // Student gets assignments for a course
   static async getAssignmentsByCourse(
     req: AuthenticatedRequest,
@@ -122,6 +123,7 @@ export class AssignmentController {
     }
 
   }
+
 
 
 
@@ -201,6 +203,7 @@ export class AssignmentController {
 
 
 
+
       return res.status(201).json({
 
         message:
@@ -241,6 +244,85 @@ export class AssignmentController {
 
 
 
+
+  // Student gets own submissions
+  static async getMySubmissions(
+    req: AuthenticatedRequest,
+    res: Response
+  ){
+
+    try{
+
+
+      const userId =
+      req.user?.id;
+
+
+
+      if(!userId){
+
+        return res.status(401).json({
+
+          message:
+          "Unauthorized"
+
+        });
+
+      }
+
+
+
+
+
+      const submissions =
+      await AssignmentService.getMySubmissions(
+        userId
+      );
+
+
+
+
+
+      return res.status(200).json({
+
+        submissions
+
+      });
+
+
+
+    }
+    catch(error:any){
+
+
+      console.error(
+        "GET MY SUBMISSIONS ERROR:",
+        error
+      );
+
+
+      return res.status(500).json({
+
+        message:
+        error.message ||
+        "Server error"
+
+      });
+
+
+    }
+
+
+  }
+
+
+
+
+
+
+
+
+
   // Instructor grades submission
   static async gradeSubmission(
     req: AuthenticatedRequest,
@@ -266,15 +348,17 @@ export class AssignmentController {
 
 
       const submission =
-  await AssignmentService.gradeSubmission({
+      await AssignmentService.gradeSubmission({
 
-    id: submissionId,
+        id:
+        submissionId,
 
-    grade,
+        grade,
 
-    feedback
+        feedback
 
-  });
+      });
+
 
 
 

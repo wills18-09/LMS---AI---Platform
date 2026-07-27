@@ -46,10 +46,9 @@ export const createLecture = async (
 
     if(req.file){
 
-      video_url = `/uploads/${req.file.filename}`;
+  video_url = `http://localhost:5000/uploads/${req.file.filename}`;
 
-    }
-
+}
 
 
     const moduleCheck = await pool.query(
@@ -552,5 +551,272 @@ export const getLectureProgress = async (
 
   }
 
+
+};
+
+export const updateLecture = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+
+    const { id } = req.params;
+
+    const instructorId = req.user?.id;
+
+    const {
+      title,
+      transcript,
+      duration_seconds,
+      order_index,
+      resource_urls
+    } = req.body;
+
+    const ownerCheck = await pool.query(
+      `
+      SELECT l.id
+      FROM lectures l
+      JOIN modules m
+      ON l.module_id = m.id
+      JOIN courses c
+      ON m.course_id = c.id
+      WHERE l.id = $1
+      AND c.instructor_id = $2
+      `,
+      [id, instructorId]
+    );
+
+    if (ownerCheck.rows.length === 0) {
+      return res.status(403).json({
+        message: "You do not own this lecture."
+      });
+    }
+
+    let videoUrlQuery = "";
+    let values: any[] = [
+      title,
+      transcript,
+      duration_seconds,
+      order_index,
+      resource_urls
+    ];
+
+    if (req.file) {
+      videoUrlQuery = ", video_url=$6";
+      values.push(`/uploads/${req.file.filename}`);
+      values.push(id);
+    } else {
+      values.push(id);
+    }
+
+    const query = req.file
+      ? `
+      UPDATE lectures
+      SET
+        title=$1,
+        transcript=$2,
+        duration_seconds=$3,
+        order_index=$4,
+        resource_urls=$5
+        ${videoUrlQuery}
+      WHERE id=$7
+      RETURNING *
+      `
+      : `
+      UPDATE lectures
+      SET
+        title=$1,
+        transcript=$2,
+        duration_seconds=$3,
+        order_index=$4,
+        resource_urls=$5
+      WHERE id=$6
+      RETURNING *
+      `;
+
+    const result = await pool.query(query, values);
+
+    res.json({
+      message: "Lecture updated successfully",
+      lecture: result.rows[0]
+    });
+
+  } catch (error) {
+
+    console.error("UPDATE LECTURE ERROR:", error);
+
+    res.status(500).json({
+      message: "Server error"
+    });
+
+  }
+};
+
+export const deleteLecture = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+
+  try {
+
+    const { id } = req.params;
+
+
+    const instructorId = req.user?.id;
+
+
+
+    console.log("DELETE LECTURE DEBUG");
+
+    console.log({
+      lectureId: id,
+      instructorId,
+      user: req.user
+    });
+
+
+
+    if(!instructorId){
+
+      return res.status(401).json({
+        message:"Instructor not authenticated"
+      });
+
+    }
+
+
+
+
+    const ownerCheck = await pool.query(
+
+      `
+      SELECT 
+        l.id,
+        c.instructor_id
+
+      FROM lectures l
+
+      JOIN modules m
+      ON l.module_id = m.id
+
+      JOIN courses c
+      ON m.course_id = c.id
+
+      WHERE l.id=$1
+
+      `,
+
+      [
+        id
+      ]
+
+    );
+
+
+
+
+
+    console.log(
+      "OWNER RESULT:",
+      ownerCheck.rows
+    );
+
+
+
+
+
+    if(ownerCheck.rows.length === 0){
+
+      return res.status(404).json({
+
+        message:"Lecture not found"
+
+      });
+
+    }
+
+
+
+
+
+    const lectureOwner =
+      ownerCheck.rows[0].instructor_id;
+
+
+
+
+    if(
+      lectureOwner !== instructorId
+    ){
+
+      console.log(
+        "OWNER MISMATCH",
+        {
+          databaseOwner: lectureOwner,
+          loggedInstructor: instructorId
+        }
+      );
+
+
+      return res.status(403).json({
+
+        message:"You do not own this lecture"
+
+      });
+
+    }
+
+
+
+
+
+
+
+    await pool.query(
+
+      `
+      DELETE FROM lectures
+      WHERE id=$1
+      `,
+
+      [
+        id
+      ]
+
+    );
+
+
+
+
+
+
+    return res.json({
+
+      message:"Lecture deleted successfully"
+
+    });
+
+
+
+
+
+  }
+  catch(error){
+
+
+    console.error(
+      "DELETE LECTURE ERROR:",
+      error
+    );
+
+
+    return res.status(500).json({
+
+      message:"Server error"
+
+    });
+
+
+  }
 
 };

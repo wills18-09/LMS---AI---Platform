@@ -9,8 +9,9 @@ import ProtectedRoute from "./ProtectedRoutes";
 import AssignmentList from "../pages/assignments/AssignmentList";
 import AssignmentSubmit from "../pages/assignments/AssignmentSubmit";
 import CreateAssignment from "../pages/instructor/createAssignment";
-import InstructorDashboard from "../pages/instructor/instructorDashboard";
+import InstructorDashboard from "../pages/instructor/InstructorDashboard";
 import InstructorCourseDetails from "../pages/instructor/instructorCourseDetails";
+import InstructorLectureDetails from "../pages/instructor/instructorLectureDetails";
 
 
 function AppRoutes() {
@@ -147,10 +148,36 @@ function AppRoutes() {
           
           path="/instructor/courses/:id"
           
-          element={<InstructorCourseDetails />}
+          element={
+          
+          <ProtectedRoute>
+            
+            <InstructorCourseDetails />
+            
+            </ProtectedRoute>
+            
+          }
           
           />
 
+          <Route
+          
+          path="/instructor/lectures/:id"
+          
+          element={
+          
+          <ProtectedRoute>
+            
+            <InstructorLectureDetails />
+            
+            </ProtectedRoute>
+            }
+            
+            />
+        
+
+
+          
 
     </Routes>
 

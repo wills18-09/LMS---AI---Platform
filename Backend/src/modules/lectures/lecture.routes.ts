@@ -4,7 +4,9 @@ import {
   createLecture,
   getLectureById,
   updateLectureProgress,
-  getLectureProgress
+  getLectureProgress,
+  updateLecture,
+  deleteLecture
 } from "./lecture.controller";
 
 import {
@@ -14,15 +16,9 @@ import {
 
 import { upload } from "../uploads/uploads.middleware";
 
-
 const router = Router();
 
-
-
-
-// CREATE LECTURE (INSTRUCTOR ONLY)
-
-
+// CREATE LECTURE
 router.post(
   "/:moduleId/lectures",
   authenticateToken as RequestHandler,
@@ -31,46 +27,42 @@ router.post(
   createLecture as RequestHandler
 );
 
-
-
-
-
 // GET SINGLE LECTURE
-
-
 router.get(
   "/:id",
   authenticateToken as RequestHandler,
   getLectureById as RequestHandler
 );
 
+// UPDATE LECTURE
+router.put(
+  "/:id",
+  authenticateToken as RequestHandler,
+  authorizeRoles("instructor") as RequestHandler,
+  upload.single("video"),
+  updateLecture as RequestHandler
+);
 
+// DELETE LECTURE
+router.delete(
+  "/:id",
+  authenticateToken as RequestHandler,
+  authorizeRoles("instructor") as RequestHandler,
+  deleteLecture as RequestHandler
+);
 
-
-
-// UPDATE LECTURE PROGRESS
-
-
-
+// UPDATE PROGRESS
 router.post(
   "/:id/progress",
   authenticateToken as RequestHandler,
   updateLectureProgress as RequestHandler
 );
 
-
-
-
-
-// GET LECTURE PROGRESS
-
-
+// GET PROGRESS
 router.get(
   "/:id/progress",
   authenticateToken as RequestHandler,
   getLectureProgress as RequestHandler
 );
-
-
 
 export default router;

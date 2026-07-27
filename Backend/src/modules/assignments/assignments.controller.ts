@@ -398,5 +398,48 @@ export class AssignmentController {
   }
 
 
+  // Instructor gets all submissions for an assignment
+static async getAssignmentSubmissions(
+  req: AuthenticatedRequest,
+  res: Response
+) {
+
+  try {
+
+    const assignmentId =
+      req.params.id as string;
+
+    const submissions =
+      await AssignmentService.getAssignmentSubmissions(
+        assignmentId
+      );
+
+    return res.status(200).json({
+
+      submissions
+
+    });
+
+  }
+  catch(error:any){
+
+    console.error(
+      "GET ASSIGNMENT SUBMISSIONS ERROR:",
+      error
+    );
+
+    return res.status(500).json({
+
+      message:
+      error.message ||
+      "Server error"
+
+    });
+
+  }
+
+}
+
+
 
 }

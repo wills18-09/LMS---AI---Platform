@@ -40,13 +40,13 @@ type Submission = {
 
   file_url:string;
 
-  status?:string;
+  grade:number | null;
 
-  grade?:number|null;
+  feedback:string | null;
+
+  submitted_at:string;
 
 };
-
-
 
 
 
@@ -419,12 +419,93 @@ submission.assignment_id === assignment.id
 
 
 
-<p className="instructions">
+{
 
-{assignment.instructions}
+submissions.find(
+submission =>
+submission.assignment_id === assignment.id
+)
+
+&&
+
+(
+
+<div className="grade-box">
+
+
+{
+
+submissions.find(
+submission =>
+submission.assignment_id === assignment.id
+)?.grade !== null
+
+?
+
+<>
+
+<h4>
+⭐ Grade
+</h4>
+
+
+<p>
+
+{
+
+submissions.find(
+submission =>
+submission.assignment_id === assignment.id
+)?.grade
+
+}
+
+/100
 
 </p>
 
+
+
+<h4>
+💬 Feedback
+</h4>
+
+
+<p>
+
+{
+
+submissions.find(
+submission =>
+submission.assignment_id === assignment.id
+)?.feedback ||
+"No feedback provided"
+
+}
+
+</p>
+
+</>
+
+
+:
+
+<p>
+
+⏳ Waiting for instructor grading
+
+</p>
+
+
+}
+
+
+
+</div>
+
+)
+
+}
 
 
 

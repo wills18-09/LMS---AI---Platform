@@ -75,6 +75,7 @@ const { id } =
 useParams();
 
 
+
 const navigate =
 useNavigate();
 
@@ -93,7 +94,6 @@ useState(false);
 
 const [selectedModule,setSelectedModule] =
 useState<string | null>(null);
-
 
 
 
@@ -158,7 +158,6 @@ error
 
 
 
-
 useEffect(()=>{
 
 
@@ -167,6 +166,29 @@ loadCourse();
 
 },[id]);
 
+
+
+
+
+
+
+
+const openAssignments = ()=>{
+
+
+if(!course){
+
+return;
+
+}
+
+
+navigate(
+`/instructor/courses/${course.id}/assignments`
+);
+
+
+};
 
 
 
@@ -209,6 +231,9 @@ return (
 
 
 
+
+
+
 {/* COURSE HEADER */}
 
 
@@ -243,6 +268,7 @@ return (
 
 
 
+
 <div className="course-status">
 
 
@@ -254,6 +280,9 @@ return (
 
 
 </div>
+
+
+
 
 
 
@@ -312,6 +341,118 @@ return (
 
 
 
+{/* ASSIGNMENTS SECTION */}
+
+<div className="assignment-management-card">
+
+
+<div className="assignment-card-header">
+
+
+<div>
+
+<h2>
+
+📝 Assignments
+
+</h2>
+
+
+<p>
+
+Create assignments and review student submissions.
+
+</p>
+
+
+</div>
+
+
+<div className="assignment-icon">
+
+📚
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div className="assignment-actions">
+
+
+
+<button
+
+
+className="create-assignment-btn"
+
+
+
+onClick={()=>{
+
+
+navigate(
+"/instructor/assignments/create"
+);
+
+
+}}
+
+
+>
+
+
+➕ Create Assignment
+
+
+</button>
+
+
+
+
+
+
+<button
+
+className="view-submissions-btn"
+
+onClick={()=>{
+
+navigate(
+`/instructor/courses/${course.id}/assignments`
+);
+
+}}
+
+>
+
+📂 Manage Assignments
+
+</button>
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 {/* MODULES */}
@@ -335,7 +476,6 @@ return (
 📚 Course Modules
 
 </h2>
-
 
 
 
@@ -388,6 +528,8 @@ key={module.id}
 
 
 
+
+
 <h3>
 
 📂 {module.title}
@@ -400,12 +542,18 @@ key={module.id}
 
 
 
+
 <button
 
 
 onClick={()=>
+
+
 setSelectedModule(module.id)
+
+
 }
+
 
 
 >
@@ -439,7 +587,10 @@ className="lecture-row"
 
 key={lecture.id}
 
+
+
 onClick={()=>{
+
 
 navigate(
 
@@ -447,13 +598,20 @@ navigate(
 
 );
 
+
 }}
+
+
 
 style={{
 
+
 cursor:"pointer"
 
+
 }}
+
+
 
 >
 
@@ -465,6 +623,7 @@ cursor:"pointer"
 
 
 ))
+
 
 
 :
@@ -484,11 +643,16 @@ No lectures yet.
 
 
 
+
+
+
 </div>
 
 
 
 ))
+
+
 
 
 
@@ -534,6 +698,10 @@ No modules created yet.
 
 
 
+
+
+
+
 {/* ADD MODULE */}
 
 
@@ -561,6 +729,7 @@ refresh={()=>{
 
 setShowModule(false);
 
+
 loadCourse();
 
 
@@ -575,6 +744,8 @@ loadCourse();
 
 
 }
+
+
 
 
 
@@ -616,6 +787,7 @@ refresh={()=>{
 
 setSelectedModule(null);
 
+
 loadCourse();
 
 
@@ -639,6 +811,9 @@ loadCourse();
 
 
 
+
+
+
 </div>
 
 
@@ -647,6 +822,7 @@ loadCourse();
 
 
 }
+
 
 
 

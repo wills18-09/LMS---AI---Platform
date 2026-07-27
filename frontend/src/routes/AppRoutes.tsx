@@ -12,6 +12,8 @@ import CreateAssignment from "../pages/instructor/createAssignment";
 import InstructorDashboard from "../pages/instructor/InstructorDashboard";
 import InstructorCourseDetails from "../pages/instructor/instructorCourseDetails";
 import InstructorLectureDetails from "../pages/instructor/instructorLectureDetails";
+import AssignmentSubmissions from "../pages/instructor/assignmentSubmissions";
+import InstructorAssignments from "../pages/instructor/instructorAssignments";
 
 
 function AppRoutes() {
@@ -174,6 +176,41 @@ function AppRoutes() {
             }
             
             />
+
+      <Route
+      
+      path="/instructor/assignments/:id/submissions"
+      
+      element={
+      
+      <ProtectedRoute>
+        
+        <AssignmentSubmissions />
+        
+        
+        </ProtectedRoute>
+        
+      }
+      
+      
+      />
+
+
+      <Route
+      
+      path="/instructor/courses/:id/assignments"
+      
+      element={
+      
+      <ProtectedRoute>
+        
+        <InstructorAssignments />
+        
+        </ProtectedRoute>
+        
+      }
+      
+      />
         
 
 

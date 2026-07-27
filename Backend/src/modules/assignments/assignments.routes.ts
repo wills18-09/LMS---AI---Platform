@@ -29,6 +29,20 @@ router.post(
 
 
 
+
+
+// Instructor views submissions for an assignment
+router.get(
+  "/:id/submissions",
+  authenticateToken,
+  authorizeRoles("instructor"),
+  AssignmentController.getAssignmentSubmissions
+);
+
+
+
+
+
 // Instructor grades submission
 router.put(
   "/submissions/:id/grade",
@@ -41,18 +55,21 @@ router.put(
 
 
 
+
+
 // ================================
 // STUDENT
 // ================================
 
 
-// Student views assignments for a course
+// Student and Instructor view assignments for a course
 router.get(
   "/course/:id",
   authenticateToken,
-  authorizeRoles("student"),
+  authorizeRoles("student","instructor"),
   AssignmentController.getAssignmentsByCourse
 );
+
 
 
 
@@ -69,6 +86,7 @@ router.post(
 
 
 
+
 // Student gets submitted assignments
 router.get(
   "/submissions/me",
@@ -76,6 +94,8 @@ router.get(
   authorizeRoles("student"),
   AssignmentController.getMySubmissions
 );
+
+
 
 
 

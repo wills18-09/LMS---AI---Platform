@@ -23,6 +23,13 @@ import {
 } from "../../services/badge.service";
 
 
+import {
+  getMyStreak
+} from "../../services/streak.service";
+
+
+
+
 
 type Course = {
 
@@ -38,6 +45,8 @@ type Course = {
 
 
 
+
+
 type Certificate = {
 
   id:string;
@@ -47,6 +56,8 @@ type Certificate = {
   certificate_url:string;
 
 };
+
+
 
 
 
@@ -63,6 +74,22 @@ type Badge = {
   earned_at:string;
 
 };
+
+
+
+
+
+type Streak = {
+
+  current_streak:number;
+
+  longest_streak:number;
+
+};
+
+
+
+
 
 
 
@@ -87,6 +114,10 @@ useState<Badge[]>([]);
 
 
 
+const [streak,setStreak] =
+useState<Streak|null>(null);
+
+
 
 
 
@@ -107,16 +138,10 @@ await api.get(
 
 
 
-console.log(
-"My courses:",
-coursesResponse.data
-);
-
-
-
 setCourses(
-coursesResponse.data
+coursesResponse.data || []
 );
+
 
 
 
@@ -130,16 +155,10 @@ await api.get(
 
 
 
-console.log(
-"My certificates:",
-certificateResponse.data
-);
-
-
-
 setCertificates(
 certificateResponse.data.certificates || []
 );
+
 
 
 
@@ -151,15 +170,23 @@ await getMyBadges();
 
 
 
-console.log(
-"My badges:",
-badgesResponse
+setBadges(
+badgesResponse.badges || []
 );
 
 
 
-setBadges(
-badgesResponse.badges || []
+
+
+
+
+const streakResponse =
+await getMyStreak();
+
+
+
+setStreak(
+streakResponse.streak || null
 );
 
 
@@ -193,6 +220,36 @@ loadDashboard();
 
 
 
+const badgeImage = (
+url:string
+)=>{
+
+
+if(!url){
+
+return null;
+
+}
+
+
+return url.startsWith("http")
+
+?
+
+url
+
+:
+
+`http://localhost:5000${url}`;
+
+
+};
+
+
+
+
+
+
 
 
 return(
@@ -200,7 +257,6 @@ return(
 
 
 <div className="student-dashboard">
-
 
 
 
@@ -243,6 +299,7 @@ Continue your learning journey and keep improving.
 
 
 
+
 </div>
 
 
@@ -254,6 +311,7 @@ Continue your learning journey and keep improving.
 
 
 <div className="stats-container">
+
 
 
 
@@ -277,7 +335,6 @@ Continue your learning journey and keep improving.
 
 
 </div>
-
 
 
 
@@ -310,7 +367,6 @@ Active
 
 
 
-
 <div className="stat-card">
 
 
@@ -329,6 +385,7 @@ Active
 
 
 </div>
+
 
 
 
@@ -359,6 +416,95 @@ Active
 
 
 
+
+
+<div className="stat-card streak-card">
+
+
+
+<div className="streak-fire">
+
+🔥
+
+</div>
+
+
+
+
+<div className="streak-info">
+
+
+<h2>
+
+{
+streak
+?
+`${streak.current_streak} Days`
+:
+"0 Days"
+}
+
+</h2>
+
+
+
+<p>
+
+Current streak
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div className="streak-stats">
+
+
+<div>
+
+<span>
+
+Best
+
+</span>
+
+
+<strong>
+
+{
+streak
+?
+streak.longest_streak
+:
+0
+}
+
+</strong>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
 </div>
 
 
@@ -371,6 +517,7 @@ Active
 
 {
 certificates.length > 0 &&
+
 
 
 <div className="certificate-dashboard-box">
@@ -394,6 +541,7 @@ You have earned {certificates.length} certificate.
 </p>
 
 
+
 </div>
 
 
@@ -413,7 +561,10 @@ View Certificates →
 
 
 
+
 </div>
+
+
 
 }
 
@@ -427,6 +578,7 @@ View Certificates →
 
 {
 badges.length > 0 &&
+
 
 
 <div className="badges-dashboard-box">
@@ -460,6 +612,7 @@ badges.length > 0 &&
 
 
 
+
 <div className="badges-grid">
 
 
@@ -481,29 +634,38 @@ className="badge-card"
 
 
 
-
 <div className="badge-icon">
 
 
 {
 
-badge.icon_url ? (
+badgeImage(badge.icon_url)
 
+?
 
 <img
 
-src={badge.icon_url}
+src={
+badgeImage(
+badge.icon_url
+)!
+}
 
 alt={badge.name}
+
+onError={
+(e)=>{
+
+e.currentTarget.style.display="none";
+
+}
+
+}
 
 />
 
 
-)
-
 :
-
-(
 
 <span>
 
@@ -511,8 +673,6 @@ alt={badge.name}
 
 </span>
 
-
-)
 
 }
 
@@ -535,6 +695,8 @@ alt={badge.name}
 
 
 
+
+
 <p>
 
 {badge.description}
@@ -544,11 +706,13 @@ alt={badge.name}
 
 
 
-<small>
 
-Earned 🎉
 
-</small>
+<div className="badge-earned">
+
+✨ Earned
+
+</div>
 
 
 
@@ -565,7 +729,9 @@ Earned 🎉
 
 
 
+
 </div>
+
 
 
 
@@ -585,6 +751,7 @@ Earned 🎉
 
 
 <div className="courses-section">
+
 
 
 
@@ -664,12 +831,13 @@ progress={course.progress_percent}
 
 )
 
-:(
+:
+
+(
 
 
 
 <div className="empty-state">
-
 
 
 <h3>
@@ -679,13 +847,11 @@ No courses yet 📚
 </h3>
 
 
-
 <p>
 
 Start learning by enrolling into a course.
 
 </p>
-
 
 
 </div>
@@ -697,6 +863,8 @@ Start learning by enrolling into a course.
 
 
 }
+
+
 
 
 
@@ -717,7 +885,6 @@ Start learning by enrolling into a course.
 
 
 );
-
 
 
 }

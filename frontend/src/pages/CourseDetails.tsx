@@ -50,6 +50,7 @@ type Module = {
 };
 
 
+
 type Course = {
 
  id:string;
@@ -72,6 +73,7 @@ type Course = {
 
 
 
+
 function CourseDetails(){
 
 
@@ -80,8 +82,21 @@ const {id}=useParams();
 const navigate=useNavigate();
 
 
+
 const [course,setCourse]=
 useState<Course|null>(null);
+
+
+
+const [certificateLoading,setCertificateLoading]=
+useState(false);
+
+
+
+const [certificateMessage,setCertificateMessage]=
+useState("");
+
+
 
 
 
@@ -100,15 +115,18 @@ await api.get(
 );
 
 
+
 console.log(
 "Course details:",
 response.data
 );
 
 
+
 setCourse(
 response.data.course
 );
+
 
 
 }
@@ -125,6 +143,7 @@ error
 };
 
 
+
 if(id){
 
 fetchCourse();
@@ -138,7 +157,85 @@ fetchCourse();
 
 
 
+
+
+
+const generateCertificate = async()=>{
+
+
+try{
+
+
+setCertificateLoading(true);
+
+setCertificateMessage("");
+
+
+
+const response =
+await api.post(
+`/certificates/${course?.id}/generate`
+);
+
+
+
+console.log(
+"Certificate generated:",
+response.data
+);
+
+
+
+setCertificateMessage(
+"🎉 Certificate generated successfully!"
+);
+
+
+
+}
+catch(error:any){
+
+
+console.error(
+"Certificate generation failed:",
+error
+);
+
+
+
+setCertificateMessage(
+
+error.response?.data?.message ||
+
+"Failed to generate certificate"
+
+);
+
+
+
+}
+finally{
+
+
+setCertificateLoading(false);
+
+
+}
+
+
+
+};
+
+
+
+
+
+
+
+
+
 if(!course){
+
 
 return(
 
@@ -157,8 +254,13 @@ Loading course...
 
 
 
+
+
 const firstLecture =
 course.modules?.[0]?.lectures?.[0];
+
+
+
 
 
 
@@ -171,10 +273,14 @@ return(
 
 
 
+
+
 <div className="course-hero">
 
 
+
 <div className="course-info">
+
 
 
 <div className="course-category">
@@ -185,11 +291,15 @@ return(
 
 
 
+
+
 <h1>
 
 {course.title}
 
 </h1>
+
+
 
 
 
@@ -203,7 +313,11 @@ return(
 
 
 
+
+
+
 <div className="course-details-row">
+
 
 
 {
@@ -216,6 +330,8 @@ course.difficulty &&
 </div>
 
 }
+
+
 
 
 
@@ -232,6 +348,9 @@ course.instructor_name &&
 
 
 
+
+
+
 <div className="info-pill">
 
 📚 {course.modules.length} Modules
@@ -240,7 +359,11 @@ course.instructor_name &&
 
 
 
+
+
 </div>
+
+
 
 
 
@@ -256,10 +379,13 @@ firstLecture &&
 className="start-learning-btn"
 
 onClick={()=>navigate(
+
 `/courses/${course.id}/lectures/${firstLecture.id}`
+
 )}
 
 >
+
 
 <span>
 
@@ -267,14 +393,19 @@ onClick={()=>navigate(
 
 </span>
 
+
 Start Learning
+
 
 </button>
 
 }
 
 
+
 </div>
+
+
 
 
 
@@ -283,6 +414,9 @@ Start Learning
 🎥
 
 </div>
+
+
+
 
 
 </div>
@@ -299,13 +433,17 @@ Start Learning
 
 
 
+
+
 <div className="section-header">
+
 
 <h2>
 
 📚 Course Content
 
 </h2>
+
 
 
 <span>
@@ -315,15 +453,20 @@ Start Learning
 </span>
 
 
+
 </div>
 
 
 
 
 
-{
 
+
+
+
+{
 course.modules?.map(module=>(
+
 
 
 <div
@@ -333,6 +476,7 @@ className="module-card"
 key={module.id}
 
 >
+
 
 
 <h3>
@@ -345,9 +489,14 @@ key={module.id}
 
 
 
+
+
+
+
 {
 
 module.lectures.map(lecture=>(
+
 
 
 <div
@@ -357,12 +506,15 @@ key={lecture.id}
 >
 
 
+
 <Link
 
 className="lecture-link"
 
 to={
+
 `/courses/${course.id}/lectures/${lecture.id}`
+
 }
 
 >
@@ -375,9 +527,14 @@ to={
 
 
 
+
+
 {
+
 module.quizzes &&
+
 module.quizzes.length > 0 &&
+
 
 
 <Link
@@ -396,8 +553,8 @@ to={`/quizzes/${module.quizzes[0].id}`}
 
 
 
-
 </div>
+
 
 
 ))
@@ -407,13 +564,18 @@ to={`/quizzes/${module.quizzes[0].id}`}
 
 
 
+
+
 </div>
+
 
 
 ))
 
 
 }
+
+
 
 
 
@@ -430,6 +592,7 @@ to={`/quizzes/${module.quizzes[0].id}`}
 <div className="assignment-box">
 
 
+
 <h2>
 
 📝 Assignments
@@ -437,11 +600,15 @@ to={`/quizzes/${module.quizzes[0].id}`}
 </h2>
 
 
+
+
 <p>
 
 Complete assignments and submit your work.
 
 </p>
+
+
 
 
 
@@ -458,7 +625,98 @@ View Assignments →
 </Link>
 
 
+
+
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div className="certificate-box">
+
+
+
+<h2>
+
+🏆 Course Certificate
+
+</h2>
+
+
+
+<p>
+
+Complete all lectures and quizzes to earn your certificate.
+
+</p>
+
+
+
+
+<button
+
+className="certificate-button"
+
+onClick={generateCertificate}
+
+disabled={certificateLoading}
+
+>
+
+
+{
+
+certificateLoading
+
+?
+
+"Generating..."
+
+:
+
+"🎓 Generate Certificate"
+
+}
+
+
+
+</button>
+
+
+
+
+
+{
+
+certificateMessage &&
+
+
+<p className="certificate-message">
+
+{certificateMessage}
+
+</p>
+
+
+}
+
+
+
+
+
+</div>
+
+
+
 
 
 
@@ -471,6 +729,9 @@ View Assignments →
 
 
 }
+
+
+
 
 
 export default CourseDetails;

@@ -42,7 +42,6 @@ type Lecture = {
 
 
 
-
 type Module = {
 
   id:string;
@@ -52,7 +51,6 @@ type Module = {
   lectures:Lecture[];
 
 };
-
 
 
 
@@ -68,7 +66,6 @@ type Course = {
 
 
 
-
 type Note = {
 
   id:string;
@@ -81,7 +78,6 @@ type Note = {
 
 
 
-
 type Bookmark = {
 
   id:string;
@@ -89,7 +85,6 @@ type Bookmark = {
   timestamp_seconds:number|null;
 
 };
-
 
 
 
@@ -118,7 +113,6 @@ useRef<HTMLVideoElement|null>(null);
 
 
 
-
 const lastUpdateRef =
 useRef(0);
 
@@ -132,11 +126,9 @@ useState<Lecture|null>(null);
 
 
 
-
 const [course,setCourse]
 =
 useState<Course|null>(null);
-
 
 
 
@@ -147,13 +139,9 @@ useState(0);
 
 
 
-
-
 const [notes,setNotes]
 =
 useState<Note[]>([]);
-
-
 
 
 
@@ -163,12 +151,9 @@ useState<Bookmark[]>([]);
 
 
 
-
-
 const [newNote,setNewNote]
 =
 useState("");
-
 
 
 
@@ -190,10 +175,7 @@ useState<
 
 
 
-// =================================
 // LOAD COURSE + FIND CURRENT LECTURE
-// =================================
-
 
 useEffect(()=>{
 
@@ -225,14 +207,13 @@ response.data.course;
 
 
 
-
 setCourse(data);
 
 
 
 
 let selectedLecture:
-Lecture|null=null;
+Lecture|null = null;
 
 
 
@@ -270,9 +251,9 @@ break;
 
 
 
-
-setLecture(selectedLecture);
-
+setLecture(
+selectedLecture
+);
 
 
 
@@ -291,7 +272,6 @@ error
 
 
 };
-
 
 
 
@@ -316,10 +296,7 @@ lectureId
 
 
 
-// =================================
 // LOAD SAVED PROGRESS
-// =================================
-
 
 useEffect(()=>{
 
@@ -347,13 +324,17 @@ lectureId
 
 
 
-const seconds:number =
-response.progress.watched_seconds;
+const seconds =
+Number(
+response.progress.watched_seconds
+);
 
 
 
+setWatchedSeconds(
+seconds
+);
 
-setWatchedSeconds(seconds);
 
 
 
@@ -363,13 +344,10 @@ videoRef.current;
 
 
 
-
 if(video){
 
 
-
-const setVideoTime =
-()=>{
+const setVideoTime = ()=>{
 
 
 video.currentTime =
@@ -412,7 +390,6 @@ once:true
 
 
 
-
 }
 catch(error){
 
@@ -426,8 +403,8 @@ error
 }
 
 
-};
 
+};
 
 
 
@@ -449,10 +426,8 @@ loadProgress();
 lecture,
 lectureId
 ]);
-// =================================
-// LOAD NOTES
-// =================================
 
+// LOAD NOTES
 
 const loadNotes = async()=>{
 
@@ -491,6 +466,7 @@ error
 );
 
 
+
 }
 
 
@@ -504,10 +480,8 @@ error
 
 
 
-// =================================
-// LOAD BOOKMARKS
-// =================================
 
+// LOAD BOOKMARKS
 
 const loadBookmarks = async()=>{
 
@@ -546,11 +520,13 @@ error
 );
 
 
+
 }
 
 
 
 };
+
 
 
 
@@ -586,10 +562,7 @@ lectureId
 
 
 
-// =================================
 // UPDATE PROGRESS
-// =================================
-
 
 const updateProgress =
 async(
@@ -604,7 +577,8 @@ videoRef.current;
 
 if(
 !lectureId ||
-!video
+!video ||
+!lecture
 ){
 
 return;
@@ -614,11 +588,40 @@ return;
 
 
 
-
-const current =
+let current =
 Math.floor(
 video.currentTime
 );
+
+
+
+
+
+// prevent progress going above duration
+
+if(
+current >
+Number(lecture.duration_seconds)
+){
+
+current =
+Number(lecture.duration_seconds);
+
+}
+
+
+
+
+
+// when video ends mark full completion
+
+if(completed){
+
+current =
+Number(lecture.duration_seconds);
+
+}
+
 
 
 
@@ -646,6 +649,16 @@ completed
 
 
 
+console.log(
+"Progress saved:",
+{
+current,
+completed
+}
+);
+
+
+
 }
 catch(error){
 
@@ -654,6 +667,7 @@ console.error(
 "Progress update failed:",
 error
 );
+
 
 
 }
@@ -672,11 +686,7 @@ error
 
 
 
-
-// =================================
 // VIDEO TIME UPDATE
-// =================================
-
 
 const handleTimeUpdate =
 ()=>{
@@ -684,7 +694,6 @@ const handleTimeUpdate =
 
 const video =
 videoRef.current;
-
 
 
 
@@ -702,6 +711,7 @@ const current =
 Math.floor(
 video.currentTime
 );
+
 
 
 
@@ -740,10 +750,7 @@ updateProgress(false);
 
 
 
-// =================================
 // ADD NOTE
-// =================================
-
 
 const addNote =
 async()=>{
@@ -757,7 +764,6 @@ if(
 return;
 
 }
-
 
 
 
@@ -797,6 +803,7 @@ error
 );
 
 
+
 }
 
 
@@ -813,10 +820,8 @@ error
 
 
 
-// =================================
-// ADD BOOKMARK
-// =================================
 
+// ADD BOOKMARK
 
 const addBookmark =
 async()=>{
@@ -860,11 +865,15 @@ error
 );
 
 
+
 }
 
 
 
 };
+
+
+
 
 
 
@@ -895,12 +904,14 @@ Loading...
 
 
 
-
-
 const percentage =
 lecture.duration_seconds
 
 ?
+
+Math.min(
+
+100,
 
 Math.floor(
 
@@ -916,9 +927,17 @@ lecture.duration_seconds
 
 )
 
+)
+
 :
 
 0;
+
+
+
+
+
+
 return (
 
 <div className="player-container">
@@ -936,10 +955,6 @@ return (
 
 
 <div className="player-layout">
-
-
-
-
 
 
 
@@ -965,9 +980,11 @@ onEnded={()=>updateProgress(true)}
 <source
 
 src={
-  lecture.video_url.startsWith("http")
-    ? lecture.video_url
-    : `http://localhost:5000${lecture.video_url}`
+lecture.video_url.startsWith("http")
+?
+lecture.video_url
+:
+`http://localhost:5000${lecture.video_url}`
 }
 
 type="video/mp4"
@@ -1049,13 +1066,6 @@ width:`${percentage}%`
 
 
 
-
-
-
-
-
-{/* COURSE CONTENT */}
-
 <div className="course-sidebar">
 
 
@@ -1095,7 +1105,6 @@ className="module"
 
 
 {
-
 
 Array.from(
 
@@ -1153,10 +1162,10 @@ navigate(
 );
 
 
+
 }}
 
 >
-
 
 
 {
@@ -1176,8 +1185,6 @@ item.id === lectureId
 
 
 {" "}
-
-
 
 {item.title}
 
@@ -1217,14 +1224,6 @@ item.id === lectureId
 
 
 
-
-
-
-
-
-{/* NOTES / BOOKMARKS PANEL */}
-
-
 <div className="side-panel">
 
 
@@ -1246,7 +1245,6 @@ Notes
 
 
 
-
 <button
 
 onClick={()=>setActiveTab("bookmarks")}
@@ -1256,7 +1254,6 @@ onClick={()=>setActiveTab("bookmarks")}
 Bookmarks
 
 </button>
-
 
 
 
@@ -1274,7 +1271,6 @@ Transcript
 
 
 
-
 <button
 
 onClick={()=>setActiveTab("resources")}
@@ -1288,18 +1284,7 @@ Resources
 
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
+id="9v8k3m"
 {
 
 activeTab==="notes" &&
@@ -1308,21 +1293,21 @@ activeTab==="notes" &&
 <div>
 
 
-
 <input
 
 value={newNote}
 
 onChange={
 
-e=>setNewNote(e.target.value)
+e=>setNewNote(
+e.target.value
+)
 
 }
 
 placeholder="Write note"
 
 />
-
 
 
 
@@ -1342,12 +1327,9 @@ Add
 
 
 
-
-
 {
 
 notes.map(note=>(
-
 
 
 <div
@@ -1359,14 +1341,11 @@ key={note.id}
 >
 
 
-
 <p>
 
 📝 {note.content}
 
 </p>
-
-
 
 
 
@@ -1433,16 +1412,10 @@ Go {note.timestamp_seconds}s
 
 
 
-
 </div>
 
 
-
 }
-
-
-
-
 
 
 
@@ -1458,7 +1431,6 @@ activeTab==="bookmarks" &&
 
 
 <div>
-
 
 
 <button
@@ -1477,12 +1449,9 @@ onClick={addBookmark}
 
 
 
-
-
 {
 
 bookmarks.map(bookmark=>(
-
 
 
 <div
@@ -1492,7 +1461,6 @@ className="item"
 key={bookmark.id}
 
 >
-
 
 
 
@@ -1554,16 +1522,10 @@ bookmark.timestamp_seconds ?? 0
 
 
 
-
-
 </div>
 
 
-
 }
-
-
-
 
 
 
@@ -1597,10 +1559,6 @@ activeTab==="transcript" &&
 
 
 
-
-
-
-
 {
 
 activeTab==="resources" &&
@@ -1608,7 +1566,6 @@ activeTab==="resources" &&
 
 
 <div>
-
 
 
 {
@@ -1666,6 +1623,10 @@ Resource {index + 1}
 
 
 
+</div>
+
+
+
 
 
 </div>
@@ -1674,19 +1635,8 @@ Resource {index + 1}
 
 
 
-
-
-
-
 </div>
 
-
-
-
-
-
-
-</div>
 
 
 );

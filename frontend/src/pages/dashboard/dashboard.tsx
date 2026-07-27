@@ -1,187 +1,200 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState
+} from "react";
+
+
+import {
+  Link
+} from "react-router-dom";
+
+
 import api from "../../services/axios";
+
+
 import CourseCard from "../../components/student/CourseCard";
+
+
 import "../../styles/dashboard.css";
 
 
+
 type Course = {
-  id: string;
-  title: string;
-  description: string;
-  progress_percent: string;
+
+  id:string;
+
+  title:string;
+
+  description:string;
+
+  progress_percent:string;
+
 };
 
 
-function Dashboard() {
 
+type Certificate = {
 
-  const [courses, setCourses] = useState<Course[]>([]);
+  id:string;
 
+  course_id:string;
 
+  certificate_url:string;
 
-  useEffect(() => {
+};
 
 
-    const getCourses = async () => {
 
 
-      try {
 
+function Dashboard(){
 
-        const response = await api.get(
-          "/enrollments/me"
-        );
 
 
-        console.log(
-          "My courses:",
-          response.data
-        );
+const [courses,setCourses] =
+useState<Course[]>([]);
 
 
-        setCourses(
-          response.data
-        );
 
+const [certificates,setCertificates] =
+useState<Certificate[]>([]);
 
 
-      } catch(error) {
 
 
-        console.error(
-          "Failed:",
-          error
-        );
 
 
-      }
 
+useEffect(()=>{
 
-    };
 
 
+const loadDashboard = async()=>{
 
-    getCourses();
 
+try{
 
 
-  }, []);
 
+const coursesResponse =
+await api.get(
+"/enrollments/me"
+);
 
 
 
+console.log(
+"My courses:",
+coursesResponse.data
+);
 
 
-  return (
 
+setCourses(
+coursesResponse.data
+);
 
-    <div className="student-dashboard">
 
 
 
-      {/* Header */}
 
 
-      <div className="dashboard-header">
 
+const certificateResponse =
+await api.get(
+"/certificates/me"
+);
 
-        <div>
 
 
-          <h1>
-            Welcome back 👋
-          </h1>
+console.log(
+"My certificates:",
+certificateResponse.data
+);
 
 
-          <p>
-            Continue your learning journey and keep improving.
-          </p>
 
+setCertificates(
+certificateResponse.data.certificates || []
+);
 
-        </div>
 
 
+}
+catch(error){
 
-        <div className="student-badge">
 
-          🎓 Student
+console.error(
+"Dashboard loading failed:",
+error
+);
 
-        </div>
 
+}
 
-      </div>
 
 
+};
 
 
 
+loadDashboard();
 
 
 
-      {/* Stats */}
+},[]);
 
 
-      <div className="stats-container">
 
 
-        <div className="stat-card">
 
 
-          <h3>
-            📚 Courses
-          </h3>
 
 
-          <p>
-            {courses.length}
-          </p>
 
+return(
 
-        </div>
 
+<div className="student-dashboard">
 
 
 
 
-        <div className="stat-card">
 
+<div className="dashboard-header">
 
-          <h3>
-            🎥 Learning
-          </h3>
 
+<div>
 
-          <p>
-            Active
-          </p>
 
+<h1>
 
-        </div>
+Welcome back 👋
 
+</h1>
 
 
+<p>
 
+Continue your learning journey and keep improving.
 
+</p>
 
-        <div className="stat-card">
 
+</div>
 
-          <h3>
-            🏆 Certificates
-          </h3>
 
 
-          <p>
-            0
-          </p>
 
+<div className="student-badge">
 
-        </div>
+🎓 Student
 
+</div>
 
 
-      </div>
 
+</div>
 
 
 
@@ -190,99 +203,274 @@ function Dashboard() {
 
 
 
-      {/* Courses */}
 
+<div className="stats-container">
 
 
-      <div className="courses-section">
 
 
-        <div className="section-header">
 
+<div className="stat-card">
 
-          <h2>
-            My Courses
-          </h2>
 
+<h3>
 
-          <span>
-            {courses.length} enrolled
-          </span>
+📚 Courses
 
+</h3>
 
-        </div>
 
+<p>
 
+{courses.length}
 
+</p>
 
 
-        {
-          courses.length > 0 ? (
+</div>
 
 
-            <div className="course-grid">
 
 
-              {
-                courses.map((course)=>(
 
 
-                  <CourseCard
 
-                    key={course.id}
 
-                    id={course.id}
 
-                    title={course.title}
+<div className="stat-card">
 
-                    description={course.description}
 
-                    progress={course.progress_percent}
+<h3>
 
-                  />
+🎥 Learning
 
+</h3>
 
-                ))
-              }
 
+<p>
 
-            </div>
+Active
 
+</p>
 
-          ) : (
 
+</div>
 
-            <div className="empty-state">
 
 
-              <h3>
-                No courses yet 📚
-              </h3>
 
 
-              <p>
-                Start learning by enrolling into a course.
-              </p>
 
 
-            </div>
 
 
-          )
-        }
+<div className="stat-card">
 
 
+<h3>
 
+🏆 Certificates
 
-      </div>
+</h3>
 
 
+<p>
 
+{certificates.length}
 
-    </div>
+</p>
 
 
-  );
+</div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{
+certificates.length > 0 &&
+
+
+<div className="certificate-dashboard-box">
+
+
+<h2>
+
+🏆 Your Achievements
+
+</h2>
+
+
+
+<p>
+
+You have earned {certificates.length} certificate.
+
+</p>
+
+
+
+
+<Link
+
+to="/certificates"
+
+className="view-certificates-btn"
+
+>
+
+View Certificates →
+
+</Link>
+
+
+
+</div>
+
+}
+
+
+
+
+
+
+
+
+
+<div className="courses-section">
+
+
+
+<div className="section-header">
+
+
+<h2>
+
+My Courses
+
+</h2>
+
+
+
+<span>
+
+{courses.length} enrolled
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{
+
+courses.length > 0 ? (
+
+
+
+<div className="course-grid">
+
+
+
+{
+
+courses.map((course)=>(
+
+
+<CourseCard
+
+key={course.id}
+
+id={course.id}
+
+title={course.title}
+
+description={course.description}
+
+progress={course.progress_percent}
+
+/>
+
+
+))
+
+
+}
+
+
+
+</div>
+
+
+
+):(
+
+
+
+<div className="empty-state">
+
+
+<h3>
+
+No courses yet 📚
+
+</h3>
+
+
+<p>
+
+Start learning by enrolling into a course.
+
+</p>
+
+
+</div>
+
+
+
+)
+
+
+
+}
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+);
 
 
 

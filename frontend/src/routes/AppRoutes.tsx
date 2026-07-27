@@ -23,6 +23,8 @@ import QuizBuilder from "../pages/instructor/quizBuilder";
 import CreateQuiz from "../pages/instructor/createQuiz";
 import InstructorQuiz from "../pages/instructor/instructorQuiz";
 
+import Certificates from "../pages/student/certificates";
+
 
 function AppRoutes() {
 
@@ -383,6 +385,22 @@ element={
 <ProtectedRoute>
 
 <QuizBuilder />
+
+</ProtectedRoute>
+
+}
+
+/>
+
+<Route
+
+path="/certificates"
+
+element={
+
+<ProtectedRoute>
+
+<Certificates />
 
 </ProtectedRoute>
 

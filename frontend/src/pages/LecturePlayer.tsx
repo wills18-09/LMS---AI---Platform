@@ -1,5 +1,12 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {
+  useEffect,
+  useState
+} from "react";
+
+import {
+  useParams
+} from "react-router-dom";
+
 
 import {
   getLecture,
@@ -11,21 +18,35 @@ import {
 } from "../services/lecture.service";
 
 
+
+
 function LecturePlayer(){
 
 
-const {lectureId}=useParams();
+const { lectureId } = useParams();
 
 
-const [lecture,setLecture]=useState<any>(null);
 
-const [watched,setWatched]=useState(0);
+const [lecture,setLecture] =
+useState<any>(null);
 
-const [note,setNote]=useState("");
 
-const [notes,setNotes]=useState<any[]>([]);
+const [watched,setWatched] =
+useState(0);
 
-const [bookmarks,setBookmarks]=useState<any[]>([]);
+
+const [note,setNote] =
+useState("");
+
+
+const [notes,setNotes] =
+useState<any[]>([]);
+
+
+const [bookmarks,setBookmarks] =
+useState<any[]>([]);
+
+
 
 
 
@@ -42,36 +63,44 @@ try{
 
 const lectureData =
 await getLecture(
- lectureId!
+  lectureId!
 );
+
 
 
 setLecture(
- lectureData.lecture
+  lectureData.lecture
 );
+
+
 
 
 
 const notesData =
 await getLectureNotes(
- lectureId!
+  lectureId!
 );
+
 
 
 setNotes(
- notesData.notes || []
+  notesData.notes || []
 );
+
+
+
 
 
 
 const bookmarksData =
 await getLectureBookmarks(
- lectureId!
+  lectureId!
 );
 
 
+
 setBookmarks(
- bookmarksData.bookmarks || []
+  bookmarksData.bookmarks || []
 );
 
 
@@ -79,12 +108,16 @@ setBookmarks(
 }
 catch(error){
 
-console.log(error);
+console.error(
+"Loading lecture failed:",
+error
+);
 
 }
 
 
 };
+
 
 
 
@@ -104,15 +137,48 @@ loadLecture();
 
 
 
+
+
+
+// Save progress while watching
+
 const handleVideoProgress = async(
 e:any
 )=>{
 
 
-const seconds =
+if(!lecture){
+
+return;
+
+}
+
+
+
+const video =
+e.currentTarget;
+
+
+
+let seconds =
 Math.floor(
- e.currentTarget.currentTime
+  video.currentTime
 );
+
+
+
+
+// prevent exceeding duration
+
+if(
+  lecture.duration_seconds &&
+  seconds > Number(lecture.duration_seconds)
+){
+
+seconds =
+Number(lecture.duration_seconds);
+
+}
 
 
 
@@ -120,15 +186,30 @@ setWatched(seconds);
 
 
 
+try{
+
+
 await updateLectureProgress(
 
-lectureId!,
+ lectureId!,
 
-seconds,
+ seconds,
 
-false
+ false
 
 );
+
+
+}
+catch(error){
+
+console.error(
+"Progress update failed:",
+error
+);
+
+
+}
 
 
 
@@ -141,18 +222,90 @@ false
 
 
 
+
+
+
+// Complete lecture when video ends
+
+const handleVideoComplete = async()=>{
+
+
+console.log(
+"VIDEO ENDED FIRED"
+);
+
+
+
+try{
+
+
+await updateLectureProgress(
+
+ lectureId!,
+
+ Number(lecture.duration_seconds),
+
+ true
+
+);
+
+
+
+console.log(
+"Lecture completed successfully"
+);
+
+
+
+}
+catch(error){
+
+console.error(
+"Completion error:",
+error
+);
+
+
+}
+
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+// Add note
+
 const addNote = async()=>{
+
+
+if(!note.trim()){
+
+return;
+
+}
+
 
 
 await createLectureNote(
 
-lectureId!,
+ lectureId!,
 
-note,
+ note,
 
-watched
+ watched
 
 );
+
 
 
 setNote("");
@@ -165,9 +318,11 @@ await getLectureNotes(
 );
 
 
+
 setNotes(
  updated.notes || []
 );
+
 
 
 };
@@ -179,16 +334,23 @@ setNotes(
 
 
 
+
+
+
+
+// Add bookmark
+
 const addBookmark = async()=>{
 
 
 await createLectureBookmark(
 
-lectureId!,
+ lectureId!,
 
-watched
+ watched
 
 );
+
 
 
 const updated =
@@ -197,12 +359,18 @@ await getLectureBookmarks(
 );
 
 
+
 setBookmarks(
  updated.bookmarks || []
 );
 
 
+
 };
+
+
+
+
 
 
 
@@ -213,7 +381,15 @@ setBookmarks(
 
 if(!lecture){
 
-return <h2>Loading lecture...</h2>;
+
+return (
+
+<h2>
+Loading lecture...
+</h2>
+
+);
+
 
 }
 
@@ -221,14 +397,28 @@ return <h2>Loading lecture...</h2>;
 
 
 
-return (
 
-<div>
+
+
+
+return(
+
+
+<div className="lecture-player-page">
+
+
+
 
 
 <h1>
+
 {lecture.title}
+
 </h1>
+
+
+
+
 
 
 
@@ -240,14 +430,21 @@ controls
 
 onTimeUpdate={handleVideoProgress}
 
+onEnded={handleVideoComplete}
+
 >
 
 
 <source
 
-src={`http://localhost:5000${lecture.video_url}`}
+src={
+`http://localhost:5000${lecture.video_url}`
+}
 
 />
+
+
+Your browser does not support video.
 
 
 </video>
@@ -255,9 +452,13 @@ src={`http://localhost:5000${lecture.video_url}`}
 
 
 
+
+
+
 <p>
 
 Duration:
+{" "}
 {lecture.duration_seconds}s
 
 </p>
@@ -267,12 +468,26 @@ Duration:
 
 
 
+
+
+
 <hr/>
 
 
+
+
+
+
+
+
 <h2>
-Notes
+
+📝 Notes
+
 </h2>
+
+
+
 
 
 
@@ -283,14 +498,22 @@ value={note}
 placeholder="Add note..."
 
 onChange={
-(e)=>setNote(e.target.value)
+(e)=>setNote(
+e.target.value
+)
 }
 
 />
 
 
 
-<button onClick={addNote}>
+
+
+<button
+
+onClick={addNote}
+
+>
 
 Add Note
 
@@ -300,17 +523,46 @@ Add Note
 
 
 
+
+
+
+
 {
+
 notes.map((item)=>(
 
-<p key={item.id}>
+
+<div
+
+key={item.id}
+
+>
+
+
+<p>
 
 {item.content}
 
 </p>
 
+
+<small>
+
+⏱ {item.timestamp_seconds}s
+
+</small>
+
+
+</div>
+
+
 ))
+
 }
+
+
+
+
 
 
 
@@ -321,14 +573,29 @@ notes.map((item)=>(
 
 
 
+
+
+
+
 <h2>
-Bookmarks
+
+🔖 Bookmarks
+
 </h2>
 
 
-<button onClick={addBookmark}>
 
-🔖 Bookmark current time
+
+
+
+
+<button
+
+onClick={addBookmark}
+
+>
+
+Bookmark current time
 
 </button>
 
@@ -336,27 +603,44 @@ Bookmarks
 
 
 
+
+
+
+
 {
+
 bookmarks.map((item)=>(
 
-<p key={item.id}>
+
+<p
+
+key={item.id}
+
+>
 
 ⏱ {item.timestamp_seconds}s
 
 </p>
 
+
 ))
+
 }
+
+
+
 
 
 
 
 </div>
 
+
 );
 
 
 }
+
 
 
 export default LecturePlayer;

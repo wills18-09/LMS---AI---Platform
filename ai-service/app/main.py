@@ -6,6 +6,7 @@ from app.routers import (
     quiz_gen,
     flashcards,
     study_plan,
+    ingestion,
 )
 
 app = FastAPI(
@@ -18,6 +19,7 @@ app.include_router(summarize.router)
 app.include_router(quiz_gen.router)
 app.include_router(flashcards.router)
 app.include_router(study_plan.router)
+app.include_router(ingestion.router)
 
 
 @app.get("/")

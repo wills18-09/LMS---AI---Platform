@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { QuizService } from "./quizzes.service";
+import { AIService } from "../../services/ai.service";
 
 
 export class QuizController {
@@ -401,5 +402,109 @@ export class QuizController {
 
   }
 
+  // Generate AI quiz from lecture
+static async generateAIQuiz(
+  req: Request,
+  res: Response
+){
+
+  try{
+
+
+    const lectureId =
+      req.params.lectureId as string;
+
+
+
+    const {
+      module_id,
+      title
+    } = req.body;
+
+
+
+    const aiQuiz =
+      await AIService.generateQuiz(
+        lectureId
+      );
+
+
+
+    const quiz =
+  await QuizService.createAIQuiz(
+    module_id,
+    title || "AI Generated Quiz",
+    lectureId
+  );
+
+    for(
+      let i = 0;
+      i < aiQuiz.questions.length;
+      i++
+    ){
+
+
+      const question =
+        await QuizService.addQuestion(
+          quiz.id,
+          aiQuiz.questions[i].question_text,
+          "mcq",
+          i + 1
+        );
+
+
+
+      for(
+        const option of aiQuiz.questions[i].options
+      ){
+
+
+        await QuizService.addOption(
+          question.id,
+          option.option_text,
+          option.is_correct
+        );
+
+
+      }
+
+
+    }
+
+
+
+    res.status(201).json({
+
+      message:
+      "AI quiz generated successfully",
+
+      quiz_id:
+      quiz.id
+
+    });
+
+
+
+  }catch(error:any){
+
+
+    console.error(
+      "AI QUIZ GENERATION ERROR:",
+      error
+    );
+
+
+    res.status(500).json({
+
+      message:error.message
+
+    });
+
+
+  }
 
 }
+
+
+}
+

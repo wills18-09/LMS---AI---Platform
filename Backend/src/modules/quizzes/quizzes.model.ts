@@ -550,6 +550,33 @@ static async getQuizById(
 
   }
 
+static async createAIQuiz(
+  moduleId: string,
+  title: string,
+  lectureId: string
+) {
 
+  const result = await pool.query(
+    `
+    INSERT INTO quizzes (
+      module_id,
+      title,
+      is_ai_generated,
+      generated_from_lecture_id
+    )
+    VALUES ($1,$2,true,$3)
+    RETURNING *
+    `,
+    [
+      moduleId,
+      title,
+      lectureId
+    ]
+  );
+
+
+  return result.rows[0];
+
+}
 
 }

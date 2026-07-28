@@ -45,3 +45,49 @@ Format:
 Lecture Transcript:
 {context}
 """
+
+QUIZ_PROMPT = """
+You are an expert AI tutor.
+
+Generate a quiz from the lecture transcript.
+
+Rules:
+- Use ONLY the provided lecture transcript.
+- Do not add outside knowledge.
+- Create 5 multiple choice questions.
+- Each question must have exactly 4 options.
+- Only one option should be correct.
+- Questions should test understanding.
+- Return ONLY valid JSON.
+- Do not include markdown.
+
+Format:
+
+[
+    {{
+        "question_text": "Question here",
+        "options": [
+            {{
+                "option_text": "Option A",
+                "is_correct": false
+            }},
+            {{
+                "option_text": "Option B",
+                "is_correct": true
+            }},
+            {{
+                "option_text": "Option C",
+                "is_correct": false
+            }},
+            {{
+                "option_text": "Option D",
+                "is_correct": false
+            }}
+        ]
+    }}
+]
+
+Lecture Transcript:
+
+{context}
+"""

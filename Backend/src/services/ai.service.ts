@@ -119,5 +119,39 @@ static async generateFlashcards(
 
 }
 
+static async generateQuiz(
+  lectureId:string
+){
+
+  try{
+
+    const response =
+      await axios.post(
+        `${AI_SERVICE_URL}/ai/quiz/`,
+        {
+          lecture_id: lectureId
+        }
+      );
+
+
+    return response.data;
+
+
+  }catch(error:any){
+
+    console.error(
+      "AI QUIZ ERROR:",
+      error.response?.data || error.message
+    );
+
+
+    throw new Error(
+      "Failed to generate quiz"
+    );
+
+  }
+
+}
+
 
 }

@@ -25,6 +25,14 @@ router.post(
 );
 
 
+// Generate AI quiz from lecture
+router.post(
+  "/generate-ai/:lectureId",
+  authenticateToken,
+  authorizeRoles("instructor"),
+  QuizController.generateAIQuiz
+);
+
 
 // Instructor gets quizzes of a module
 router.get(
@@ -33,39 +41,6 @@ router.get(
   authorizeRoles("instructor"),
   QuizController.getQuizzesByModule
 );
-
-
-
-// Instructor gets quiz questions
-router.get(
-  "/:id/questions",
-  authenticateToken,
-  authorizeRoles("instructor"),
-  QuizController.getQuestions
-);
-
-
-
-// Instructor adds question to quiz
-router.post(
-  "/:id/questions",
-  authenticateToken,
-  authorizeRoles("instructor"),
-  QuizController.addQuestion
-);
-
-
-
-// Instructor adds option to question
-router.post(
-  "/questions/:id/options",
-  authenticateToken,
-  authorizeRoles("instructor"),
-  QuizController.addOption
-);
-
-
-
 
 
 // =====================================

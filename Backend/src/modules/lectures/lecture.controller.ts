@@ -1,6 +1,7 @@
 import { Response } from "express";
 import pool from "../../db";
 import { AuthenticatedRequest } from "../../middleware/authMiddleware";
+import axios from "axios";
 
 
 
@@ -84,38 +85,80 @@ export const createLecture = async (
 
 
 
+const result = await pool.query(
+  `
+  INSERT INTO lectures
+  (
+    module_id,
+    title,
+    video_url,
+    transcript,
+    duration_seconds,
+    order_index,
+    resource_urls
+  )
 
-    const result = await pool.query(
+  VALUES
+  ($1,$2,$3,$4,$5,$6,$7)
 
+  RETURNING *
+  `,
+  [
+    moduleId,
+    title,
+    video_url,
+    transcript,
+    duration_seconds,
+    order_index,
+    resource_urls
+  ]
+);
+
+
+
+
+if(transcript){
+
+  try {
+
+    const course =
+    await pool.query(
       `
-      INSERT INTO lectures
-      (
-        module_id,
-        title,
-        video_url,
-        transcript,
-        duration_seconds,
-        order_index,
-        resource_urls
-      )
-
-      VALUES
-      ($1,$2,$3,$4,$5,$6,$7)
-
-      RETURNING *
+      SELECT course_id
+      FROM modules
+      WHERE id=$1
       `,
-
       [
-        moduleId,
-        title,
-        video_url,
-        transcript,
-        duration_seconds,
-        order_index,
-        resource_urls
+        moduleId
       ]
-
     );
+
+
+    await axios.post(
+  "http://127.0.0.1:8000/ingest/",
+  {
+    course_id: course.rows[0].course_id,
+    lecture_id: result.rows[0].id,
+    transcript: transcript
+  }
+);
+
+    console.log(
+      "Lecture transcript sent to AI ingestion"
+    );
+
+
+  }
+  catch(error:any){
+
+    console.error(
+      "AI INGESTION ERROR:",
+      error.response?.data || error.message
+    );
+
+  }
+
+}
 
 
 

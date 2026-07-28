@@ -15,6 +15,19 @@ export class QuizService {
     );
 
   }
+static async createAIQuiz(
+  moduleId: string,
+  title: string,
+  lectureId: string
+) {
+
+  return await QuizModel.createAIQuiz(
+    moduleId,
+    title,
+    lectureId
+  );
+
+}
 
 
 

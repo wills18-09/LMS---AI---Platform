@@ -211,6 +211,22 @@ CREATE TABLE document_chunks (
     created_at TIMESTAMPTZ DEFAULT now()
 );
 CREATE INDEX ON document_chunks USING ivfflat (embedding vector_cosine_ops);
+
+-- LECTURE AI SUMMARIES ---------------------------------------------------------
+
+CREATE TABLE lecture_summaries (
+
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    lecture_id UUID REFERENCES lectures(id) ON DELETE CASCADE,
+
+    summary TEXT NOT NULL,
+
+    created_at TIMESTAMPTZ DEFAULT now(),
+
+    UNIQUE (lecture_id)
+
+);
  
 -- RECOMMENDATIONS & STUDY PLANS ---------------------------------------------------
 CREATE TABLE study_plans (

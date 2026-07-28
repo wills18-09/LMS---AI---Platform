@@ -8,7 +8,6 @@ client = Groq(
 )
 
 
-
 def ask_llm(
     question: str,
     context: str
@@ -44,7 +43,6 @@ Student Question:
 Tutor Answer:
 """
 
-
     response = client.chat.completions.create(
         model=settings.MODEL_NAME,
 
@@ -58,5 +56,29 @@ Tutor Answer:
         temperature=0.3
     )
 
+    return response.choices[0].message.content
+
+
+def generate_text(
+    system_prompt: str,
+    context: str
+):
+
+    prompt = system_prompt.format(
+        context=context
+    )
+
+    response = client.chat.completions.create(
+        model=settings.MODEL_NAME,
+
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+
+        temperature=0.3
+    )
 
     return response.choices[0].message.content

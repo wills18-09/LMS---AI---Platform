@@ -22,7 +22,8 @@ import adminRoutes from "./modules/admin/admin.routes";
 import reviewRoutes from "./modules/reviews/reviews.routes";
 import announcementRoutes from "./modules/announcements/announcements.routes";
 import uploadRoutes from "./modules/uploads/uploads.routes";
-
+import aiRoutes from "./modules/ai/ai.routes";
+import flashcardRoutes from "./modules/flashcards/flashcards.routes";
 
 const app = express();
 app.use(
@@ -93,6 +94,9 @@ app.use("/api/v1",announcementRoutes);
 
 app.use("/api/v1",uploadRoutes);
 
+app.use("/api/v1/ai",aiRoutes);
+
+app.use("/api/v1/flashcards",flashcardRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('LMS AI Platform Backend Engine is running smoothly.');

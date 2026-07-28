@@ -16,7 +16,11 @@ import {
 
 import { upload } from "../uploads/uploads.middleware";
 
+import { LectureAIController } from "./lecture.ai.controller";
+
+
 const router = Router();
+
 
 // CREATE LECTURE
 router.post(
@@ -27,12 +31,14 @@ router.post(
   createLecture as RequestHandler
 );
 
+
 // GET SINGLE LECTURE
 router.get(
   "/:id",
   authenticateToken as RequestHandler,
   getLectureById as RequestHandler
 );
+
 
 // UPDATE LECTURE
 router.put(
@@ -43,6 +49,7 @@ router.put(
   updateLecture as RequestHandler
 );
 
+
 // DELETE LECTURE
 router.delete(
   "/:id",
@@ -51,6 +58,7 @@ router.delete(
   deleteLecture as RequestHandler
 );
 
+
 // UPDATE PROGRESS
 router.post(
   "/:id/progress",
@@ -58,11 +66,21 @@ router.post(
   updateLectureProgress as RequestHandler
 );
 
+
 // GET PROGRESS
 router.get(
   "/:id/progress",
   authenticateToken as RequestHandler,
   getLectureProgress as RequestHandler
 );
+
+
+// GENERATE SUMMARY
+router.post(
+  "/:lectureId/summary",
+  authenticateToken as RequestHandler,
+  LectureAIController.summarizeLecture as RequestHandler
+);
+
 
 export default router;

@@ -7,3 +7,4 @@ Backend/certificates/*.pdf
 *.zip
 
 /src/generated/prisma
+

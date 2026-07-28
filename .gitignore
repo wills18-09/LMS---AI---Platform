@@ -1,11 +1,69 @@
-# Ignore the massive dependencies folder
+# ==========================
+# Node dependencies
+# ==========================
 node_modules/
 Backend/node_modules/
+Frontend/node_modules/
 
-# Ignore local environment secrets (passwords, database keys)
+
+# ==========================
+# Build files
+# ==========================
+dist/
+
+
+# ==========================
+# Environment secrets
+# ==========================
 .env
 Backend/.env
+Frontend/.env
+ai-service/.env
 
-# Ignore OS specific files
+
+# ==========================
+# Python AI Service
+# ==========================
+ai-service/venv/
+.venv/
+ai-service/__pycache__/
+__pycache__/
+*.pyc
+
+
+# ==========================
+# Generated files
+# ==========================
+src/generated/prisma
+
+
+# ==========================
+# Media / uploads
+# ==========================
+videos/
+uploads/
+
+
+# ==========================
+# Certificates
+# ==========================
+Backend/certificates/*.pdf
+
+
+# ==========================
+# Archives
+# ==========================
+*.zip
+
+
+# ==========================
+# OS files
+# ==========================
 .DS_Store
-Thumbs.dbg
+Thumbs.db
+
+
+# ==========================
+# Logs
+# ==========================
+*.log

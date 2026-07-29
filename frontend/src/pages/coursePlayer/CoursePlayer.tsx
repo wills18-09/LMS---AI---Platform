@@ -169,8 +169,17 @@ useState<
 
 
 
+const [question,setQuestion] =
+useState("");
 
+const [aiAnswer,setAiAnswer] =
+useState("");
 
+const [aiLoading,setAiLoading] =
+useState(false);
+
+const [showAI,setShowAI] =
+useState(false);
 
 
 
@@ -873,9 +882,48 @@ error
 };
 
 
+// AI TUTOR
 
 
+const askAI = async()=>{
 
+try{
+
+if(!question.trim()){
+return;
+}
+
+setAiLoading(true);
+
+const response =
+await api.post(
+"/ai/chat",
+{
+message:question
+}
+);
+
+setAiAnswer(
+    response.data.reply
+);
+
+
+}
+catch(error){
+
+console.error(
+"AI Tutor failed:",
+error
+);
+
+}
+finally{
+
+setAiLoading(false);
+
+}
+
+};
 
 
 
@@ -943,14 +991,9 @@ return (
 <div className="player-container">
 
 
-
 <h1 className="player-title">
-
 {lecture.title}
-
 </h1>
-
-
 
 
 
@@ -958,8 +1001,12 @@ return (
 
 
 
-<div className="video-section">
+{/* LEFT SIDE */}
 
+<div className="main-content">
+
+
+<div className="video-section">
 
 
 <video
@@ -992,45 +1039,22 @@ type="video/mp4"
 />
 
 
-
-Your browser does not support video.
-
-
-
 </video>
 
 
 
 
+<div className="video-info">
 
 
 <p>
-
-Watched:
-
-{" "}
-
-{watchedSeconds}s
-
+Watched: {watchedSeconds}s
 </p>
-
-
-
-
 
 
 <p>
-
-Progress:
-
-{" "}
-
-{percentage}%
-
+Progress: {percentage}%
 </p>
-
-
-
 
 
 
@@ -1042,9 +1066,7 @@ Progress:
 className="progress-fill"
 
 style={{
-
 width:`${percentage}%`
-
 }}
 
 />
@@ -1054,7 +1076,10 @@ width:`${percentage}%`
 
 
 
+</div>
 
+
+</div>
 
 
 </div>
@@ -1065,23 +1090,24 @@ width:`${percentage}%`
 
 
 
+{/* RIGHT SIDEBAR */}
+
+<div className="right-sidebar">
+
+
+
+{/* COURSE CONTENT */}
 
 <div className="course-sidebar">
 
 
-
 <h2>
-
-Course Content
-
+📚 Course Content
 </h2>
 
 
 
-
-
 {
-
 course?.modules.map(module=>(
 
 
@@ -1095,41 +1121,14 @@ className="module"
 
 
 <h3>
-
 📂 {module.title}
-
 </h3>
 
 
 
 
-
 {
-
-Array.from(
-
-new Map(
-
-module.lectures.map(
-
-lecture =>
-
-[
-
-lecture.id,
-
-lecture
-
-]
-
-)
-
-).values()
-
-)
-
-.map(item=>(
-
+module.lectures.map(item=>(
 
 
 <div
@@ -1151,47 +1150,30 @@ item.id === lectureId
 }
 
 
-
-onClick={()=>{
-
-
-navigate(
+onClick={()=>navigate(
 
 `/courses/${courseId}/lectures/${item.id}`
 
-);
+)}
 
-
-
-}}
 
 >
 
 
 {
-
 item.id === lectureId
-
 ?
-
 "▶"
-
 :
-
 "○"
-
 }
-
-
 
 {" "}
 
 {item.title}
 
 
-
 </div>
-
 
 
 ))
@@ -1201,10 +1183,7 @@ item.id === lectureId
 
 
 
-
-
 </div>
-
 
 
 ))
@@ -1214,7 +1193,6 @@ item.id === lectureId
 
 
 
-
 </div>
 
 
@@ -1224,67 +1202,44 @@ item.id === lectureId
 
 
 
-<div className="side-panel">
-
+{/* TABS */}
 
 
 <div className="tabs">
 
 
-
-<button
-
-onClick={()=>setActiveTab("notes")}
-
->
-
+<button onClick={()=>setActiveTab("notes")}>
 Notes
-
 </button>
 
 
-
-
-<button
-
-onClick={()=>setActiveTab("bookmarks")}
-
->
-
+<button onClick={()=>setActiveTab("bookmarks")}>
 Bookmarks
-
 </button>
 
 
-
-
-<button
-
-onClick={()=>setActiveTab("transcript")}
-
->
-
+<button onClick={()=>setActiveTab("transcript")}>
 Transcript
-
 </button>
 
 
-
-
-<button
-
-onClick={()=>setActiveTab("resources")}
-
->
-
+<button onClick={()=>setActiveTab("resources")}>
 Resources
-
 </button>
-
 
 
 </div>
-id="9v8k3m"
+
+
+
+
+
+
+
+
+
+{/* NOTES */}
+
 {
 
 activeTab==="notes" &&
@@ -1298,11 +1253,7 @@ activeTab==="notes" &&
 value={newNote}
 
 onChange={
-
-e=>setNewNote(
-e.target.value
-)
-
+e=>setNewNote(e.target.value)
 }
 
 placeholder="Write note"
@@ -1311,18 +1262,9 @@ placeholder="Write note"
 
 
 
-
-<button
-
-onClick={addNote}
-
->
-
+<button onClick={addNote}>
 Add
-
 </button>
-
-
 
 
 
@@ -1342,18 +1284,9 @@ key={note.id}
 
 
 <p>
-
 📝 {note.content}
-
 </p>
 
-
-
-
-
-{
-
-note.timestamp_seconds !== null &&
 
 
 <button
@@ -1365,19 +1298,15 @@ const video =
 videoRef.current;
 
 
-const timestamp =
-note.timestamp_seconds;
-
-
 
 if(
 video &&
-timestamp !== null
+note.timestamp_seconds !== null
 ){
 
 
 video.currentTime =
-timestamp;
+note.timestamp_seconds;
 
 
 video.play();
@@ -1386,23 +1315,20 @@ video.play();
 }
 
 
-
 }}
+
 
 >
 
+
 Go {note.timestamp_seconds}s
+
 
 </button>
 
 
 
-}
-
-
-
 </div>
-
 
 
 ))
@@ -1411,7 +1337,6 @@ Go {note.timestamp_seconds}s
 }
 
 
-
 </div>
 
 
@@ -1423,6 +1348,9 @@ Go {note.timestamp_seconds}s
 
 
 
+
+
+{/* BOOKMARKS */}
 
 
 {
@@ -1433,18 +1361,9 @@ activeTab==="bookmarks" &&
 <div>
 
 
-<button
-
-onClick={addBookmark}
-
->
-
+<button onClick={addBookmark}>
 🔖 Add Bookmark
-
 </button>
-
-
-
 
 
 
@@ -1463,7 +1382,6 @@ key={bookmark.id}
 >
 
 
-
 <button
 
 onClick={()=>{
@@ -1473,19 +1391,15 @@ const video =
 videoRef.current;
 
 
-const timestamp =
-bookmark.timestamp_seconds;
-
-
 
 if(
 video &&
-timestamp !== null
+bookmark.timestamp_seconds !== null
 ){
 
 
 video.currentTime =
-timestamp;
+bookmark.timestamp_seconds;
 
 
 video.play();
@@ -1497,22 +1411,18 @@ video.play();
 
 }}
 
+
 >
 
-Jump to {
 
-bookmark.timestamp_seconds ?? 0
+Jump to {bookmark.timestamp_seconds ?? 0}s
 
-}s
 
 </button>
 
 
 
-
-
 </div>
-
 
 
 ))
@@ -1535,18 +1445,21 @@ bookmark.timestamp_seconds ?? 0
 
 
 
+{/* TRANSCRIPT */}
+
+
 {
 
 activeTab==="transcript" &&
 
 
+<div className="transcript-box">
 
-<p>
 
 {lecture.transcript}
 
-</p>
 
+</div>
 
 
 }
@@ -1559,10 +1472,12 @@ activeTab==="transcript" &&
 
 
 
+{/* RESOURCES */}
+
+
 {
 
 activeTab==="resources" &&
-
 
 
 <div>
@@ -1575,12 +1490,7 @@ lecture.resource_urls?.map(
 (url,index)=>(
 
 
-
-<p
-
-key={index}
-
->
+<p key={index}>
 
 
 <a
@@ -1594,7 +1504,7 @@ rel="noreferrer"
 >
 
 
-Resource {index + 1}
+Resource {index+1}
 
 
 </a>
@@ -1603,12 +1513,150 @@ Resource {index + 1}
 </p>
 
 
-
 )
 
 
 )
 
+
+}
+
+
+</div>
+
+
+}
+
+
+
+
+
+
+
+
+{/* AI FLOATING TUTOR */}
+
+
+<button
+
+className="ai-floating-btn"
+
+onClick={()=>setShowAI(!showAI)}
+
+>
+
+🤖 AI Tutor
+
+</button>
+
+
+
+
+
+{
+
+showAI &&
+
+
+<div className="ai-popup">
+
+
+
+<div className="ai-header">
+
+
+<h3>
+🤖 AI Tutor
+</h3>
+
+
+
+<button
+
+onClick={()=>setShowAI(false)}
+
+>
+
+✕
+
+</button>
+
+
+</div>
+
+
+
+
+
+<input
+
+placeholder="Ask something about this lecture..."
+
+value={question}
+
+onChange={
+e=>setQuestion(e.target.value)
+}
+
+/>
+
+
+
+
+
+<button
+
+onClick={askAI}
+
+disabled={aiLoading}
+
+>
+
+
+{
+
+aiLoading
+
+?
+
+"Thinking..."
+
+:
+
+"Ask AI"
+
+}
+
+
+</button>
+
+
+
+
+
+
+
+{
+
+aiAnswer &&
+
+
+<div className="ai-answer">
+
+
+<p>
+{aiAnswer}
+</p>
+
+
+</div>
+
+
+}
+
+
+
+</div>
 
 
 }
@@ -1619,31 +1667,15 @@ Resource {index + 1}
 
 
 
-}
-
-
 
 </div>
 
 
-
-
-
 </div>
-
-
-
-
-
-</div>
-
 
 
 );
 
-
 }
-
-
 
 export default CoursePlayer;

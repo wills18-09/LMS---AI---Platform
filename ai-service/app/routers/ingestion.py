@@ -23,6 +23,12 @@ def ingest(
     request: IngestionRequest
 ):
 
+    print("INGEST REQUEST RECEIVED")
+    print("LECTURE ID:", request.lecture_id)
+    print("TRANSCRIPT:", request.transcript[:100])
+
+
+
     chunks = ingest_document(
         course_id=request.course_id,
         lecture_id=request.lecture_id,

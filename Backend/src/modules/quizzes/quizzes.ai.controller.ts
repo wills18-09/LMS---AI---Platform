@@ -3,8 +3,7 @@ import axios from "axios";
 import pool from "../../db";
 
 
-const AI_SERVICE_URL = "http://127.0.0.1:8000";
-
+const AI_SERVICE_URL = process.env.AI_SERVICE_URL;
 
 
 export class QuizAIController {
@@ -59,12 +58,12 @@ export class QuizAIController {
       // Call AI Service
 
       const response =
-      await axios.post(
-        `${AI_SERVICE_URL}/ai/quiz/`,
-        {
-          lecture_id: lectureId
-        }
-      );
+await axios.post(
+  `${AI_SERVICE_URL}/ai/quiz/`,
+  {
+    lecture_id: lectureId
+  }
+);
 
 
 

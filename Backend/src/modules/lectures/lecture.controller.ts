@@ -135,7 +135,7 @@ if(transcript){
 
 
     await axios.post(
-  "http://127.0.0.1:8000/ingest/",
+  "http://127.0.0.1:8001/ingest/",
   {
     course_id: course.rows[0].course_id,
     lecture_id: result.rows[0].id,
@@ -678,6 +678,53 @@ export const updateLecture = async (
       `;
 
     const result = await pool.query(query, values);
+
+    if(transcript){
+
+  try {
+
+    const course =
+    await pool.query(
+      `
+      SELECT course_id
+      FROM modules
+      WHERE id = (
+        SELECT module_id
+        FROM lectures
+        WHERE id=$1
+      )
+      `,
+      [id]
+    );
+
+
+    await axios.post(
+      "http://127.0.0.1:8001/ingest/",
+      {
+        course_id: course.rows[0].course_id,
+        lecture_id: id,
+        transcript
+      }
+    );
+
+
+    console.log(
+      "Lecture transcript sent to AI ingestion"
+    );
+
+
+  }
+  catch(error:any){
+
+    console.error(
+      "AI INGESTION ERROR:",
+      error.response?.data || error.message
+    );
+
+  }
+
+}
+
 
     res.json({
       message: "Lecture updated successfully",

@@ -67,35 +67,42 @@ def retrieve_chunks(
         db.close()
 
 
-def get_lecture_chunks(
-    lecture_id: str
-):
-    """
-    Retrieve ALL transcript chunks belonging to
-    a single lecture.
-
-    Used for:
-    - Summaries
-    - Flashcards
-    - Quiz generation
-    - Study plans
-    """
+def get_lecture_chunks(lecture_id: str):
 
     db = get_db()
     cursor = db.cursor()
 
     try:
 
+        print(
+            "SEARCHING LECTURE:",
+            lecture_id
+        )
+
+
+        cursor.execute(
+            """
+            SELECT COUNT(*)
+            FROM document_chunks
+            WHERE lecture_id=%s
+            """,
+            (lecture_id,)
+        )
+
+
+        print(
+            "CHUNK COUNT:",
+            cursor.fetchone()
+        )
+
+
         sql = """
-        SELECT
-            chunk_text
-
+        SELECT chunk_text
         FROM document_chunks
-
         WHERE lecture_id = %s
-
         ORDER BY created_at ASC;
         """
+
 
         cursor.execute(
             sql,
@@ -104,7 +111,9 @@ def get_lecture_chunks(
             )
         )
 
+
         results = cursor.fetchall()
+
 
         return [
             row[0]

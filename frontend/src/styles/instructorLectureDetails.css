@@ -1,37 +1,297 @@
 .instructor-lecture-page {
 
-padding:40px;
+    padding:40px;
+
+    background:#f8fafc;
+
+    min-height:100vh;
 
 }
+
+
+
+.instructor-lecture-page h1 {
+
+    margin-bottom:30px;
+
+    font-size:32px;
+
+    color:#1e293b;
+
+}
+
+
+
 
 
 .lecture-box {
 
-display:flex;
+    background:white;
 
-flex-direction:column;
+    padding:30px;
 
-gap:15px;
+    border-radius:18px;
 
-max-width:600px;
+    max-width:850px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
 
 }
+
+
+
+
+
+.lecture-box label {
+
+    font-weight:600;
+
+    color:#334155;
+
+    margin-top:5px;
+
+}
+
+
+
 
 
 .lecture-box input,
 .lecture-box textarea {
 
-padding:10px;
 
-font-size:16px;
+    padding:14px;
+
+    border-radius:10px;
+
+    border:1px solid #cbd5e1;
+
+    font-size:16px;
+
+    outline:none;
+
+    transition:.2s;
 
 }
 
 
+
+
+
+.lecture-box textarea {
+
+    min-height:180px;
+
+    resize:vertical;
+
+}
+
+
+
+
+
+.lecture-box input:focus,
+.lecture-box textarea:focus {
+
+    border-color:#6366f1;
+
+    box-shadow:0 0 0 3px rgba(99,102,241,.15);
+
+}
+
+
+
+
+
+
+
+/* VIDEO SECTION */
+
+
+.lecture-box h3 {
+
+    margin-top:25px;
+
+    color:#1e293b;
+
+}
+
+
+
+video {
+
+    border-radius:15px;
+
+    margin-top:10px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+
+}
+
+
+
+
+
+.lecture-box p {
+
+    color:#64748b;
+
+    font-size:14px;
+
+    word-break:break-all;
+
+}
+
+
+
+
+
+
+
+/* BUTTONS */
+
+
 .lecture-box button {
 
-padding:12px;
 
-cursor:pointer;
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:.2s;
+
+}
+
+
+
+
+.lecture-box button:hover {
+
+    transform:translateY(-2px);
+
+}
+
+
+
+
+
+
+/* SAVE BUTTON */
+
+
+.lecture-box button:first-of-type {
+
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+
+
+
+
+.lecture-box button:first-of-type:hover {
+
+    background:#1d4ed8;
+
+}
+
+
+
+
+
+
+/* AI BUTTON */
+
+
+.generate-ai-btn {
+
+    background:#7c3aed;
+
+    color:white;
+
+    width:100%;
+
+    margin-top:5px;
+
+}
+
+
+
+.generate-ai-btn:hover {
+
+    background:#6d28d9;
+
+}
+
+
+
+
+
+/* DELETE BUTTON */
+
+
+.lecture-box button:last-child {
+
+    background:#ef4444;
+
+    color:white;
+
+}
+
+
+
+.lecture-box button:last-child:hover {
+
+    background:#dc2626;
+
+}
+
+
+
+
+
+/* MOBILE */
+
+
+@media(max-width:768px){
+
+
+    .instructor-lecture-page {
+
+        padding:20px;
+
+    }
+
+
+    .lecture-box {
+
+        padding:20px;
+
+    }
+
+
+    video {
+
+        width:100%;
+
+    }
+
 
 }

@@ -19,6 +19,8 @@ type Lecture = {
 
   id:string;
 
+  module_id:string;
+
   title:string;
 
   video_url:string;
@@ -30,8 +32,6 @@ type Lecture = {
   order_index:number;
 
 };
-
-
 
 
 
@@ -368,8 +368,41 @@ error
 
 
 
+const generateAIQuiz = async () => {
 
+  try {
 
+    const title = prompt(
+      "Enter AI Quiz title"
+    );
+
+    if (!title) {
+      return;
+    }
+
+    await api.post(
+      `/quizzes/ai/${id}`,
+      {
+        module_id: lecture.module_id,
+        title
+      }
+    );
+
+    alert("AI Quiz generated successfully 🎉");
+
+  }
+  catch(error){
+
+    console.error(
+      "AI Quiz generation failed:",
+      error
+    );
+
+    alert("Failed generating AI quiz");
+
+  }
+
+};
 
 
 
@@ -582,11 +615,9 @@ Source:
 
 
 
-
-
 <button
 
-onClick={updateLecture}
+  onClick={updateLecture}
 
 >
 
@@ -594,23 +625,28 @@ Save Changes
 
 </button>
 
+<button
 
+  className="generate-ai-btn"
 
+  onClick={generateAIQuiz}
 
+>
 
+🤖 Generate AI Quiz
 
+</button>
 
 
 <button
 
-onClick={deleteLecture}
+  onClick={deleteLecture}
 
 >
 
 Delete Lecture
 
 </button>
-
 
 
 

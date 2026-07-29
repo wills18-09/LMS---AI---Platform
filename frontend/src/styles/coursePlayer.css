@@ -10,11 +10,10 @@
 
     padding:35px 50px;
 
-    font-family:
-    "Inter",
-    sans-serif;
+    font-family:"Inter", sans-serif;
 
 }
+
 
 
 
@@ -40,6 +39,7 @@
 
 
 
+
 /* =========================
    MAIN LAYOUT
 ========================= */
@@ -50,9 +50,12 @@
     display:grid;
 
     grid-template-columns:
-    2fr 1fr;
 
-    gap:30px;
+    minmax(0, 2fr)
+
+    380px;
+
+    gap:25px;
 
     align-items:start;
 
@@ -64,11 +67,20 @@
 
 
 /* =========================
-   VIDEO SECTION
+   VIDEO
 ========================= */
 
 
+.main-content {
+
+    min-width:0;
+
+}
+
+
+
 .video-section {
+
 
     background:white;
 
@@ -79,6 +91,7 @@
     box-shadow:
     0 15px 35px rgba(0,0,0,0.08);
 
+
 }
 
 
@@ -86,6 +99,7 @@
 
 
 .video-player {
+
 
     width:100%;
 
@@ -95,20 +109,22 @@
 
     background:black;
 
+
 }
 
 
 
 
 
+.video-info p {
 
-.video-section p {
 
     margin-top:15px;
 
     color:#555;
 
     font-size:15px;
+
 
 }
 
@@ -119,7 +135,7 @@
 
 
 /* =========================
-   PROGRESS BAR
+   PROGRESS
 ========================= */
 
 
@@ -144,24 +160,30 @@
 
 
 
+
 .progress-fill {
 
 
     height:100%;
 
+
     background:
+
     linear-gradient(
         90deg,
         #667eea,
         #764ba2
     );
 
+
     border-radius:20px;
 
-    transition:0.3s;
+
+    transition:.3s;
 
 
 }
+
 
 
 
@@ -170,24 +192,32 @@
 
 
 /* =========================
-   COURSE CONTENT SIDEBAR
+   RIGHT SIDEBAR
 ========================= */
 
 
-.course-sidebar {
+.right-sidebar {
 
 
     background:white;
 
+
     border-radius:24px;
 
-    padding:25px;
 
-    max-height:620px;
+    padding:20px;
+
+
+    max-height:
+
+    calc(100vh - 120px);
+
 
     overflow-y:auto;
 
+
     box-shadow:
+
     0 15px 35px rgba(0,0,0,0.08);
 
 
@@ -195,11 +225,23 @@
 
 
 
-.course-sidebar h2 {
 
-    margin-bottom:20px;
 
-    font-size:22px;
+/* =========================
+ COURSE CONTENT
+========================= */
+
+
+.course-sidebar {
+
+
+    padding-bottom:20px;
+
+
+    border-bottom:
+
+    1px solid #eee;
+
 
 }
 
@@ -207,9 +249,19 @@
 
 
 
+.course-sidebar h2 {
 
 
-/* MODULES */
+    font-size:22px;
+
+
+    margin-bottom:20px;
+
+
+}
+
+
+
 
 
 .module {
@@ -223,15 +275,17 @@
 
 
 
-
 .module h3 {
 
 
     font-size:16px;
 
+
     color:#374151;
 
+
     margin-bottom:12px;
+
 
 }
 
@@ -239,23 +293,26 @@
 
 
 
-/* LECTURE ITEMS */
-
-
 .lecture-item {
 
 
     padding:12px 15px;
 
+
     border-radius:12px;
+
 
     cursor:pointer;
 
+
     margin-bottom:8px;
+
 
     color:#555;
 
-    transition:0.25s;
+
+    transition:.25s;
+
 
 }
 
@@ -277,12 +334,11 @@
 
 
 
-
-
 .active-lecture {
 
 
     background:
+
     linear-gradient(
         135deg,
         #667eea,
@@ -306,42 +362,8 @@
 
 
 /* =========================
- NOTES PANEL
+   TABS
 ========================= */
-
-
-.side-panel {
-
-
-    grid-column:
-    1 / -1;
-
-
-    background:white;
-
-
-    margin-top:10px;
-
-
-    padding:30px;
-
-
-    border-radius:24px;
-
-
-    box-shadow:
-    0 15px 35px rgba(0,0,0,0.08);
-
-
-}
-
-
-
-
-
-
-
-/* TABS */
 
 
 .tabs {
@@ -350,17 +372,13 @@
     display:flex;
 
 
-    gap:15px;
+    gap:10px;
 
 
-    border-bottom:
-    1px solid #eee;
+    flex-wrap:wrap;
 
 
-    padding-bottom:15px;
-
-
-    margin-bottom:25px;
+    margin:20px 0;
 
 
 }
@@ -368,10 +386,11 @@
 
 
 
+
 .tabs button {
 
 
-    padding:10px 20px;
+    padding:9px 14px;
 
 
     border:none;
@@ -392,7 +411,7 @@
     font-weight:600;
 
 
-    transition:0.2s;
+    transition:.2s;
 
 
 }
@@ -406,6 +425,7 @@
 
     background:#667eea;
 
+
     color:white;
 
 
@@ -417,24 +437,24 @@
 
 
 
-/* INPUT */
+/* =========================
+   NOTES / BOOKMARKS
+========================= */
 
 
-.side-panel input {
+input {
 
 
-    width:70%;
+    width:100%;
 
 
-    padding:14px 18px;
+    padding:12px;
 
 
-    border-radius:12px;
+    border-radius:10px;
 
 
-    border:
-
-    1px solid #ddd;
+    border:1px solid #ddd;
 
 
     outline:none;
@@ -443,13 +463,16 @@
     font-size:15px;
 
 
+    box-sizing:border-box;
+
+
 }
 
 
 
 
 
-.side-panel input:focus {
+input:focus {
 
 
     border-color:#667eea;
@@ -461,28 +484,22 @@
 
 
 
+.right-sidebar button {
 
 
-
-.side-panel button {
-
-
-    margin-left:10px;
-
-
-    padding:12px 20px;
+    padding:10px 15px;
 
 
     border:none;
+
+
+    border-radius:10px;
 
 
     background:#667eea;
 
 
     color:white;
-
-
-    border-radius:12px;
 
 
     cursor:pointer;
@@ -494,18 +511,13 @@
 
 
 
-
-
-/* NOTES / BOOKMARK CARDS */
-
-
 .item {
 
 
     background:#f8f9ff;
 
 
-    padding:18px;
+    padding:15px;
 
 
     margin-top:15px;
@@ -514,24 +526,14 @@
     border-radius:15px;
 
 
-    display:flex;
-
-
-    justify-content:space-between;
-
-
-    align-items:center;
-
-
 }
+
 
 
 
 
 .item p {
 
-
-    margin:0;
 
     color:#444;
 
@@ -545,21 +547,188 @@
 
 
 
+/* =========================
+ TRANSCRIPT
+========================= */
 
-/* LINKS */
+
+.transcript-box {
 
 
-.side-panel a {
+    background:#f8f9ff;
+
+
+    padding:15px;
+
+
+    border-radius:12px;
+
+
+    line-height:1.6;
+
+
+    white-space:pre-line;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+ LINKS
+========================= */
+
+
+.right-sidebar a {
 
 
     color:#667eea;
 
+
     text-decoration:none;
+
 
     font-weight:600;
 
 
 }
+
+
+
+
+
+
+
+
+
+/* =========================
+ AI TUTOR
+========================= */
+
+
+.ai-tutor-card {
+
+
+    margin-top:25px;
+
+
+    padding-top:20px;
+
+
+    border-top:1px solid #eee;
+
+
+}
+
+
+
+
+
+.ai-tutor-card h2 {
+
+
+    font-size:20px;
+
+
+    margin-bottom:15px;
+
+
+}
+
+
+
+
+
+.ai-tutor-card input {
+
+
+    width:100%;
+
+
+    padding:12px;
+
+
+    border-radius:10px;
+
+
+    border:1px solid #ddd;
+
+
+    margin-bottom:12px;
+
+
+}
+
+
+
+
+
+.ai-tutor-card button {
+
+
+    width:100%;
+
+
+    padding:12px;
+
+
+    background:#6c63ff;
+
+
+    color:white;
+
+
+    border:none;
+
+
+    border-radius:10px;
+
+
+    font-weight:600;
+
+
+}
+
+
+
+
+
+.ai-tutor-card button:hover {
+
+
+    opacity:.9;
+
+
+}
+
+
+
+
+
+.ai-answer {
+
+
+    margin-top:15px;
+
+
+    background:#f6f4ff;
+
+
+    padding:12px;
+
+
+    border-radius:10px;
+
+
+    line-height:1.5;
+
+
+}
+
 
 
 
@@ -585,6 +754,16 @@
 
 
 
+.right-sidebar {
+
+
+    max-height:none;
+
+
+}
+
+
+
 .video-player {
 
 
@@ -594,11 +773,176 @@
 }
 
 
+
 .player-container {
 
 
     padding:20px;
 
+
+}
+
+
+}
+
+.ai-floating-btn {
+
+
+position:fixed;
+
+
+bottom:30px;
+
+
+right:30px;
+
+
+background:#6c63ff;
+
+
+color:white;
+
+
+border:none;
+
+
+padding:15px 22px;
+
+
+border-radius:30px;
+
+
+font-weight:600;
+
+
+cursor:pointer;
+
+
+box-shadow:
+
+0 10px 25px rgba(0,0,0,.2);
+
+
+z-index:1000;
+
+
+}
+
+
+
+.ai-popup {
+
+
+position:fixed;
+
+
+right:30px;
+
+
+bottom:90px;
+
+
+width:340px;
+
+
+background:white;
+
+
+border-radius:20px;
+
+
+padding:20px;
+
+
+box-shadow:
+
+0 20px 50px rgba(0,0,0,.25);
+
+
+z-index:1000;
+
+
+animation:slideUp .25s ease;
+
+
+}
+
+
+
+.ai-header {
+
+
+display:flex;
+
+
+justify-content:space-between;
+
+
+align-items:center;
+
+
+margin-bottom:15px;
+
+
+}
+
+
+
+.ai-header button {
+
+
+background:none;
+
+
+color:#555;
+
+
+font-size:18px;
+
+
+}
+
+
+
+.ai-popup input {
+
+
+width:100%;
+
+
+padding:12px;
+
+
+border-radius:10px;
+
+
+border:1px solid #ddd;
+
+
+margin-bottom:12px;
+
+
+}
+
+
+
+@keyframes slideUp {
+
+
+from{
+
+transform:translateY(30px);
+
+opacity:0;
+
+}
+
+
+to{
+
+transform:translateY(0);
+
+opacity:1;
 
 }
 

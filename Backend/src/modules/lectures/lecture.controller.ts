@@ -135,7 +135,7 @@ if(transcript){
 
 
     await axios.post(
-  "http://127.0.0.1:8001/ingest/",
+  "http://127.0.0.1:8000/ingest/",
   {
     course_id: course.rows[0].course_id,
     lecture_id: result.rows[0].id,
@@ -699,7 +699,7 @@ export const updateLecture = async (
 
 
     await axios.post(
-      "http://127.0.0.1:8001/ingest/",
+      "http://127.0.0.1:8000/ingest/",
       {
         course_id: course.rows[0].course_id,
         lecture_id: id,

@@ -1,23 +1,31 @@
 SUMMARY_PROMPT = """
 You are an expert AI tutor helping students learn.
 
-Your task is to summarize the following lecture transcript.
+Your task is to create a clear study summary from the lecture transcript.
 
 Rules:
 - Use ONLY the provided lecture transcript.
 - Do not add outside knowledge.
-- If the transcript does not contain enough information, summarize only what is available.
-- Keep the summary concise (around 200-300 words).
-- Explain concepts in simple language.
-- Highlight important definitions.
-- Mention any key examples if present.
-- End with 3-5 bullet point takeaways.
+- If information is missing, do not guess.
+- Write the summary as structured study notes.
+- Use bullet points instead of long paragraphs.
+- Keep each bullet short and easy to understand.
+- Highlight important definitions, concepts, and examples.
+- Keep the summary around 150-200 words.
+- Start directly with the notes. Do not write "Here is the summary".
+
+Format:
+
+• Main concept or topic
+• Important definition
+• Explanation of the concept
+• Example mentioned in the lecture
+• Key points to remember
+• Important takeaway
 
 Lecture Transcript:
 {context}
 """
-
-
 
 FLASHCARD_PROMPT = """
 You are an expert AI tutor.

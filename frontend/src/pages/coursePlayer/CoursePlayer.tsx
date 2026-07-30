@@ -1,4 +1,9 @@
 import {
+  generateFlashcards,
+  generateSummary
+} from "../../services/ai.service";
+
+import {
   useEffect,
   useRef,
   useState
@@ -10,6 +15,7 @@ import {
 } from "react-router-dom";
 
 import api from "../../services/axios";
+
 
 import {
   getLectureProgress,
@@ -181,7 +187,10 @@ useState(false);
 const [showAI,setShowAI] =
 useState(false);
 
+const [flashcards,setFlashcards] =
+useState<any[]>([]);
 
+const [summary,setSummary] = useState("");
 
 
 // LOAD COURSE + FIND CURRENT LECTURE
@@ -435,6 +444,16 @@ loadProgress();
 lecture,
 lectureId
 ]);
+
+useEffect(()=>{
+
+setSummary("");
+setFlashcards([]);
+setAiAnswer("");
+
+},[lectureId]);
+
+
 
 // LOAD NOTES
 
@@ -878,6 +897,102 @@ error
 }
 
 
+
+};
+
+const handleGenerateFlashcards = async()=>{
+
+try{
+
+
+if(!lectureId){
+
+return;
+
+}
+
+
+setAiLoading(true);
+
+
+
+const response =
+await generateFlashcards(
+lectureId
+);
+
+
+
+setFlashcards(
+response.flashcards || response
+);
+
+
+
+}
+catch(error){
+
+console.error(
+"Flashcard generation failed:",
+error
+);
+
+
+}
+finally{
+
+
+setAiLoading(false);
+
+
+}
+
+
+};
+
+
+const handleGenerateSummary = async()=>{
+
+try{
+
+if(!lectureId){
+
+return;
+
+}
+
+
+setAiLoading(true);
+
+
+
+const response =
+await generateSummary(
+lectureId
+);
+
+
+
+setSummary(
+response.summary
+);
+
+
+
+}
+catch(error){
+
+console.error(
+"Summary failed",
+error
+);
+
+}
+finally{
+
+setAiLoading(false);
+
+}
 
 };
 
@@ -1552,32 +1667,112 @@ onClick={()=>setShowAI(!showAI)}
 
 
 
-
-{
-
-showAI &&
-
+{showAI && (
 
 <div className="ai-popup">
 
+    <div className="ai-header">
+
+        <div>
+
+            <h2>🤖 AI Study Assistant</h2>
+
+            <p>Ask questions or generate study material.</p>
+
+        </div>
+
+        <button
+            className="close-btn"
+            onClick={() => setShowAI(false)}
+        >
+            ✕
+        </button>
+
+    </div>
 
 
-<div className="ai-header">
+
+    <div className="ai-chat-section">
+
+        <input
+            placeholder="Ask anything about this lecture..."
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+        />
+
+        <button
+            onClick={askAI}
+            disabled={aiLoading}
+        >
+            {aiLoading ? "Thinking..." : "Ask AI"}
+        </button>
+
+    </div>
 
 
-<h3>
-🤖 AI Tutor
-</h3>
+
+    <div className="ai-divider" />
 
 
 
-<button
+    <h3 className="quick-title">
+        ⚡ Quick Actions
+    </h3>
 
-onClick={()=>setShowAI(false)}
 
->
 
-✕
+    <div className="quick-actions">
+
+        <div className="action-card">
+
+            <h4>📄 Lecture Summary</h4>
+
+            <p>
+                Generate a concise summary of this lecture.
+            </p>
+
+            
+
+            <button
+            
+            onClick={handleGenerateSummary}
+            
+            disabled={aiLoading}
+            
+            >
+              {
+              aiLoading ?
+              "Generating...":"Generate"}
+              
+              </button>
+
+        </div>
+
+
+
+        <div className="action-card">
+          
+          <h4>🃏 Flashcards</h4>
+          
+          <p>
+            Create flashcards for quick revision.
+          </p>
+            
+          <button
+          
+          onClick={handleGenerateFlashcards}
+          
+          disabled={aiLoading}
+          
+          >
+
+{
+aiLoading
+?
+"Generating..."
+:
+"Generate"
+}
 
 </button>
 
@@ -1585,81 +1780,149 @@ onClick={()=>setShowAI(false)}
 </div>
 
 
+        <div className="action-card">
+
+            <h4>❓ Practice Quiz</h4>
+
+            <p>
+                Generate quiz questions from this lecture.
+            </p>
+
+            <button>
+                Generate
+            </button>
+
+        </div>
+
+    </div>
 
 
 
-<input
+    {aiAnswer && (
 
-placeholder="Ask something about this lecture..."
+        <div className="ai-response">
 
-value={question}
+            <h3>🤖 AI Response</h3>
 
-onChange={
-e=>setQuestion(e.target.value)
-}
+            <p>{aiAnswer}</p>
 
-/>
+        </div>
+
+    )}
+
+{
+flashcards.length > 0 && (
+
+<div className="ai-response">
+
+<h3>
+🃏 Flashcards
+</h3>
 
 
+{
+flashcards.map(
+(card,index)=>(
 
-
-
-<button
-
-onClick={askAI}
-
-disabled={aiLoading}
-
+<div
+key={card.id || index}
+className="flashcard"
 >
 
+<p>
 
-{
+<strong>
+Q:
+</strong>
 
-aiLoading
+{" "}
 
-?
+{card.question}
 
-"Thinking..."
-
-:
-
-"Ask AI"
-
-}
-
-
-</button>
-
-
-
-
-
-
-
-{
-
-aiAnswer &&
-
-
-<div className="ai-answer">
+</p>
 
 
 <p>
-{aiAnswer}
+
+<strong>
+A:
+</strong>
+
+{" "}
+
+{card.answer}
+
 </p>
 
 
 </div>
 
+)
+
+)
 
 }
-
 
 
 </div>
 
+)
+}
+
+
+
+{
+summary && (
+
+<div className="ai-response summary-box">
+
+<h3>
+📄 Lecture Summary
+</h3>
+
+
+<div className="summary-content">
+
+{
+summary
+.split("\n")
+.filter(
+point => point.trim() !== ""
+)
+.map(
+(point,index)=>(
+
+<div 
+key={index}
+className="summary-point"
+>
+
+<span>
+• 
+</span>
+
+{point.replace(/^[-•]\s*/, "")}
+
+</div>
+
+)
+
+)
 
 }
+
+</div>
+
+
+</div>
+
+)
+}
+
+
+</div>
+
+)}
 
 
 

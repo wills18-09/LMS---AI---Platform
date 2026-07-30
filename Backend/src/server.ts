@@ -25,7 +25,7 @@ import uploadRoutes from "./modules/uploads/uploads.routes";
 import aiRoutes from "./modules/ai/ai.routes";
 import flashcardRoutes from "./modules/flashcards/flashcards.routes";
 import quizAIRoutes from "./modules/quizzes/quizzes.ai.routes";
-
+import summaryRoutes from "./modules/ai/summary.routes";
 
 
 
@@ -104,6 +104,7 @@ app.use("/api/v1/flashcards",flashcardRoutes);
 
 app.use("/api/v1/quizzes/ai",quizAIRoutes);
 
+app.use("/api/v1/ai/summary",summaryRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {

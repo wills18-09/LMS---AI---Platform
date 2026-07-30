@@ -8,43 +8,6 @@ export class AIService {
 
 
 
-  static async generateSummary(
-    lectureId: string
-  ) {
-
-    try {
-
-
-      const response = await axios.post(
-        `${AI_SERVICE_URL}/summary/`,
-        {
-          lecture_id: lectureId
-        }
-      );
-
-
-      return response.data;
-
-
-    } catch(error:any) {
-
-
-      console.error(
-        "AI SUMMARY ERROR:",
-        error.response?.data || error.message
-      );
-
-
-      throw new Error(
-        "Failed to generate summary"
-      );
-
-    }
-
-  }
-
-
-
 
 
   static async chat(
@@ -119,6 +82,44 @@ static async generateFlashcards(
 
 }
 
+static async generateSummary(
+  lectureId:string
+){
+
+  try{
+
+
+    const response =
+      await axios.post(
+        `${AI_SERVICE_URL}/summary/`,
+        {
+          lecture_id: lectureId
+        }
+      );
+
+
+    return response.data;
+
+
+  }
+  catch(error:any){
+
+
+    console.error(
+      "AI SUMMARY ERROR:",
+      error.response?.data || error.message
+    );
+
+
+    throw new Error(
+      "Failed to generate summary"
+    );
+
+
+  }
+
+}
+
 static async generateQuiz(
   lectureId:string
 ){
@@ -152,6 +153,8 @@ static async generateQuiz(
   }
 
 }
+
+
 
 
 }

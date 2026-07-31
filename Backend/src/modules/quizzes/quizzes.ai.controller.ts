@@ -23,17 +23,13 @@ export class QuizAIController {
 
 
 
-      const {
-        module_id,
-        title
-      } = req.body;
-
-
 
       const lecture =
       await pool.query(
         `
-        SELECT transcript
+        SELECT
+            module_id,
+            title
         FROM lectures
         WHERE id=$1
         `,
@@ -47,8 +43,61 @@ export class QuizAIController {
       if(!lecture.rows[0]){
 
         return res.status(404).json({
+
           message:"Lecture not found"
+
         });
+
+      }
+
+
+
+      const module_id =
+      lecture.rows[0].module_id;
+
+
+      const title =
+      `${lecture.rows[0].title} AI Quiz`;
+
+
+
+
+      // Check if AI quiz already exists
+
+      const existingQuiz =
+      await pool.query(
+        `
+        SELECT
+            id
+
+        FROM quizzes
+
+        WHERE generated_from_lecture_id=$1
+
+        AND is_ai_generated=true
+
+        LIMIT 1
+        `,
+        [
+          lectureId
+        ]
+      );
+
+
+
+      if(existingQuiz.rows.length > 0){
+
+
+        return res.json({
+
+          message:
+          "AI quiz already exists",
+
+          quiz_id:
+          existingQuiz.rows[0].id
+
+        });
+
 
       }
 
@@ -58,12 +107,12 @@ export class QuizAIController {
       // Call AI Service
 
       const response =
-await axios.post(
-  `${AI_SERVICE_URL}/ai/quiz/`,
-  {
-    lecture_id: lectureId
-  }
-);
+      await axios.post(
+        `${AI_SERVICE_URL}/ai/quiz/`,
+        {
+          lecture_id: lectureId
+        }
+      );
 
 
 
@@ -129,6 +178,7 @@ await axios.post(
 
       const quizId =
       quiz.rows[0].id;
+
 
 
 

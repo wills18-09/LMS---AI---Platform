@@ -505,6 +505,67 @@ static async generateAIQuiz(
 
 }
 
+static async getQuizForStudent(
+  req:Request,
+  res:Response
+){
+
+  try{
+
+
+    const quizId =
+    req.params.id as string;
+
+
+
+    const quiz =
+    await QuizService.getQuizForStudent(
+      quizId
+    );
+
+
+
+    if(!quiz){
+
+      return res.status(404).json({
+
+        message:"Quiz not found"
+
+      });
+
+    }
+
+
+
+    res.json({
+
+      quiz
+
+    });
+
+
+
+  }
+  catch(error){
+
+
+    console.error(
+      "GET STUDENT QUIZ ERROR",
+      error
+    );
+
+
+    res.status(500).json({
+
+      message:"Failed loading quiz"
+
+    });
+
+
+  }
+
+
+}
 
 }
 

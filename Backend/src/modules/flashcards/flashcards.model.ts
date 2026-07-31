@@ -112,5 +112,37 @@ export class FlashcardModel {
 
   }
 
+  static async findByLectureId(
+  lectureId:string
+){
+
+const result =
+await pool.query(
+`
+SELECT
+f.*
+
+FROM flashcards f
+
+JOIN modules m
+ON f.module_id = m.id
+
+JOIN lectures l
+ON l.module_id = m.id
+
+WHERE l.id=$1
+
+ORDER BY f.id
+`,
+[
+lectureId
+]
+);
+
+
+return result.rows;
+
+}
+
 
 }

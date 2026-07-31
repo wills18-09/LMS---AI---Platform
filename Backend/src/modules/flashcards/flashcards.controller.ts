@@ -13,89 +13,130 @@ export class FlashcardController {
 
 
   static async generate(
-    req: Request,
-    res: Response
-  ) {
+req: Request,
+res: Response
+){
 
-    try {
-
-
-      const lectureId =
-        req.params.lectureId as string;
+try{
 
 
-
-      const lecture =
-        await pool.query(
-          `
-          SELECT module_id
-          FROM lectures
-          WHERE id = $1
-          `,
-          [
-            lectureId
-          ]
-        );
+const lectureId =
+req.params.lectureId as string;
 
 
 
-      if (
-        lecture.rows.length === 0
-      ) {
+// CHECK EXISTING FLASHCARDS
 
-        return res.status(404).json({
-          message: "Lecture not found"
-        });
-
-      }
+const existingCards =
+await FlashcardModel.findByLectureId(
+lectureId
+);
 
 
 
-      const moduleId =
-        lecture.rows[0].module_id;
+if(existingCards.length > 0){
+
+return res.json({
+
+flashcards: existingCards,
+
+cached:true
+
+});
+
+}
 
 
 
-      const result =
-        await AIService.generateFlashcards(
-          lectureId
-        );
+
+
+const lecture =
+await pool.query(
+`
+SELECT module_id
+FROM lectures
+WHERE id=$1
+`,
+[
+lectureId
+]
+);
 
 
 
-      const saved =
-        await FlashcardModel.createMany(
-          moduleId,
-          result.flashcards
-        );
+if(lecture.rows.length===0){
+
+return res.status(404).json({
+
+message:"Lecture not found"
+
+});
+
+}
 
 
 
-      res.json({
-        flashcards: saved
-      });
+const moduleId =
+lecture.rows[0].module_id;
 
 
 
-    } catch(error:any) {
 
 
-      console.error(
-        "FLASHCARD GENERATION ERROR:",
-        error
-      );
+// CALL AI ONLY IF NO CARDS EXIST
 
-
-      res.status(500).json({
-        message: error.message
-      });
-
-    }
-
-  }
+const result =
+await AIService.generateFlashcards(
+lectureId
+);
 
 
 
+
+
+const saved =
+await FlashcardModel.createMany(
+
+moduleId,
+
+result.flashcards
+
+);
+
+
+
+
+
+return res.json({
+
+flashcards:saved,
+
+cached:false
+
+});
+
+
+
+}
+catch(error:any){
+
+console.error(
+"FLASHCARD GENERATION ERROR:",
+error
+);
+
+
+return res.status(500).json({
+
+message:error.message
+
+});
+
+
+}
+
+
+}
 
 
   static async getByModule(

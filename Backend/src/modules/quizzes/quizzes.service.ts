@@ -151,15 +151,26 @@ static async createAIQuiz(
 
 
     const updatedAttempt =
-      await QuizModel.updateScore(
-        attemptId,
-        score
-      );
+  await QuizModel.updateScore(
+    attemptId,
+    score
+  );
 
 
+return {
 
-    return updatedAttempt;
+  ...updatedAttempt,
 
+  correctAnswers: score,
+
+  totalQuestions: answers.length,
+
+  percentage:
+    Math.round(
+      (score / answers.length) * 100
+    )
+
+};
 
 
   }
@@ -209,5 +220,16 @@ static async getQuestions(
 
 }
 
+static async getQuizForStudent(
+  quizId:string
+){
+
+  return await QuizModel.getQuizForStudent(
+    quizId
+  );
 
 }
+
+
+}
+

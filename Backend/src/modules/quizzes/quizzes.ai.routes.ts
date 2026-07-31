@@ -12,9 +12,9 @@ const router = Router();
 
 
 router.post(
- "/:lectureId",
+ "/generate/:lectureId",
  authenticateToken,
- authorizeRoles("instructor"),
+ authorizeRoles("student"),
  QuizAIController.generateQuiz
 );
 

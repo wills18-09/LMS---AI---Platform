@@ -243,7 +243,6 @@ static async getQuizById(
   quizId:string
 ){
 
-
   const result = await pool.query(
 
     `
@@ -289,15 +288,12 @@ static async getQuizById(
 
 
   if(result.rows.length === 0){
-
     return null;
-
   }
 
 
 
-
-  const quiz = {
+  const quiz:any = {
 
     quiz_id:
     result.rows[0].quiz_id,
@@ -307,7 +303,7 @@ static async getQuizById(
     result.rows[0].title,
 
 
-    questions:[] as any[]
+    questions:[]
 
   };
 
@@ -315,15 +311,173 @@ static async getQuizById(
 
 
 
+  for(const row of result.rows){
 
 
-  result.rows.forEach(row=>{
+    if(!row.question_id){
+      continue;
+    }
+
 
 
     let question =
     quiz.questions.find(
-      (q:any)=>q.id === row.question_id
+      (q:any)=>
+      q.id === row.question_id
     );
+
+
+
+    if(!question){
+
+
+      question = {
+
+        id:
+        row.question_id,
+
+
+        question_text:
+        row.question_text,
+
+
+        question_type:
+        row.question_type,
+
+
+        options:[]
+
+      };
+
+
+
+      quiz.questions.push(question);
+
+    }
+
+
+
+
+    if(row.option_id){
+
+
+      question.options.push({
+
+        id:
+        row.option_id,
+
+
+        option_text:
+        row.option_text,
+
+
+        is_correct:
+        row.is_correct
+
+      });
+
+
+    }
+
+
+
+  }
+
+
+
+  return quiz;
+
+}
+
+static async getQuizForStudent(
+  quizId:string
+){
+
+  const result = await pool.query(
+
+    `
+    SELECT
+
+    q.id AS quiz_id,
+    q.title,
+
+    qq.id AS question_id,
+    qq.question_text,
+    qq.question_type,
+    qq.order_index,
+
+    qo.id AS option_id,
+    qo.option_text
+
+
+    FROM quizzes q
+
+
+    LEFT JOIN quiz_questions qq
+    ON qq.quiz_id = q.id
+
+
+    LEFT JOIN quiz_options qo
+    ON qo.question_id = qq.id
+
+
+    WHERE q.id = $1
+
+
+    ORDER BY qq.order_index ASC
+
+    `,
+
+    [
+      quizId
+    ]
+
+  );
+
+
+
+  if(result.rows.length === 0){
+
+    return null;
+
+  }
+
+
+
+  const quiz:any = {
+
+    quiz_id:
+    result.rows[0].quiz_id,
+
+
+    title:
+    result.rows[0].title,
+
+
+    questions:[]
+
+  };
+
+
+
+
+  for(const row of result.rows){
+
+
+    if(!row.question_id){
+
+      continue;
+
+    }
+
+
+
+    let question =
+    quiz.questions.find(
+      (q:any)=>
+      q.id === row.question_id
+    );
+
 
 
 
@@ -356,9 +510,6 @@ static async getQuizById(
 
 
 
-
-
-
     if(row.option_id){
 
 
@@ -369,11 +520,7 @@ static async getQuizById(
 
 
         option_text:
-        row.option_text,
-
-
-        is_correct:
-        row.is_correct
+        row.option_text
 
       });
 
@@ -381,8 +528,7 @@ static async getQuizById(
     }
 
 
-  });
-
+  }
 
 
 

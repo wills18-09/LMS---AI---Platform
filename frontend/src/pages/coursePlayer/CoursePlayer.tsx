@@ -44,8 +44,9 @@ type Lecture = {
 
   resource_urls:string[];
 
-};
+  module_id:string;
 
+};
 
 
 type Module = {
@@ -191,6 +192,19 @@ const [flashcards,setFlashcards] =
 useState<any[]>([]);
 
 const [summary,setSummary] = useState("");
+
+const [quiz,setQuiz] = useState<any>(null);
+
+const [quizAnswers,setQuizAnswers] = useState<any[]>([]);
+
+const [currentQuizQuestion,setCurrentQuizQuestion] =
+useState(0);
+
+const [quizLoading,setQuizLoading] = useState(false);
+
+const [quizResult,setQuizResult] = useState<any>(null);
+
+
 
 
 // LOAD COURSE + FIND CURRENT LECTURE
@@ -996,6 +1010,161 @@ setAiLoading(false);
 
 };
 
+const handleSubmitAIQuiz = async()=>{
+
+    try{
+
+
+        if(!quiz){
+
+            return;
+
+        }
+
+
+
+        const response =
+        await api.post(
+            `/quizzes/${quiz.id}/attempt`
+        );
+
+
+
+        const attemptId =
+        response.data.attempt.id;
+
+
+
+        const result =
+        await api.post(
+
+            `/quizzes/attempts/${attemptId}/submit`,
+
+            {
+                answers: quizAnswers
+            }
+
+        );
+
+
+
+        setQuizResult(
+            result.data.result || result.data
+        );
+
+
+    }
+    catch(error){
+
+        console.error(
+            "SUBMIT AI QUIZ ERROR:",
+            error
+        );
+
+    }
+
+
+};
+
+const handleGenerateQuiz = async()=>{
+
+    try{
+
+
+        if(!lectureId || !lecture){
+
+            return;
+
+        }
+
+
+
+        setQuizLoading(true);
+
+
+
+        const response =
+await api.post(
+    `/quizzes/ai/generate/${lectureId}`,
+    {
+        module_id:
+        lecture?.module_id,
+
+        title:
+        `${lecture.title} AI Quiz`
+    }
+);
+
+
+        console.log(
+            "AI QUIZ GENERATED:",
+            response.data
+        );
+
+
+
+        const quizId =
+        response.data.quiz_id;
+
+
+
+        const quizResponse =
+        await api.get(
+ `/quizzes/${quizId}/play`
+);
+
+
+        console.log(
+            "QUIZ DATA:",
+            quizResponse.data
+        );
+
+
+
+        const loadedQuiz =
+        quizResponse.data.quiz;
+        
+        setQuiz({
+
+    ...loadedQuiz,
+
+    id:
+    loadedQuiz.quiz_id,
+
+    questions:
+    loadedQuiz.questions || []
+
+});
+
+
+        setQuizAnswers([]);
+
+        setQuizResult(null);
+
+
+
+    }
+    catch(error:any){
+
+
+        console.error(
+            "GENERATE AI QUIZ ERROR:",
+            error.response?.data ||
+            error.message
+        );
+
+
+    }
+    finally{
+
+
+        setQuizLoading(false);
+
+
+    }
+
+
+};
 
 // AI TUTOR
 
@@ -1647,8 +1816,6 @@ Resource {index+1}
 
 
 
-
-
 {/* AI FLOATING TUTOR */}
 
 
@@ -1667,47 +1834,85 @@ onClick={()=>setShowAI(!showAI)}
 
 
 
+
 {showAI && (
 
 <div className="ai-popup">
 
+
     <div className="ai-header">
+
 
         <div>
 
-            <h2>🤖 AI Study Assistant</h2>
+            <h2>
+                🤖 AI Study Assistant
+            </h2>
 
-            <p>Ask questions or generate study material.</p>
+            <p>
+                Ask questions or generate study material.
+            </p>
 
         </div>
 
+
+
         <button
+
             className="close-btn"
+
             onClick={() => setShowAI(false)}
+
         >
+
             ✕
+
         </button>
 
+
     </div>
+
+
 
 
 
     <div className="ai-chat-section">
 
+
         <input
+
             placeholder="Ask anything about this lecture..."
+
             value={question}
-            onChange={(e) => setQuestion(e.target.value)}
+
+            onChange={(e)=>setQuestion(e.target.value)}
+
         />
 
+
+
         <button
+
             onClick={askAI}
+
             disabled={aiLoading}
+
         >
-            {aiLoading ? "Thinking..." : "Ask AI"}
+
+            {
+            aiLoading
+            ?
+            "Thinking..."
+            :
+            "Ask AI"
+            }
+
         </button>
 
+
     </div>
+
+
 
 
 
@@ -1715,86 +1920,153 @@ onClick={()=>setShowAI(!showAI)}
 
 
 
+
+
     <h3 className="quick-title">
+
         ⚡ Quick Actions
+
     </h3>
+
+
 
 
 
     <div className="quick-actions">
 
+
+
         <div className="action-card">
 
-            <h4>📄 Lecture Summary</h4>
+
+            <h4>
+                📄 Lecture Summary
+            </h4>
+
+
 
             <p>
                 Generate a concise summary of this lecture.
             </p>
 
-            
+
 
             <button
-            
+
             onClick={handleGenerateSummary}
-            
+
             disabled={aiLoading}
-            
+
             >
-              {
-              aiLoading ?
-              "Generating...":"Generate"}
-              
-              </button>
+
+            {
+            aiLoading
+            ?
+            "Generating..."
+            :
+            "Generate"
+            }
+
+
+            </button>
+
 
         </div>
 
 
 
-        <div className="action-card">
-          
-          <h4>🃏 Flashcards</h4>
-          
-          <p>
-            Create flashcards for quick revision.
-          </p>
-            
-          <button
-          
-          onClick={handleGenerateFlashcards}
-          
-          disabled={aiLoading}
-          
-          >
-
-{
-aiLoading
-?
-"Generating..."
-:
-"Generate"
-}
-
-</button>
 
 
-</div>
 
 
         <div className="action-card">
 
-            <h4>❓ Practice Quiz</h4>
+
+            <h4>
+                🃏 Flashcards
+            </h4>
+
+
+
+            <p>
+                Create flashcards for quick revision.
+            </p>
+
+
+
+            <button
+
+            onClick={handleGenerateFlashcards}
+
+            disabled={aiLoading}
+
+            >
+
+
+            {
+            aiLoading
+            ?
+            "Generating..."
+            :
+            "Generate"
+            }
+
+
+            </button>
+
+
+        </div>
+
+
+
+
+
+
+
+        <div className="action-card">
+
+
+            <h4>
+                ❓ Practice Quiz
+            </h4>
+
+
 
             <p>
                 Generate quiz questions from this lecture.
             </p>
 
-            <button>
-                Generate
+
+
+            <button
+
+            onClick={handleGenerateQuiz}
+
+            disabled={quizLoading}
+
+            >
+
+            {
+            quizLoading
+            ?
+            "Generating..."
+            :
+            "Generate"
+            }
+
+
             </button>
+
 
         </div>
 
+
+
     </div>
+
+
+
+
 
 
 
@@ -1802,32 +2074,57 @@ aiLoading
 
         <div className="ai-response">
 
-            <h3>🤖 AI Response</h3>
 
-            <p>{aiAnswer}</p>
+            <h3>
+                🤖 AI Response
+            </h3>
+
+
+
+            <p>
+                {aiAnswer}
+            </p>
+
 
         </div>
 
     )}
+
+
+
+
+
+
+
+
 
 {
 flashcards.length > 0 && (
 
 <div className="ai-response">
 
+
 <h3>
 🃏 Flashcards
 </h3>
 
 
+
+
 {
 flashcards.map(
+
 (card,index)=>(
 
+
 <div
+
 key={card.id || index}
+
 className="flashcard"
+
 >
+
 
 <p>
 
@@ -1840,6 +2137,8 @@ Q:
 {card.question}
 
 </p>
+
+
 
 
 <p>
@@ -1855,7 +2154,9 @@ A:
 </p>
 
 
+
 </div>
+
 
 )
 
@@ -1864,10 +2165,18 @@ A:
 }
 
 
+
 </div>
 
 )
+
 }
+
+
+
+
+
+
 
 
 
@@ -1876,34 +2185,53 @@ summary && (
 
 <div className="ai-response summary-box">
 
+
 <h3>
 📄 Lecture Summary
 </h3>
 
 
+
 <div className="summary-content">
 
+
 {
+
 summary
+
 .split("\n")
+
 .filter(
-point => point.trim() !== ""
+point=>point.trim() !== ""
 )
+
 .map(
+
 (point,index)=>(
 
-<div 
+
+<div
+
 key={index}
+
 className="summary-point"
+
 >
 
+
 <span>
-• 
+•
 </span>
+
+
+{" "}
+
 
 {point.replace(/^[-•]\s*/, "")}
 
+
 </div>
+
 
 )
 
@@ -1911,13 +2239,353 @@ className="summary-point"
 
 }
 
+
 </div>
+
+
+
+</div>
+
+
+)
+
+}
+
+
+
+
+
+
+
+{
+quiz && (
+
+<div className="quiz-container">
+
+
+<h2>
+❓ {quiz.title}
+</h2>
+
+
+
+<div className="quiz-progress">
+
+
+<p>
+
+Question {currentQuizQuestion + 1}
+/
+{quiz.questions.length}
+
+</p>
+
+
+
+<div className="quiz-progress-bar">
+
+<div
+
+className="quiz-progress-fill"
+
+style={{
+width:
+`${(
+((currentQuizQuestion + 1)
+/ quiz.questions.length)
+*100
+)}%`
+}}
+
+/>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div className="quiz-card">
+
+
+<h3>
+
+{
+quiz.questions[
+currentQuizQuestion
+].question_text
+
+}
+
+</h3>
+
+
+
+
+
+<div className="quiz-options">
+
+
+{
+
+quiz.questions[
+currentQuizQuestion
+]
+.options.map(
+(option:any)=>(
+
+
+<label
+
+key={option.id}
+
+className={
+
+quizAnswers.find(
+
+(a:any)=>
+
+a.question_id ===
+quiz.questions[currentQuizQuestion].id
+
+&&
+
+a.selected_option_ids.includes(
+option.id
+)
+
+)
+
+?
+
+"selected-option"
+
+:
+
+""
+
+}
+
+
+>
+
+
+<input
+
+type="radio"
+
+checked={
+
+quizAnswers.some(
+
+(a:any)=>
+
+a.question_id ===
+quiz.questions[currentQuizQuestion].id
+
+&&
+
+a.selected_option_ids.includes(
+option.id
+)
+
+)
+
+}
+
+onChange={()=>{
+
+
+setQuizAnswers(
+previous=>[
+
+...previous.filter(
+
+answer=>
+
+answer.question_id !==
+quiz.questions[currentQuizQuestion].id
+
+),
+
+
+{
+
+question_id:
+quiz.questions[currentQuizQuestion].id,
+
+
+selected_option_ids:[
+option.id
+]
+
+}
+
+]
+
+);
+
+
+}}
+
+
+/>
+
+
+{option.option_text}
+
+
+</label>
+
+
+)
+
+)
+
+}
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div className="quiz-navigation">
+
+
+<button
+
+disabled={
+currentQuizQuestion===0
+}
+
+onClick={()=>
+
+
+setCurrentQuizQuestion(
+previous=>previous-1
+)
+
+}
+
+>
+
+Previous
+
+</button>
+
+
+
+
+
+<button
+
+disabled={
+
+currentQuizQuestion ===
+quiz.questions.length-1
+
+}
+
+
+onClick={()=>
+
+
+setCurrentQuizQuestion(
+previous=>previous+1
+)
+
+}
+
+>
+
+Next
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<button
+
+className="submit-quiz-btn"
+
+onClick={handleSubmitAIQuiz}
+
+disabled={
+quizAnswers.length !==
+quiz.questions.length
+}
+
+>
+
+Submit Quiz
+
+</button>
+
+
+
+
+
+{
+
+quizResult && (
+
+<div className="quiz-result">
+
+
+<h3>
+🎯 Result
+</h3>
+
+
+<p>
+Score:
+{" "}
+{quizResult.percentage}%
+</p>
+
+
+<p>
+Correct:
+{" "}
+{quizResult.correctAnswers}
+/
+{quizResult.totalQuestions}
+</p>
+
+
+</div>
+
+
+)
+
+}
+
 
 
 </div>
 
 )
 }
+
+
+
+
+
 
 
 </div>
@@ -1926,9 +2594,9 @@ className="summary-point"
 
 
 
+
+
 </div>
-
-
 
 
 </div>

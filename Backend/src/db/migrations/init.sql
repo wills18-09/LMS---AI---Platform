@@ -243,6 +243,8 @@ CREATE TABLE flashcards (
     question TEXT,
     answer TEXT
 );
+
+
  
 CREATE TABLE recommendations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

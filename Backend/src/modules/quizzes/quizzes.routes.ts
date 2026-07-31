@@ -87,11 +87,10 @@ router.get(
 // Student views quiz
 
 router.get(
-  "/:id",
+  "/:id/play",
   authenticateToken,
   authorizeRoles("student"),
-  QuizController.getQuiz
+  QuizController.getQuizForStudent
 );
-
 
 export default router;

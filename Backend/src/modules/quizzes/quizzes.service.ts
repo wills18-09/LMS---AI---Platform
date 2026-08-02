@@ -1,5 +1,5 @@
 import { QuizModel } from "./quizzes.model";
-
+import { MasteryService } from "../mastery/mastery.service";
 
 export class QuizService {
 
@@ -149,31 +149,60 @@ static async createAIQuiz(
 
 
 
+const updatedAttempt =
+await QuizModel.updateScore(
+  attemptId,
+  score
+);
 
-    const updatedAttempt =
-  await QuizModel.updateScore(
-    attemptId,
-    score
+
+// UPDATE STUDENT MASTERY
+
+const attempt =
+await QuizModel.getAttemptDetails(
+  attemptId
+);
+
+
+const percentage =
+Math.round(
+  (score / answers.length) * 100
+);
+
+
+
+if(
+  attempt &&
+  attempt.lecture_id
+){
+
+  await MasteryService.updateMastery(
+    attempt.user_id,
+    attempt.lecture_id,
+    percentage
   );
+
+}
+
 
 
 return {
 
   ...updatedAttempt,
 
-  correctAnswers: score,
+  correctAnswers:
+  score,
 
-  totalQuestions: answers.length,
+  totalQuestions:
+  answers.length,
 
-  percentage:
-    Math.round(
-      (score / answers.length) * 100
-    )
+  percentage
 
 };
 
 
   }
+
 
 
 
@@ -210,26 +239,32 @@ return {
   }
 
 
-static async getQuestions(
-  quizId:string
-){
 
-  return await QuizModel.getQuestions(
-    quizId
-  );
+
+
+  static async getQuestions(
+    quizId:string
+  ){
+
+    return await QuizModel.getQuestions(
+      quizId
+    );
+
+  }
+
+
+
+
+
+  static async getQuizForStudent(
+    quizId:string
+  ){
+
+    return await QuizModel.getQuizForStudent(
+      quizId
+    );
+
+  }
+
 
 }
-
-static async getQuizForStudent(
-  quizId:string
-){
-
-  return await QuizModel.getQuizForStudent(
-    quizId
-  );
-
-}
-
-
-}
-

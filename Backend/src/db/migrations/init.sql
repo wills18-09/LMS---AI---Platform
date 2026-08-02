@@ -318,3 +318,22 @@ CREATE TABLE audit_logs (
     metadata JSONB,
     created_at TIMESTAMPTZ DEFAULT now()
 );
+
+
+CREATE TABLE IF NOT EXISTS student_preferences (
+
+    user_id UUID PRIMARY KEY
+    REFERENCES users(id)
+    ON DELETE CASCADE,
+
+    difficulty_mode VARCHAR(20)
+    NOT NULL
+    DEFAULT 'intermediate',
+
+    created_at TIMESTAMP
+    DEFAULT now(),
+
+    updated_at TIMESTAMP
+    DEFAULT now()
+
+);

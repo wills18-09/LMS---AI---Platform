@@ -725,4 +725,53 @@ static async createAIQuiz(
 
 }
 
+static async getAttemptDetails(
+  attemptId:string
+){
+
+  const result =
+  await pool.query(
+
+    `
+    SELECT
+
+    qa.user_id,
+
+    q.generated_from_lecture_id AS lecture_id,
+
+    COUNT(qq.id) AS total_questions
+
+
+    FROM quiz_attempts qa
+
+
+    JOIN quizzes q
+    ON q.id = qa.quiz_id
+
+
+    JOIN quiz_questions qq
+    ON qq.quiz_id = q.id
+
+
+    WHERE qa.id=$1
+
+
+    GROUP BY
+    qa.user_id,
+    q.generated_from_lecture_id
+
+    `,
+
+    [
+      attemptId
+    ]
+
+  );
+
+
+  return result.rows[0];
+
+}
+
+
 }

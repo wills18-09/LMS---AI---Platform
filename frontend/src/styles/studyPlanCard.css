@@ -1,0 +1,371 @@
+.study-plan-card {
+
+  position:relative;
+
+  overflow:hidden;
+
+  background:
+  linear-gradient(
+    135deg,
+    #ffffff,
+    #f8fafc,
+    #eef2ff
+  );
+
+  padding:32px;
+
+  border-radius:26px;
+
+  margin-bottom:35px;
+
+  border:1px solid #e2e8f0;
+
+  box-shadow:
+  0 20px 45px rgba(15,23,42,0.08);
+
+  transition:
+  transform 0.3s ease,
+  box-shadow 0.3s ease;
+
+}
+
+
+
+.study-plan-card:hover {
+
+  transform:translateY(-5px);
+
+  box-shadow:
+  0 25px 55px rgba(99,102,241,0.15);
+
+}
+
+
+
+
+
+.study-plan-card::before {
+
+  content:"";
+
+  position:absolute;
+
+  width:200px;
+
+  height:200px;
+
+  border-radius:50%;
+
+  background:#8b5cf6;
+
+  opacity:0.08;
+
+  right:-80px;
+
+  top:-80px;
+
+}
+
+
+
+
+
+.study-plan-header {
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:flex-start;
+
+}
+
+
+
+
+
+.study-plan-header h2 {
+
+  margin:0;
+
+  font-size:24px;
+
+  color:#0f172a;
+
+}
+
+
+
+.study-plan-header p {
+
+  margin-top:8px;
+
+  color:#64748b;
+
+}
+
+
+
+
+
+.study-plan-header span {
+
+
+background:
+
+linear-gradient(
+135deg,
+#8b5cf6,
+#6366f1
+);
+
+
+
+color:white;
+
+
+padding:8px 18px;
+
+
+border-radius:30px;
+
+
+font-size:13px;
+
+
+font-weight:700;
+
+
+text-transform:capitalize;
+
+}
+
+
+
+
+
+.study-plan-days {
+
+  margin-top:30px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:16px;
+
+}
+
+
+
+
+
+.study-day {
+
+
+display:flex;
+
+
+gap:18px;
+
+
+align-items:flex-start;
+
+
+background:white;
+
+
+padding:18px;
+
+
+border-radius:18px;
+
+
+border:1px solid #e2e8f0;
+
+
+transition:0.25s ease;
+
+
+}
+
+
+
+
+
+.study-day:hover {
+
+
+transform:translateX(5px);
+
+
+border-color:#c7d2fe;
+
+
+}
+
+
+
+
+
+.day-number {
+
+
+min-width:65px;
+
+
+height:35px;
+
+
+display:flex;
+
+
+align-items:center;
+
+
+justify-content:center;
+
+
+background:#eef2ff;
+
+
+color:#4f46e5;
+
+
+border-radius:12px;
+
+
+font-weight:700;
+
+
+font-size:14px;
+
+
+}
+
+
+
+
+
+.study-day h3 {
+
+
+margin:0;
+
+
+font-size:17px;
+
+
+color:#111827;
+
+
+}
+
+
+
+
+
+.study-day p {
+
+
+margin-top:6px;
+
+
+color:#64748b;
+
+
+font-size:14px;
+
+
+line-height:1.5;
+
+
+}
+
+
+
+
+
+.study-plan-card button {
+
+
+margin-top:25px;
+
+
+padding:13px 25px;
+
+
+border:none;
+
+
+border-radius:14px;
+
+
+background:
+
+linear-gradient(
+135deg,
+#4f46e5,
+#7c3aed
+);
+
+
+
+color:white;
+
+
+font-weight:600;
+
+
+font-size:15px;
+
+
+cursor:pointer;
+
+
+transition:0.25s ease;
+
+
+}
+
+
+
+
+
+.study-plan-card button:hover {
+
+
+transform:translateY(-3px);
+
+
+box-shadow:
+
+0 12px 25px rgba(79,70,229,0.3);
+
+
+}
+
+
+
+
+
+@media(max-width:700px){
+
+
+.study-plan-header{
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+
+.study-day{
+
+flex-direction:column;
+
+}
+
+
+}

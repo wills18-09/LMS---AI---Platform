@@ -28,7 +28,11 @@ import {
 } from "../../services/streak.service";
 
 
+import RecommendationCard from "../../components/student/RecommendationCard";
 
+import StudyPlanCard from "../../components/student/StudyPlanCard";
+
+import MasteryCard from "../../components/student/MasteryCard";
 
 
 type Course = {
@@ -744,17 +748,21 @@ e.currentTarget.style.display="none";
 
 
 
+<RecommendationCard />
 
 
+{
+courses.length > 0 &&
+<StudyPlanCard
+courseId={courses[0].id}
+/>
+}
 
 
+<MasteryCard />
 
 
 <div className="courses-section">
-
-
-
-
 
 
 <div className="section-header">

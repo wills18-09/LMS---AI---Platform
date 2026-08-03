@@ -262,5 +262,46 @@ static async rejectCourse(
 
   }
 
+    static async getDetailedAnalytics(
+    req: Request,
+    res: Response
+  ) {
+
+
+    try {
+
+
+      const analytics =
+        await AdminService.getDetailedAnalytics();
+
+
+      res.json({
+        analytics
+      });
+
+
+    }
+    catch(error){
+
+
+      console.error(
+        "DETAILED ANALYTICS ERROR:",
+        error
+      );
+
+
+      res.status(500).json({
+
+        message:
+        "Failed to fetch detailed analytics"
+
+      });
+
+
+    }
+
+
+  }
+
 
 }

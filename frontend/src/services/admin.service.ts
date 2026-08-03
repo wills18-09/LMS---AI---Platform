@@ -114,3 +114,15 @@ export const rejectCourse = async(
     return response.data;
 
 };
+
+export const getDetailedAnalytics = async()=>{
+
+    const response =
+    await api.get(
+        "/admin/analytics/detailed"
+    );
+
+
+    return response.data;
+
+};

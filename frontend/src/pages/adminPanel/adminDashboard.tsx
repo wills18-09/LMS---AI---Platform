@@ -15,7 +15,7 @@ import {
 
 import "../../styles/adminDashboard.css";
 
-
+import AdminAnalytics from "../../components/admin/adminAnalytics";
 
 type User = {
 
@@ -433,7 +433,7 @@ error &&
 }
 
 
-
+<AdminAnalytics />
 
 
 

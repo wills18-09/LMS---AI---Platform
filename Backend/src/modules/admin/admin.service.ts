@@ -93,6 +93,12 @@ export class AdminService {
 
   }
 
+    static async getDetailedAnalytics() {
+
+    return await AdminModel.getDetailedAnalytics();
+
+  }
+
 
 
 }

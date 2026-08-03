@@ -71,5 +71,12 @@ router.get(
   AdminController.getOverview
 );
 
+router.get(
+  "/analytics/detailed",
+  authenticateToken,
+  authorizeRoles("admin"),
+  AdminController.getDetailedAnalytics
+);
+
 
 export default router;

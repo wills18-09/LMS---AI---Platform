@@ -315,6 +315,84 @@ export class AdminModel {
 
   }
 
+    // Detailed admin analytics
+  static async getDetailedAnalytics() {
+
+
+    const result = await pool.query(
+      `
+      SELECT
+
+      (
+        SELECT COUNT(*)
+        FROM users
+        WHERE is_active = true
+      ) AS active_users,
+
+
+      (
+        SELECT COUNT(*)
+        FROM users u
+        JOIN user_roles ur
+        ON ur.user_id = u.id
+        JOIN roles r
+        ON r.id = ur.role_id
+        WHERE r.name = 'student'
+      ) AS total_students,
+
+
+      (
+        SELECT COUNT(*)
+        FROM users u
+        JOIN user_roles ur
+        ON ur.user_id = u.id
+        JOIN roles r
+        ON r.id = ur.role_id
+        WHERE r.name = 'instructor'
+      ) AS total_instructors,
+
+
+
+      (
+        SELECT COUNT(*)
+        FROM courses
+        WHERE status = 'approved'
+      ) AS approved_courses,
+
+
+
+      (
+        SELECT COUNT(*)
+        FROM courses
+        WHERE status = 'pending'
+      ) AS pending_courses,
+
+
+
+      (
+        SELECT COUNT(*)
+        FROM quiz_attempts
+      ) AS quiz_attempts,
+
+
+
+      (
+        SELECT COUNT(*)
+        FROM lecture_progress
+        WHERE completed = true
+      ) AS completed_lectures;
+
+
+
+      `
+    );
+
+
+    return result.rows[0];
+
+
+  }
+
 
 
 }

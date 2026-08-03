@@ -1,145 +1,220 @@
+/* =========================
+   RECOMMENDATION CARD
+========================= */
+
+
 .recommendation-card {
 
-  position: relative;
 
-  overflow: hidden;
+    position:relative;
 
-  background:
-  linear-gradient(
-    135deg,
-    #ffffff 0%,
-    #f5f7ff 50%,
-    #eef2ff 100%
-  );
 
-  padding:32px;
+    overflow:hidden;
 
-  border-radius:26px;
 
-  margin-bottom:35px;
+    background:
 
-  border:1px solid #e2e8f0;
+    linear-gradient(
+        135deg,
+        var(--card-color),
+        var(--bg)
+    );
 
-  box-shadow:
-  0 20px 45px rgba(15,23,42,0.08);
 
-  transition:
-  transform 0.3s ease,
-  box-shadow 0.3s ease;
+    padding:32px;
+
+
+    border-radius:26px;
+
+
+    margin-bottom:35px;
+
+
+    border:1px solid var(--border-color);
+
+
+    box-shadow:
+
+    var(--shadow);
+
+
+    transition:
+
+    transform .3s ease,
+    box-shadow .3s ease;
+
 
 }
+
+
 
 
 
 .recommendation-card:hover {
 
-  transform:translateY(-5px);
 
-  box-shadow:
-  0 25px 55px rgba(79,70,229,0.15);
+    transform:translateY(-5px);
+
+
+    box-shadow:
+
+    0 25px 55px rgba(79,70,229,.15);
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   DECORATION
+========================= */
 
 
 .recommendation-card::before {
 
-  content:"";
 
-  position:absolute;
+    content:"";
 
-  width:180px;
 
-  height:180px;
+    position:absolute;
 
-  background:#6366f1;
 
-  opacity:0.08;
+    width:180px;
 
-  border-radius:50%;
 
-  top:-70px;
+    height:180px;
 
-  right:-70px;
+
+    background:#6366f1;
+
+
+    opacity:.08;
+
+
+    border-radius:50%;
+
+
+    top:-70px;
+
+
+    right:-70px;
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   HEADER
+========================= */
 
 
 .recommendation-header {
 
-  display:flex;
 
-  justify-content:space-between;
+    display:flex;
 
-  align-items:flex-start;
+
+    justify-content:space-between;
+
+
+    align-items:flex-start;
+
 
 }
+
+
 
 
 
 .recommendation-title h2 {
 
-  margin:0;
 
-  font-size:24px;
+    margin:0;
 
-  font-weight:700;
 
-  color:#0f172a;
+    font-size:24px;
+
+
+    font-weight:700;
+
+
+    color:var(--text-h);
+
 
 }
+
+
 
 
 
 .recommendation-title p {
 
-  margin-top:8px;
 
-  color:#64748b;
+    margin-top:8px;
 
-  font-size:14px;
+
+    color:var(--text);
+
+
+    opacity:.75;
+
+
+    font-size:14px;
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   AI BADGE
+========================= */
 
 
 .ai-badge {
 
 
-background:
+    background:
 
-linear-gradient(
-135deg,
-#6366f1,
-#8b5cf6
-);
-
-
-color:white;
+    linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
 
 
-padding:8px 18px;
+    color:white;
 
 
-border-radius:30px;
+    padding:8px 18px;
 
 
-font-size:13px;
+    border-radius:30px;
 
 
-font-weight:700;
+    font-size:13px;
 
 
-box-shadow:
+    font-weight:700;
 
-0 8px 20px rgba(99,102,241,0.3);
+
+    box-shadow:
+
+    0 8px 20px rgba(99,102,241,.3);
+
 
 }
 
@@ -147,29 +222,39 @@ box-shadow:
 
 
 
+
+
+/* =========================
+   CONTENT
+========================= */
 
 
 .recommendation-content {
 
-margin-top:30px;
+
+    margin-top:30px;
+
 
 }
+
+
 
 
 
 .recommendation-content h3 {
 
 
-font-size:28px;
+    font-size:28px;
 
 
-margin-bottom:10px;
+    margin-bottom:10px;
 
 
-color:#111827;
+    color:var(--text-h);
 
 
 }
+
 
 
 
@@ -177,16 +262,20 @@ color:#111827;
 .course-name {
 
 
-font-size:16px;
+    font-size:16px;
 
 
-font-weight:600;
+    font-weight:600;
 
 
-color:#475569;
+    color:var(--text);
+
+
+    opacity:.8;
 
 
 }
+
 
 
 
@@ -196,25 +285,25 @@ color:#475569;
 .recommendation-reason {
 
 
-margin-top:18px;
+    margin-top:18px;
 
 
-background:white;
+    background:var(--card-color);
 
 
-padding:18px;
+    padding:18px;
 
 
-border-radius:16px;
+    border-radius:16px;
 
 
-color:#475569;
+    color:var(--text);
 
 
-line-height:1.6;
+    line-height:1.6;
 
 
-border:1px solid #e2e8f0;
+    border:1px solid var(--border-color);
 
 
 }
@@ -223,24 +312,29 @@ border:1px solid #e2e8f0;
 
 
 
+
+
+/* =========================
+   FOOTER
+========================= */
 
 
 .recommendation-footer {
 
 
-margin-top:25px;
+    margin-top:25px;
 
 
-display:flex;
+    display:flex;
 
 
-justify-content:space-between;
+    justify-content:space-between;
 
 
-align-items:center;
+    align-items:center;
 
 
-gap:20px;
+    gap:20px;
 
 
 }
@@ -248,30 +342,37 @@ gap:20px;
 
 
 
+
+
+
+/* =========================
+   MASTERY BOX
+========================= */
 
 
 .mastery-box {
 
 
-background:white;
+    background:var(--card-color);
 
 
-padding:14px 20px;
+    padding:14px 20px;
 
 
-border-radius:18px;
+    border-radius:18px;
 
 
-display:flex;
+    display:flex;
 
 
-flex-direction:column;
+    flex-direction:column;
 
 
-border:1px solid #e2e8f0;
+    border:1px solid var(--border-color);
 
 
 }
+
 
 
 
@@ -279,13 +380,17 @@ border:1px solid #e2e8f0;
 .mastery-box span {
 
 
-font-size:13px;
+    font-size:13px;
 
 
-color:#64748b;
+    color:var(--text);
+
+
+    opacity:.7;
 
 
 }
+
 
 
 
@@ -293,13 +398,13 @@ color:#64748b;
 .mastery-box strong {
 
 
-font-size:25px;
+    font-size:25px;
 
 
-color:#4f46e5;
+    color:#4f46e5;
 
 
-margin-top:4px;
+    margin-top:4px;
 
 
 }
@@ -310,42 +415,45 @@ margin-top:4px;
 
 
 
+/* =========================
+   BUTTON
+========================= */
+
+
 .recommendation-footer button {
 
 
-border:none;
+    border:none;
 
 
-background:
+    background:
+
+    linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
 
 
-linear-gradient(
-135deg,
-#4f46e5,
-#7c3aed
-);
+    color:white;
 
 
-
-color:white;
-
-
-padding:14px 26px;
+    padding:14px 26px;
 
 
-border-radius:14px;
+    border-radius:14px;
 
 
-font-size:15px;
+    font-size:15px;
 
 
-font-weight:600;
+    font-weight:600;
 
 
-cursor:pointer;
+    cursor:pointer;
 
 
-transition:0.25s ease;
+    transition:.25s ease;
 
 
 }
@@ -357,38 +465,52 @@ transition:0.25s ease;
 .recommendation-footer button:hover {
 
 
-transform:translateY(-3px);
+    transform:translateY(-3px);
 
 
-box-shadow:
+    box-shadow:
 
-0 12px 25px rgba(79,70,229,0.35);
+    0 12px 25px rgba(79,70,229,.35);
 
 
 }
 
 
 
+
+
+
+
+/* =========================
+   MOBILE
+========================= */
 
 
 @media(max-width:700px){
 
 
-.recommendation-footer{
-
-flex-direction:column;
-
-align-items:stretch;
-
-}
+    .recommendation-footer{
 
 
+        flex-direction:column;
 
-.recommendation-footer button{
 
-width:100%;
+        align-items:stretch;
 
-}
+
+    }
+
+
+
+
+
+    .recommendation-footer button{
+
+
+        width:100%;
+
+
+    }
 
 
 }

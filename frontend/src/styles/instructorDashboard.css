@@ -1,182 +1,547 @@
+/* =========================
+   INSTRUCTOR DASHBOARD
+========================= */
+
+
 .instructor-dashboard {
+
 
     padding:40px;
 
-    background:#f5f7fb;
+
+    background:var(--bg);
+
+
+    color:var(--text);
+
 
     min-height:100vh;
 
+
 }
 
+
+
+
+
+
+
+/* =========================
+   HEADER
+========================= */
 
 
 .instructor-header {
 
+
     display:flex;
+
 
     justify-content:space-between;
 
+
     align-items:center;
+
+
+    gap:20px;
+
 
     margin-bottom:40px;
 
+
 }
+
+
 
 
 
 .instructor-header h1 {
 
+
     font-size:34px;
+
 
     margin-bottom:10px;
 
+
+    color:var(--text-h);
+
+
 }
+
+
 
 
 
 .instructor-header p {
 
-    color:#666;
+
+    color:var(--text);
+
+
+    opacity:.75;
+
 
 }
+
+
+
+
 
 
 
 .instructor-badge {
 
-    background:#667eea;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
+
 
     color:white;
 
+
     padding:12px 22px;
+
 
     border-radius:30px;
 
+
     font-weight:bold;
+
+
+    box-shadow:
+
+    0 10px 25px rgba(102,126,234,.3);
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   STATS
+========================= */
 
 
 .instructor-stats {
 
+
     display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+
+    grid-template-columns:
+
+    repeat(3,1fr);
+
 
     gap:25px;
 
+
     margin-bottom:40px;
 
+
 }
+
+
+
+
 
 
 
 .instructor-stat-card {
 
-    background:white;
+
+    background:var(--card-color);
+
+
+    color:var(--text);
+
 
     padding:25px;
 
+
     border-radius:20px;
 
-    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+
+    border:1px solid var(--border-color);
+
+
+    box-shadow:
+
+    0 10px 25px rgba(0,0,0,.06);
+
+
+    transition:.3s ease;
+
 
 }
+
+
+
+
+
+.instructor-stat-card:hover {
+
+
+    transform:translateY(-5px);
+
+
+    box-shadow:
+
+    0 15px 35px rgba(79,70,229,.15);
+
+
+}
+
+
+
+
 
 
 
 .instructor-stat-card h3 {
 
-    color:#555;
+
+    color:var(--text);
+
+
+    opacity:.7;
+
+
+    font-size:16px;
+
 
 }
+
+
 
 
 
 .instructor-stat-card p {
 
-    font-size:30px;
 
-    font-weight:bold;
+    margin-top:15px;
+
+
+    font-size:32px;
+
+
+    font-weight:800;
+
 
     color:#667eea;
+
 
 }
 
 
 
 
+
+
+
+/* =========================
+   COURSES SECTION
+========================= */
 
 
 .my-courses-section {
 
-    background:white;
+
+    background:var(--card-color);
+
+
+    color:var(--text);
+
 
     padding:30px;
 
+
     border-radius:25px;
 
+
+    border:1px solid var(--border-color);
+
+
+    box-shadow:
+
+    0 10px 30px rgba(0,0,0,.05);
+
+
 }
+
+
+
 
 
 
 
 .section-title {
 
+
     display:flex;
+
 
     justify-content:space-between;
 
+
     align-items:center;
+
+
+    gap:20px;
+
 
     margin-bottom:25px;
 
+
 }
 
+
+
+
+
+
+
+.section-title h2 {
+
+
+    color:var(--text-h);
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   CREATE COURSE BUTTON
+========================= */
 
 
 .create-course-btn {
 
-    background:#667eea;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
+
 
     color:white;
 
+
     border:none;
+
 
     padding:12px 22px;
 
+
     border-radius:12px;
+
 
     cursor:pointer;
 
+
+    font-weight:600;
+
+
+    transition:.25s;
+
+
 }
 
+
+
+
+
+.create-course-btn:hover {
+
+
+    transform:translateY(-2px);
+
+
+    box-shadow:
+
+    0 10px 25px rgba(102,126,234,.35);
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   COURSE GRID
+========================= */
 
 
 .instructor-course-grid {
 
+
     display:grid;
 
-    grid-template-columns:repeat(
+
+    grid-template-columns:
+
+    repeat(
         auto-fill,
         minmax(280px,1fr)
     );
 
+
     gap:25px;
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+
 .empty-course {
+
+
+    background:var(--bg);
+
+
+    color:var(--text);
+
+
+    border:1px solid var(--border-color);
+
 
     text-align:center;
 
+
     padding:40px;
 
-    color:#777;
+
+    border-radius:20px;
+
+
+    opacity:.8;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@media(max-width:900px){
+
+
+    .instructor-stats {
+
+
+        grid-template-columns:1fr;
+
+
+    }
+
+
+
+
+
+    .instructor-header {
+
+
+        flex-direction:column;
+
+
+        align-items:flex-start;
+
+
+    }
+
+
+}
+
+
+
+
+
+@media(max-width:600px){
+
+
+    .instructor-dashboard {
+
+
+        padding:20px;
+
+
+    }
+
+
+
+
+
+    .section-title {
+
+
+        flex-direction:column;
+
+
+        align-items:flex-start;
+
+
+    }
+
+
+
+
+
+    .create-course-btn {
+
+
+        width:100%;
+
+
+    }
+
+
+
+
+
+    .instructor-header h1 {
+
+
+        font-size:28px;
+
+
+    }
+
 
 }

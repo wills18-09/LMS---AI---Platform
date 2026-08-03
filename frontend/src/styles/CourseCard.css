@@ -1,149 +1,269 @@
 .course-card {
 
-    background:white;
+
+    background:var(--card-color);
+
+
+    color:var(--text);
+
 
     border-radius:20px;
 
+
     overflow:hidden;
 
-    box-shadow:
-    0 10px 25px rgba(0,0,0,0.08);
 
-    transition:0.3s;
+    border:1px solid var(--border-color);
+
+
+    box-shadow:
+
+    var(--shadow);
+
+
+    transition:.3s;
+
 
 }
+
+
 
 
 
 .course-card:hover {
 
+
     transform:translateY(-5px);
+
 
 }
 
 
 
+
+
+
+
 .course-image {
+
 
     height:120px;
 
+
     background:
+
     linear-gradient(
         135deg,
         #667eea,
         #764ba2
     );
 
+
     display:flex;
+
 
     align-items:center;
 
+
     justify-content:center;
+
 
     font-size:45px;
 
+
 }
+
+
+
+
 
 
 
 .course-content {
 
+
     padding:25px;
 
+
 }
+
+
+
+
 
 
 
 .course-content h2 {
 
+
     margin-bottom:10px;
 
+
+    color:var(--text-h);
+
+
 }
+
+
+
+
 
 
 
 .course-content p {
 
-    color:#666;
+
+    color:var(--text);
+
+
+    opacity:.75;
+
 
     min-height:45px;
 
+
 }
+
+
+
+
 
 
 
 .progress-section {
 
+
     margin-top:20px;
 
+
 }
+
+
+
+
 
 
 
 .progress-text {
 
+
     display:flex;
+
 
     justify-content:space-between;
 
+
     margin-bottom:8px;
+
 
     font-weight:bold;
 
+
+    color:var(--text);
+
+
 }
+
+
+
+
 
 
 
 .progress-bar {
 
+
     height:10px;
 
-    background:#eee;
+
+    background:var(--border-color);
+
 
     border-radius:20px;
 
+
     overflow:hidden;
 
+
 }
+
+
+
+
 
 
 
 .progress-fill {
 
+
     height:100%;
 
-    background:#667eea;
+
+    background:
+
+    linear-gradient(
+        90deg,
+        #667eea,
+        #764ba2
+    );
+
 
 }
+
+
+
+
 
 
 
 .course-content button {
 
+
     margin-top:25px;
+
 
     width:100%;
 
+
     padding:12px;
+
 
     border:none;
 
+
     border-radius:12px;
+
 
     background:#667eea;
 
+
     color:white;
+
 
     font-size:16px;
 
+
     cursor:pointer;
+
+
+    transition:.3s;
+
 
 }
 
 
 
+
+
+
+
 .course-content button:hover {
 
+
     background:#5563d6;
+
+
+    transform:translateY(-2px);
+
 
 }

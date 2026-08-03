@@ -1,94 +1,162 @@
+/* =========================
+   MASTERY CARD
+========================= */
+
+
 .mastery-card {
 
-  background:
-  linear-gradient(
-    135deg,
-    #ffffff,
-    #f8fafc,
-    #eef2ff
-  );
 
-  padding:32px;
+    background:
 
-  border-radius:26px;
+    linear-gradient(
+        135deg,
+        var(--card-color),
+        var(--bg)
+    );
 
-  margin-bottom:35px;
 
-  border:1px solid #e2e8f0;
+    padding:32px;
 
-  box-shadow:
-  0 20px 45px rgba(15,23,42,0.08);
 
-  transition:0.3s ease;
+    border-radius:26px;
+
+
+    margin-bottom:35px;
+
+
+    border:1px solid var(--border-color);
+
+
+    box-shadow:
+
+    var(--shadow);
+
+
+    transition:.3s ease;
+
 
 }
+
+
 
 
 
 .mastery-card:hover {
 
-  transform:translateY(-5px);
 
-  box-shadow:
-  0 25px 55px rgba(79,70,229,0.15);
+    transform:translateY(-5px);
+
+
+    box-shadow:
+
+    0 25px 55px rgba(79,70,229,.15);
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   HEADER
+========================= */
 
 
 .mastery-header h2 {
 
-  margin:0;
 
-  font-size:24px;
+    margin:0;
 
-  color:#0f172a;
+
+    font-size:24px;
+
+
+    color:var(--text-h);
+
 
 }
+
+
 
 
 
 .mastery-header p {
 
-  margin-top:8px;
 
-  color:#64748b;
+    margin-top:8px;
+
+
+    color:var(--text);
+
+
+    opacity:.75;
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   LIST
+========================= */
 
 
 .mastery-list {
 
-  margin-top:28px;
 
-  display:flex;
+    margin-top:28px;
 
-  flex-direction:column;
 
-  gap:18px;
+    display:flex;
+
+
+    flex-direction:column;
+
+
+    gap:18px;
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   ITEM
+========================= */
 
 
 .mastery-item {
 
-  background:white;
 
-  padding:18px;
+    background:var(--card-color);
 
-  border-radius:18px;
 
-  border:1px solid #e2e8f0;
+    color:var(--text);
+
+
+    padding:18px;
+
+
+    border-radius:18px;
+
+
+    border:1px solid var(--border-color);
+
 
 }
+
+
 
 
 
@@ -96,35 +164,51 @@
 
 .mastery-info {
 
-  display:flex;
 
-  justify-content:space-between;
+    display:flex;
 
-  align-items:center;
 
-  margin-bottom:12px;
+    justify-content:space-between;
+
+
+    align-items:center;
+
+
+    margin-bottom:12px;
+
 
 }
+
+
 
 
 
 .mastery-info h3 {
 
-  margin:0;
 
-  font-size:17px;
+    margin:0;
 
-  color:#111827;
+
+    font-size:17px;
+
+
+    color:var(--text-h);
+
 
 }
+
+
 
 
 
 .mastery-info span {
 
-  font-weight:700;
 
-  color:#4f46e5;
+    font-weight:700;
+
+
+    color:#4f46e5;
+
 
 }
 
@@ -132,15 +216,27 @@
 
 
 
+
+
+/* =========================
+   PROGRESS BAR
+========================= */
+
+
 .mastery-bar {
 
-  height:12px;
 
-  background:#e5e7eb;
+    height:12px;
 
-  border-radius:20px;
 
-  overflow:hidden;
+    background:var(--border-color);
+
+
+    border-radius:20px;
+
+
+    overflow:hidden;
+
 
 }
 
@@ -150,53 +246,84 @@
 
 .mastery-fill {
 
-  height:100%;
 
-  background:
+    height:100%;
 
-  linear-gradient(
-    90deg,
-    #6366f1,
-    #8b5cf6
-  );
 
-  border-radius:20px;
+    background:
 
-  transition:
-  width 0.5s ease;
+    linear-gradient(
+        90deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+
+    border-radius:20px;
+
+
+    transition:
+
+    width .5s ease;
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   MESSAGE
+========================= */
 
 
 .mastery-message {
 
-  margin-top:12px;
 
-  font-size:14px;
+    margin-top:12px;
 
-  color:#64748b;
+
+    font-size:14px;
+
+
+    color:var(--text);
+
+
+    opacity:.75;
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   MOBILE
+========================= */
 
 
 @media(max-width:700px){
 
 
-.mastery-info{
+    .mastery-info{
 
-flex-direction:column;
 
-align-items:flex-start;
+        flex-direction:column;
 
-gap:8px;
 
-}
+        align-items:flex-start;
+
+
+        gap:8px;
+
+
+    }
 
 
 }

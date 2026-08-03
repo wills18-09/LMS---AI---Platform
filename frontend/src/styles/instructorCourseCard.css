@@ -1,136 +1,285 @@
+/* =========================
+   INSTRUCTOR COURSE CARD
+========================= */
+
+
 .instructor-course-card {
 
 
-background:#f8f9ff;
+    background:var(--card-color);
 
-padding:25px;
 
-border-radius:22px;
+    color:var(--text);
 
-transition:.3s;
+
+    padding:25px;
+
+
+    border-radius:22px;
+
+
+    border:1px solid var(--border-color);
+
+
+    box-shadow:
+
+    0 10px 25px rgba(0,0,0,.06);
+
+
+    transition:.3s ease;
 
 
 }
+
+
 
 
 
 .instructor-course-card:hover {
 
 
-transform:translateY(-5px);
+    transform:translateY(-5px);
 
-box-shadow:
-0 12px 25px rgba(0,0,0,.1);
+
+    box-shadow:
+
+    0 15px 35px rgba(79,70,229,.15);
 
 
 }
 
+
+
+
+
+
+
+/* =========================
+   COURSE STATUS
+========================= */
 
 
 .course-status {
 
 
-display:inline-block;
+    display:inline-block;
 
-background:#e8f7ed;
 
-color:#28a745;
+    background:#dcfce7;
 
-padding:7px 15px;
 
-border-radius:20px;
+    color:#15803d;
 
-font-size:13px;
 
-margin-bottom:15px;
+    padding:7px 15px;
+
+
+    border-radius:20px;
+
+
+    font-size:13px;
+
+
+    font-weight:600;
+
+
+    margin-bottom:15px;
 
 
 }
 
+
+
+
+
+
+
+/* =========================
+   TEXT
+========================= */
 
 
 .instructor-course-card h2 {
 
 
-margin-bottom:15px;
+    margin-bottom:15px;
+
+
+    font-size:22px;
+
+
+    color:var(--text-h);
 
 
 }
+
+
 
 
 
 .instructor-course-card p {
 
 
-color:#666;
+    color:var(--text);
 
-line-height:1.5;
+
+    opacity:.75;
+
+
+    line-height:1.6;
 
 
 }
 
+
+
+
+
+
+
+/* =========================
+   COURSE INFO
+========================= */
 
 
 .course-info {
 
 
-display:flex;
+    display:flex;
 
-gap:10px;
 
-margin-top:15px;
+    flex-wrap:wrap;
+
+
+    gap:10px;
+
+
+    margin-top:18px;
 
 
 }
+
+
+
+
 
 
 
 .course-info span {
 
 
-background:white;
+    background:var(--bg);
 
-padding:8px 12px;
 
-border-radius:12px;
+    border:1px solid var(--border-color);
 
-font-size:14px;
+
+    color:var(--text);
+
+
+    padding:8px 12px;
+
+
+    border-radius:12px;
+
+
+    font-size:14px;
 
 
 }
 
+
+
+
+
+
+
+/* =========================
+   BUTTON
+========================= */
 
 
 .instructor-course-card button {
 
 
-margin-top:20px;
+    margin-top:20px;
 
-width:100%;
 
-padding:14px;
+    width:100%;
 
-border:none;
 
-border-radius:15px;
+    padding:14px;
 
-background:#667eea;
 
-color:white;
+    border:none;
 
-font-weight:bold;
 
-cursor:pointer;
+    border-radius:15px;
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
+
+
+    color:white;
+
+
+    font-weight:bold;
+
+
+    cursor:pointer;
+
+
+    transition:.3s;
 
 
 }
+
+
+
+
 
 
 
 .instructor-course-card button:hover {
 
 
-background:#5563d8;
+    transform:translateY(-2px);
+
+
+    box-shadow:
+
+    0 10px 25px rgba(102,126,234,.35);
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   MOBILE
+========================= */
+
+
+@media(max-width:700px){
+
+
+    .course-info{
+
+
+        flex-direction:column;
+
+
+    }
 
 
 }

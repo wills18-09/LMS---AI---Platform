@@ -1,21 +1,36 @@
+/* =====================
+   LOGIN PAGE
+===================== */
+
+
 .login-page {
+
 
     min-height:100vh;
 
+
     display:flex;
+
 
     justify-content:center;
 
+
     align-items:center;
 
+
     background:
+
     linear-gradient(
         135deg,
         #667eea,
         #764ba2
     );
 
+
 }
+
+
+
 
 
 
@@ -25,14 +40,24 @@
 
     width:380px;
 
-    background:white;
+
+    background:var(--card-color);
+
+
+    color:var(--text);
+
 
     padding:40px;
 
+
     border-radius:20px;
 
-    box-shadow:
-    0 20px 40px rgba(0,0,0,0.15);
+
+    border:1px solid var(--border-color);
+
+
+    box-shadow:var(--shadow);
+
 
     text-align:center;
 
@@ -43,13 +68,20 @@
 
 
 
+
+
 .logo {
+
 
     font-size:45px;
 
+
     margin-bottom:10px;
 
+
 }
+
+
 
 
 
@@ -60,9 +92,14 @@
 
     margin-bottom:8px;
 
-    color:#333;
+
+    color:var(--text-h);
+
 
 }
+
+
+
 
 
 
@@ -70,11 +107,18 @@
 .subtitle {
 
 
-    color:#777;
+    color:var(--text);
+
+
+    opacity:.7;
+
 
     margin-bottom:25px;
 
+
 }
+
+
 
 
 
@@ -85,15 +129,27 @@
 
     width:100%;
 
+
     padding:13px;
+
 
     margin-bottom:15px;
 
+
     border-radius:10px;
 
-    border:1px solid #ddd;
+
+    border:1px solid var(--border-color);
+
+
+    background:var(--bg);
+
+
+    color:var(--text);
+
 
     font-size:15px;
+
 
     box-sizing:border-box;
 
@@ -102,17 +158,41 @@
 
 
 
-.login-card input:focus {
 
 
-    outline:none;
 
-    border-color:#667eea;
+
+.login-card input::placeholder {
+
+
+    color:var(--text);
+
+
+    opacity:.5;
+
 
 }
 
 
 
+
+
+
+
+.login-card input:focus {
+
+
+    outline:none;
+
+
+    border-color:#667eea;
+
+
+}
+
+/* =====================
+   LOGIN BUTTON
+===================== */
 
 
 .login-card button {
@@ -120,24 +200,34 @@
 
     width:100%;
 
+
     padding:14px;
+
 
     border:none;
 
+
     border-radius:10px;
+
 
     background:#667eea;
 
+
     color:white;
+
 
     font-size:16px;
 
+
     cursor:pointer;
+
 
     transition:0.3s;
 
 
 }
+
+
 
 
 
@@ -154,10 +244,14 @@
 
 
 
+
+
+
 .login-card button:disabled {
 
 
     opacity:0.7;
+
 
     cursor:not-allowed;
 
@@ -168,18 +262,32 @@
 
 
 
+
+
+/* =====================
+   ERROR MESSAGE
+===================== */
+
+
 .error {
 
 
-    background:#ffe5e5;
+    background:rgba(239,68,68,.15);
 
-    color:#c0392b;
+
+    color:#f87171;
+
 
     padding:10px;
 
+
     border-radius:8px;
 
+
     margin-bottom:15px;
+
+
+    border:1px solid rgba(239,68,68,.3);
 
 
 }
@@ -187,12 +295,25 @@
 
 
 
+
+
+
+/* =====================
+   FOOTER
+===================== */
+
+
 .footer-text {
 
 
     margin-top:25px;
 
-    color:#999;
+
+    color:var(--text);
+
+
+    opacity:.6;
+
 
     font-size:13px;
 

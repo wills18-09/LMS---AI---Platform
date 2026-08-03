@@ -79,5 +79,35 @@ export class AnnouncementModel {
 
   }
 
+  static async getCourseStudents(
+courseId:string
+){
+
+
+const result =
+await pool.query(
+
+`
+SELECT
+
+user_id
+
+FROM enrollments
+
+WHERE course_id=$1;
+
+`,
+[
+courseId
+]
+
+);
+
+
+return result.rows;
+
+
+}
+
 
 }

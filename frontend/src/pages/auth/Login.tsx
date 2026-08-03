@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -247,11 +248,22 @@ else{
 
         <p className="footer-text">
 
-          AI powered learning platform 🚀
+  AI powered learning platform 🚀
 
-        </p>
+</p>
 
 
+<p className="footer-text">
+
+  Don't have an account?{" "}
+
+  <Link to="/register">
+
+    Register
+
+  </Link>
+
+</p>
 
       </div>
 

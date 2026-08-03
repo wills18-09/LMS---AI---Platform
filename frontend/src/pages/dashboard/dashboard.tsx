@@ -843,8 +843,6 @@ progress={course.progress_percent}
 
 (
 
-
-
 <div className="empty-state">
 
 
@@ -860,6 +858,16 @@ No courses yet 📚
 Start learning by enrolling into a course.
 
 </p>
+
+
+<Link
+to="/courses"
+className="browse-courses-btn"
+>
+
+Browse Courses →
+
+</Link>
 
 
 </div>

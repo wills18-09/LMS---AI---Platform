@@ -1,18 +1,70 @@
+/* =========================
+   ASSIGNMENT CREATE PAGE
+========================= */
+
+
 .assignment-container {
 
-padding:30px;
 
-max-width:700px;
+    padding:40px;
+
+
+    max-width:750px;
+
+
+    min-height:100vh;
+
+
+    background:var(--bg);
+
+
+    color:var(--text);
+
 
 }
+
+
+
+
 
 
 
 .assignment-container h1 {
 
-margin-bottom:20px;
+
+    margin-bottom:25px;
+
+
+    font-size:32px;
+
+
+    color:var(--text-h);
+
 
 }
+
+
+
+
+
+
+
+/* =========================
+   FORM CARD FEEL
+========================= */
+
+
+.assignment-container {
+
+
+    background:var(--bg);
+
+
+}
+
+
+
+
 
 
 
@@ -21,41 +73,220 @@ margin-bottom:20px;
 .assignment-container select {
 
 
-display:block;
+    display:block;
 
-width:100%;
 
-margin-bottom:15px;
+    width:100%;
 
-padding:12px;
 
-border-radius:8px;
+    margin-bottom:18px;
 
-border:1px solid #ddd;
+
+    padding:14px;
+
+
+    border-radius:12px;
+
+
+    border:
+
+    1px solid var(--border-color);
+
+
+    background:var(--card-color);
+
+
+    color:var(--text);
+
+
+    font-size:15px;
+
+
+    outline:none;
+
+
+    transition:.25s;
+
+
+    box-sizing:border-box;
 
 
 }
+
+
+
+
+
+
+
+.assignment-container input::placeholder,
+.assignment-container textarea::placeholder {
+
+
+    color:var(--text);
+
+
+    opacity:.5;
+
+
+}
+
+
+
+
+
+
+
+.assignment-container input:focus,
+.assignment-container textarea:focus,
+.assignment-container select:focus {
+
+
+    border-color:#6366f1;
+
+
+    box-shadow:
+
+
+    0 0 0 3px rgba(99,102,241,.15);
+
+
+}
+
+
+
+
 
 
 
 .assignment-container textarea {
 
-height:120px;
+
+    height:140px;
+
+
+    resize:vertical;
+
 
 }
 
 
 
+
+
+
+
+.assignment-container select {
+
+
+    cursor:pointer;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   BUTTON
+========================= */
+
+
 .assignment-container button {
 
 
-padding:12px 20px;
+    padding:14px 24px;
 
-cursor:pointer;
 
-border:none;
+    cursor:pointer;
 
-border-radius:8px;
+
+    border:none;
+
+
+    border-radius:14px;
+
+
+    background:
+
+
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
+
+
+    color:white;
+
+
+    font-size:16px;
+
+
+    font-weight:600;
+
+
+    transition:.25s;
+
+
+}
+
+
+
+
+
+
+
+.assignment-container button:hover {
+
+
+    transform:translateY(-2px);
+
+
+    box-shadow:
+
+
+    0 10px 25px rgba(102,126,234,.35);
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   MOBILE
+========================= */
+
+
+@media(max-width:700px){
+
+
+    .assignment-container {
+
+
+        padding:20px;
+
+
+    }
+
+
+
+
+
+    .assignment-container h1 {
+
+
+        font-size:28px;
+
+
+    }
 
 
 }

@@ -1,0 +1,30 @@
+.app-layout{
+
+min-height:100vh;
+
+background:var(--bg);
+
+color:var(--text);
+
+transition:
+background .3s ease,
+color .3s ease;
+
+}
+
+
+
+
+
+.page-content{
+
+padding:20px;
+
+min-height:calc(100vh - 70px);
+
+background:var(--bg);
+
+transition:
+background .3s ease;
+
+}

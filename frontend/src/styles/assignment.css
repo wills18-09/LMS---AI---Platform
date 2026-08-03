@@ -1,24 +1,44 @@
+/* =========================
+   STUDENT ASSIGNMENTS PAGE
+========================= */
+
+
 .assignments-page {
 
-padding:40px;
+    padding:40px;
 
-background:#f5f7fb;
+    min-height:100vh;
 
-min-height:100vh;
+    background:var(--bg);
+
+    color:var(--text);
 
 }
 
 
 
+/* =========================
+   HEADER
+========================= */
+
+
 .assignments-header {
 
-display:flex;
+    display:flex;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-align-items:center;
+    align-items:center;
 
-margin-bottom:35px;
+    margin-bottom:35px;
+
+    background:var(--card-color);
+
+    padding:30px 35px;
+
+    border-radius:24px;
+
+    box-shadow:var(--shadow);
 
 }
 
@@ -26,9 +46,11 @@ margin-bottom:35px;
 
 .assignments-header h1 {
 
-font-size:36px;
+    font-size:36px;
 
-margin-bottom:10px;
+    margin:0 0 10px;
+
+    color:var(--text-h);
 
 }
 
@@ -36,7 +58,11 @@ margin-bottom:10px;
 
 .assignments-header p {
 
-color:#666;
+    margin:0;
+
+    color:var(--text);
+
+    opacity:.8;
 
 }
 
@@ -44,52 +70,71 @@ color:#666;
 
 .assignment-count {
 
-background:#667eea;
+    background:
 
-color:white;
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
 
-padding:12px 22px;
+    color:white;
 
-border-radius:30px;
+    padding:12px 22px;
 
-font-weight:bold;
+    border-radius:30px;
+
+    font-weight:700;
 
 }
 
 
 
+/* =========================
+   ASSIGNMENT GRID
+========================= */
 
 
 .assignment-grid {
 
-display:grid;
+    display:grid;
 
-grid-template-columns:
+    grid-template-columns:
 
-repeat(auto-fill,minmax(320px,1fr));
+    repeat(
+        auto-fill,
+        minmax(320px,1fr)
+    );
 
-gap:25px;
+    gap:25px;
 
 }
 
 
 
+
+
+/* =========================
+   ASSIGNMENT CARD
+========================= */
 
 
 .assignment-card {
 
 
-background:white;
+    background:var(--card-color);
 
-padding:30px;
+    color:var(--text);
 
-border-radius:22px;
+    padding:30px;
 
-box-shadow:
+    border-radius:22px;
 
-0 10px 25px rgba(0,0,0,0.08);
+    border:1px solid var(--border-color);
 
-transition:0.3s;
+    box-shadow:var(--shadow);
+
+    transition:.3s ease;
 
 
 }
@@ -98,7 +143,8 @@ transition:0.3s;
 
 .assignment-card:hover {
 
-transform:translateY(-5px);
+
+    transform:translateY(-5px);
 
 }
 
@@ -108,29 +154,43 @@ transform:translateY(-5px);
 
 .assignment-top {
 
-display:flex;
 
-justify-content:flex-end;
+    display:flex;
+
+    justify-content:flex-end;
+
 
 }
+
+
 
 
 
 .assignment-status {
 
 
-background:#fff3cd;
+    background:#fef3c7;
 
-color:#856404;
+    color:#92400e;
 
-padding:7px 15px;
+    padding:7px 15px;
 
-border-radius:20px;
+    border-radius:20px;
 
-font-size:13px;
+    font-size:13px;
 
-font-weight:bold;
+    font-weight:700;
 
+
+}
+
+
+
+.dark .assignment-status {
+
+    background:#422006;
+
+    color:#fcd34d;
 
 }
 
@@ -140,9 +200,13 @@ font-weight:bold;
 
 .assignment-card h2 {
 
-margin-top:15px;
 
-font-size:22px;
+    margin-top:15px;
+
+    font-size:22px;
+
+    color:var(--text-h);
+
 
 }
 
@@ -150,11 +214,15 @@ font-size:22px;
 
 .instructions {
 
-color:#666;
 
-line-height:1.6;
+    color:var(--text);
 
-margin:20px 0;
+    opacity:.85;
+
+    line-height:1.6;
+
+    margin:20px 0;
+
 
 }
 
@@ -165,42 +233,19 @@ margin:20px 0;
 .assignment-info {
 
 
-background:#f7f8ff;
+    background:var(--bg);
 
-padding:15px;
+    border:1px solid var(--border-color);
 
-border-radius:15px;
+    padding:15px;
 
-display:flex;
+    border-radius:15px;
 
-justify-content:space-between;
+    display:flex;
 
-margin-bottom:25px;
+    justify-content:space-between;
 
-}
-
-
-
-
-
-.view-assignment-btn {
-
-
-display:block;
-
-text-align:center;
-
-background:#667eea;
-
-color:white;
-
-padding:13px;
-
-border-radius:14px;
-
-text-decoration:none;
-
-font-weight:bold;
+    margin-bottom:25px;
 
 
 }
@@ -208,133 +253,263 @@ font-weight:bold;
 
 
 
-.view-assignment-btn:hover {
-
-background:#5563d8;
-
-}
+.assignment-info span {
 
 
-
-
-
-
-.empty-assignment {
-
-
-background:white;
-
-padding:50px;
-
-border-radius:20px;
-
-text-align:center;
-
-color:#666;
+    color:var(--text);
 
 }
+
+
 
 
 
 
 /* =========================
-   SUBMIT PAGE
+   VIEW BUTTON
+========================= */
+
+
+.view-assignment-btn {
+
+
+    display:block;
+
+    text-align:center;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
+
+
+    color:white;
+
+    padding:13px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    transition:.3s;
+
+
+}
+
+
+
+.view-assignment-btn:hover {
+
+
+    transform:translateY(-2px);
+
+    box-shadow:
+
+    0 8px 20px rgba(102,126,234,.35);
+
+
+}
+
+
+
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+
+.empty-assignment {
+
+
+    background:var(--card-color);
+
+    color:var(--text);
+
+    padding:50px;
+
+    border-radius:24px;
+
+    text-align:center;
+
+    border:1px solid var(--border-color);
+
+    box-shadow:var(--shadow);
+
+
+}
+
+
+
+.empty-assignment h2 {
+
+
+    color:var(--text-h);
+
+}
+
+
+
+.empty-assignment p {
+
+
+    color:var(--text);
+
+    opacity:.8;
+
+}
+
+/* =========================
+   SUBMIT ASSIGNMENT PAGE
 ========================= */
 
 
 .submit-page {
 
-min-height:100vh;
 
-background:#f5f7fb;
+    min-height:100vh;
 
-padding:60px;
+    background:var(--bg);
 
-display:flex;
+    padding:60px;
 
-justify-content:center;
+    display:flex;
 
-align-items:center;
+    justify-content:center;
+
+    align-items:center;
+
 
 }
+
 
 
 
 .submit-card {
 
 
-background:white;
+    background:var(--card-color);
 
-width:520px;
+    color:var(--text);
 
-padding:45px;
+    width:520px;
 
-border-radius:30px;
+    padding:45px;
 
-box-shadow:
-0 15px 40px rgba(0,0,0,0.1);
+    border-radius:30px;
+
+    border:1px solid var(--border-color);
+
+    box-shadow:var(--shadow);
 
 
 }
 
+
+
+
+
+
+/* =========================
+   SUBMIT HEADER
+========================= */
 
 
 .submit-header {
 
-text-align:center;
 
-margin-bottom:35px;
+    text-align:center;
+
+    margin-bottom:35px;
+
 
 }
+
 
 
 
 .submit-icon {
 
 
-width:70px;
+    width:70px;
 
-height:70px;
+    height:70px;
 
-margin:auto;
+    margin:auto;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:center;
+    justify-content:center;
 
-background:#eef0ff;
 
-border-radius:50%;
+    background:
 
-font-size:32px;
+    linear-gradient(
+        135deg,
+        #eef2ff,
+        #ddd6fe
+    );
 
-margin-bottom:20px;
+
+    border-radius:50%;
+
+    font-size:32px;
+
+    margin-bottom:20px;
 
 
 }
+
+
+
+
+.dark .submit-icon {
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #312e81,
+        #4338ca
+    );
+
+
+}
+
 
 
 
 .submit-header h1 {
 
 
-font-size:34px;
+    font-size:34px;
 
-margin-bottom:10px;
+    margin-bottom:10px;
+
+    color:var(--text-h);
 
 
 }
+
 
 
 
 .submit-header p {
 
 
-color:#777;
+    color:var(--text);
 
-line-height:1.5;
+    opacity:.8;
+
+    line-height:1.5;
 
 
 }
@@ -343,73 +518,93 @@ line-height:1.5;
 
 
 
-
-/* FILE UPLOAD */
+/* =========================
+   FILE UPLOAD
+========================= */
 
 
 .upload-container {
 
 
-background:#f8f9ff;
+    background:var(--bg);
 
-border:2px dashed #cfd5ff;
+    border:
 
-padding:35px;
+    2px dashed #818cf8;
 
-border-radius:25px;
 
-text-align:center;
+    padding:35px;
 
-margin-bottom:30px;
+    border-radius:25px;
+
+    text-align:center;
+
+    margin-bottom:30px;
 
 
 }
+
+
 
 
 
 .upload-container input {
 
 
-display:none;
+    display:none;
 
 
 }
+
+
 
 
 
 .custom-upload-btn {
 
 
-display:inline-block;
+    display:inline-block;
 
-background:#667eea;
+    background:
 
-color:white;
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
 
-padding:15px 30px;
 
-border-radius:18px;
+    color:white;
 
-font-weight:bold;
+    padding:15px 30px;
 
-cursor:pointer;
+    border-radius:18px;
 
-transition:.3s;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
 
 
 }
+
+
 
 
 
 .custom-upload-btn:hover {
 
 
-background:#5563d8;
+    transform:translateY(-2px);
 
-transform:translateY(-2px);
+    box-shadow:
+
+    0 10px 20px rgba(102,126,234,.35);
 
 
 }
+
 
 
 
@@ -419,60 +614,70 @@ transform:translateY(-2px);
 .file-preview {
 
 
-margin-top:25px;
+    margin-top:25px;
 
-background:white;
+    background:var(--bg);
 
-padding:15px;
+    color:var(--text);
 
-border-radius:18px;
+    border:1px solid var(--border-color);
 
-display:flex;
+    padding:15px;
 
-align-items:center;
+    border-radius:18px;
 
-gap:15px;
 
-text-align:left;
+    display:flex;
 
-box-shadow:
-0 5px 15px rgba(0,0,0,.08);
+    align-items:center;
+
+    gap:15px;
+
+    text-align:left;
 
 
 }
+
+
 
 
 
 .file-icon {
 
 
-font-size:30px;
+    font-size:30px;
 
 
 }
+
+
 
 
 
 .file-preview p {
 
 
-margin:0;
+    margin:0;
 
-font-weight:bold;
+    font-weight:700;
 
-word-break:break-word;
+    color:var(--text-h);
+
+    word-break:break-word;
 
 
 }
+
+
 
 
 
 .file-preview span {
 
 
-font-size:13px;
+    font-size:13px;
 
-color:#667eea;
+    color:#818cf8;
 
 
 }
@@ -483,61 +688,74 @@ color:#667eea;
 
 
 
-
-/* SUBMIT BUTTON */
+/* =========================
+   SUBMIT BUTTON
+========================= */
 
 
 .submit-btn {
 
 
-width:100%;
+    width:100%;
 
-padding:16px;
+    padding:16px;
 
-border:none;
+    border:none;
 
-border-radius:18px;
+    border-radius:18px;
 
-background:#667eea;
 
-color:white;
+    background:
 
-font-size:17px;
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
 
-font-weight:bold;
 
-cursor:pointer;
+    color:white;
 
-transition:.3s;
+    font-size:17px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
 
 
 }
+
+
 
 
 
 .submit-btn:hover {
 
 
-background:#5563d8;
+    transform:translateY(-2px);
 
-transform:translateY(-2px);
+    box-shadow:
+
+    0 10px 25px rgba(102,126,234,.35);
 
 
 }
+
+
 
 
 
 .submit-btn:disabled {
 
 
-opacity:.6;
+    opacity:.6;
 
-cursor:not-allowed;
+    cursor:not-allowed;
 
 
 }
-
-
 
 
 
@@ -546,19 +764,23 @@ cursor:not-allowed;
 .submit-message {
 
 
-margin-top:20px;
+    margin-top:20px;
 
-padding:15px;
+    padding:15px;
 
-border-radius:15px;
+    border-radius:15px;
 
-background:#eef0ff;
 
-color:#667eea;
+    background:
 
-text-align:center;
+    rgba(102,126,234,.15);
 
-font-weight:bold;
+
+    color:#818cf8;
+
+    text-align:center;
+
+    font-weight:700;
 
 
 }
@@ -569,151 +791,95 @@ font-weight:bold;
 
 
 
-/* BACK BUTTON */
+/* =========================
+   BACK BUTTON
+========================= */
 
 
 .back-btn {
 
 
-margin-top:20px;
+    margin-top:20px;
 
-width:100%;
+    width:100%;
 
-padding:15px;
+    padding:15px;
 
-border:none;
+    border-radius:18px;
 
-border-radius:18px;
 
-background:#f1f2f7;
+    background:var(--bg);
 
-color:#555;
+    border:1px solid var(--border-color);
 
-font-size:16px;
+    color:var(--text);
 
-font-weight:bold;
 
-cursor:pointer;
+    font-size:16px;
 
-transition:.3s;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
 
 
 }
+
 
 
 
 .back-btn:hover {
 
 
-background:#e4e6f0;
+    background:var(--card-color);
 
-transform:translateY(-2px);
+    transform:translateY(-2px);
 
 
 }
-
 
 /* =====================================
    INSTRUCTOR SUBMISSIONS PAGE
 ===================================== */
 
 
-.assignments-page {
-  padding: 40px;
-  min-height: 100vh;
-  background: #f5f7fb;
-}
 
-
-/* Header */
-
-.assignments-header {
-
-  background: white;
-
-  padding: 30px 35px;
-
-  border-radius: 24px;
-
-  margin-bottom: 35px;
-
-  box-shadow:
-    0 8px 25px rgba(0,0,0,0.05);
-
-}
-
-
-.assignments-header h1 {
-
-  font-size: 32px;
-
-  margin-bottom: 8px;
-
-  color:#1f2937;
-
-}
-
-
-.assignments-header p {
-
-  color:#6b7280;
-
-  font-size:16px;
-
-}
-
-
-
-
-
-/* Submission grid */
-
-
-.assignment-grid {
-
-  display:grid;
-
-  grid-template-columns:
-  repeat(auto-fit,minmax(330px,1fr));
-
-  gap:25px;
-
-}
-
-
-
-
-
-
-/* Student submission card */
+/* =========================
+   SUBMISSION CARDS
+========================= */
 
 
 .assignment-card {
 
-  background:white;
 
-  border-radius:24px;
+    background:var(--card-color);
 
-  padding:28px;
+    color:var(--text);
 
-  box-shadow:
-  0 10px 30px rgba(0,0,0,0.06);
+    border-radius:24px;
 
-  transition:0.3s ease;
+    padding:28px;
+
+    border:1px solid var(--border-color);
+
+    box-shadow:var(--shadow);
+
+    transition:.3s ease;
+
 
 }
+
 
 
 
 .assignment-card:hover {
 
-  transform:translateY(-5px);
 
-  box-shadow:
-  0 15px 35px rgba(0,0,0,0.10);
+    transform:translateY(-5px);
+
 
 }
-
 
 
 
@@ -721,21 +887,29 @@ transform:translateY(-2px);
 
 .assignment-card h2 {
 
-  font-size:22px;
 
-  color:#111827;
+    font-size:22px;
 
-  margin-bottom:12px;
+    color:var(--text-h);
+
+    margin-bottom:12px;
+
 
 }
+
+
 
 
 
 .assignment-card p {
 
-  color:#4b5563;
 
-  margin:12px 0;
+    color:var(--text);
+
+    opacity:.85;
+
+    margin:12px 0;
+
 
 }
 
@@ -744,36 +918,54 @@ transform:translateY(-2px);
 
 
 
-/* File link */
+
+/* =========================
+   SUBMISSION FILE LINK
+========================= */
 
 
 .assignment-card a {
 
-  display:inline-flex;
 
-  align-items:center;
+    display:inline-flex;
 
-  gap:8px;
+    align-items:center;
 
-  padding:10px 16px;
+    gap:8px;
 
-  background:#eef2ff;
 
-  color:#4f46e5;
+    padding:10px 16px;
 
-  border-radius:12px;
 
-  text-decoration:none;
+    background:
 
-  font-weight:600;
+    rgba(102,126,234,.15);
+
+
+    color:#818cf8;
+
+
+    border-radius:12px;
+
+
+    text-decoration:none;
+
+
+    font-weight:700;
+
 
 }
+
 
 
 
 .assignment-card a:hover {
 
-  background:#e0e7ff;
+
+    background:
+
+    rgba(102,126,234,.25);
+
 
 }
 
@@ -782,24 +974,29 @@ transform:translateY(-2px);
 
 
 
-/* Grade section */
+
+/* =========================
+   GRADING SECTION
+========================= */
 
 
 .assignment-card label {
 
 
-display:block;
+    display:block;
 
-font-weight:600;
+    font-weight:700;
 
-color:#374151;
+    color:var(--text-h);
 
-margin-top:20px;
+    margin-top:20px;
 
-margin-bottom:8px;
+    margin-bottom:8px;
 
 
 }
+
+
 
 
 
@@ -807,33 +1004,74 @@ margin-bottom:8px;
 .assignment-card input {
 
 
-width:100%;
+    width:100%;
 
-padding:12px 15px;
 
-border-radius:12px;
+    padding:12px 15px;
 
-border:1px solid #d1d5db;
 
-font-size:15px;
+    border-radius:12px;
 
-outline:none;
+
+    border:
+
+    1px solid var(--border-color);
+
+
+    background:var(--bg);
+
+
+    color:var(--text);
+
+
+    font-size:15px;
+
+
+    outline:none;
+
+
+    box-sizing:border-box;
 
 
 }
 
 
 
-.assignment-card input:focus {
 
 
-border-color:#667eea;
+.assignment-card input::placeholder,
 
-box-shadow:
-0 0 0 3px rgba(102,126,234,0.15);
+
+.assignment-card textarea::placeholder {
+
+
+    color:var(--text);
+
+    opacity:.5;
 
 
 }
+
+
+
+
+
+.assignment-card input:focus,
+
+
+.assignment-card textarea:focus {
+
+
+    border-color:#667eea;
+
+
+    box-shadow:
+
+    0 0 0 3px rgba(102,126,234,.15);
+
+
+}
+
 
 
 
@@ -843,23 +1081,42 @@ box-shadow:
 .assignment-card textarea {
 
 
-width:100%;
+    width:100%;
 
-min-height:100px;
 
-resize:none;
+    min-height:100px;
 
-padding:14px;
 
-border-radius:12px;
+    resize:none;
 
-border:1px solid #d1d5db;
 
-font-family:inherit;
+    padding:14px;
 
-font-size:15px;
 
-outline:none;
+    border-radius:12px;
+
+
+    border:
+
+    1px solid var(--border-color);
+
+
+    background:var(--bg);
+
+
+    color:var(--text);
+
+
+    font-family:inherit;
+
+
+    font-size:15px;
+
+
+    outline:none;
+
+
+    box-sizing:border-box;
 
 
 }
@@ -867,142 +1124,207 @@ outline:none;
 
 
 
-.assignment-card textarea:focus {
-
-
-border-color:#667eea;
-
-box-shadow:
-0 0 0 3px rgba(102,126,234,0.15);
-
-
-}
 
 
 
 
-
-
-
-/* Grade button */
+/* =========================
+   GRADE BUTTON
+========================= */
 
 
 .assignment-card button {
 
 
-margin-top:22px;
+    margin-top:22px;
 
-width:100%;
 
-padding:14px;
+    width:100%;
 
-border:none;
 
-border-radius:14px;
+    padding:14px;
 
-background:
-linear-gradient(
-135deg,
-#667eea,
-#764ba2
-);
 
-color:white;
+    border:none;
 
-font-size:16px;
 
-font-weight:600;
+    border-radius:14px;
 
-cursor:pointer;
 
-transition:0.25s;
+    background:
+
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
+
+
+    color:white;
+
+
+    font-size:16px;
+
+
+    font-weight:700;
+
+
+    cursor:pointer;
+
+
+    transition:.25s;
 
 
 }
+
 
 
 
 .assignment-card button:hover {
 
 
-transform:translateY(-2px);
-
-box-shadow:
-0 8px 20px rgba(102,126,234,0.35);
+    transform:translateY(-2px);
 
 
-}
+    box-shadow:
 
-
-
-
-
-
-/* Empty state */
-
-
-.empty-assignment {
-
-
-background:white;
-
-padding:50px;
-
-border-radius:24px;
-
-text-align:center;
-
-box-shadow:
-0 8px 25px rgba(0,0,0,0.05);
+    0 8px 20px rgba(102,126,234,.35);
 
 
 }
 
 
-.empty-assignment h2 {
-
-
-color:#374151;
-
-}
 
 
 
-.empty-assignment p {
 
 
-color:#6b7280;
+/* =========================
+   GRADE DISPLAY
+========================= */
 
-}
 
 .grade-box {
 
-margin-top:20px;
 
-padding:18px;
+    margin-top:20px;
 
-background:#f0fdf4;
 
-border-radius:16px;
+    padding:18px;
 
-border-left:5px solid #22c55e;
+
+    background:
+
+
+    rgba(34,197,94,.12);
+
+
+    border-radius:16px;
+
+
+    border-left:
+
+    5px solid #22c55e;
+
 
 }
+
+
 
 
 .grade-box h4 {
 
-margin-bottom:5px;
 
-color:#166534;
+    margin-bottom:5px;
+
+
+    color:#22c55e;
+
 
 }
 
 
+
+
 .grade-box p {
 
-color:#374151;
 
-margin-bottom:12px;
+    color:var(--text);
+
+
+    margin-bottom:12px;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@media(max-width:900px){
+
+
+    .assignments-page {
+
+
+        padding:20px;
+
+
+    }
+
+
+
+    .assignments-header {
+
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+
+
+    }
+
+
+
+    .assignment-grid {
+
+
+        grid-template-columns:1fr;
+
+
+    }
+
+
+
+    .submit-page {
+
+
+        padding:20px;
+
+
+    }
+
+
+
+    .submit-card {
+
+
+        width:100%;
+
+
+        padding:30px;
+
+
+    }
+
 
 }

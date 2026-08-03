@@ -1,68 +1,108 @@
+/* =========================
+   STUDY PLAN CARD
+========================= */
+
+
 .study-plan-card {
 
-  position:relative;
 
-  overflow:hidden;
+    position:relative;
 
-  background:
-  linear-gradient(
-    135deg,
-    #ffffff,
-    #f8fafc,
-    #eef2ff
-  );
 
-  padding:32px;
+    overflow:hidden;
 
-  border-radius:26px;
 
-  margin-bottom:35px;
+    background:
 
-  border:1px solid #e2e8f0;
+    linear-gradient(
+        135deg,
+        var(--card-color),
+        var(--bg)
+    );
 
-  box-shadow:
-  0 20px 45px rgba(15,23,42,0.08);
 
-  transition:
-  transform 0.3s ease,
-  box-shadow 0.3s ease;
+    padding:32px;
+
+
+    border-radius:26px;
+
+
+    margin-bottom:35px;
+
+
+    border:1px solid var(--border-color);
+
+
+    box-shadow:
+
+    var(--shadow);
+
+
+    transition:
+
+    transform .3s ease,
+    box-shadow .3s ease;
+
 
 }
+
+
 
 
 
 .study-plan-card:hover {
 
-  transform:translateY(-5px);
 
-  box-shadow:
-  0 25px 55px rgba(99,102,241,0.15);
+    transform:translateY(-5px);
+
+
+    box-shadow:
+
+    0 25px 55px rgba(99,102,241,.15);
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   DECORATION
+========================= */
 
 
 .study-plan-card::before {
 
-  content:"";
 
-  position:absolute;
+    content:"";
 
-  width:200px;
 
-  height:200px;
+    position:absolute;
 
-  border-radius:50%;
 
-  background:#8b5cf6;
+    width:200px;
 
-  opacity:0.08;
 
-  right:-80px;
+    height:200px;
 
-  top:-80px;
+
+    border-radius:50%;
+
+
+    background:#8b5cf6;
+
+
+    opacity:.08;
+
+
+    right:-80px;
+
+
+    top:-80px;
+
 
 }
 
@@ -70,13 +110,24 @@
 
 
 
+
+
+/* =========================
+   HEADER
+========================= */
+
+
 .study-plan-header {
 
-  display:flex;
 
-  justify-content:space-between;
+    display:flex;
 
-  align-items:flex-start;
+
+    justify-content:space-between;
+
+
+    align-items:flex-start;
+
 
 }
 
@@ -86,23 +137,37 @@
 
 .study-plan-header h2 {
 
-  margin:0;
 
-  font-size:24px;
+    margin:0;
 
-  color:#0f172a;
+
+    font-size:24px;
+
+
+    color:var(--text-h);
+
 
 }
+
+
 
 
 
 .study-plan-header p {
 
-  margin-top:8px;
 
-  color:#64748b;
+    margin-top:8px;
+
+
+    color:var(--text);
+
+
+    opacity:.75;
+
 
 }
+
+
 
 
 
@@ -111,50 +176,64 @@
 .study-plan-header span {
 
 
-background:
+    background:
 
-linear-gradient(
-135deg,
-#8b5cf6,
-#6366f1
-);
-
-
-
-color:white;
+    linear-gradient(
+        135deg,
+        #8b5cf6,
+        #6366f1
+    );
 
 
-padding:8px 18px;
+    color:white;
 
 
-border-radius:30px;
+    padding:8px 18px;
 
 
-font-size:13px;
+    border-radius:30px;
 
 
-font-weight:700;
+    font-size:13px;
 
 
-text-transform:capitalize;
+    font-weight:700;
+
+
+    text-transform:capitalize;
+
 
 }
 
 
 
+
+
+
+
+/* =========================
+   DAYS
+========================= */
 
 
 .study-plan-days {
 
-  margin-top:30px;
 
-  display:flex;
+    margin-top:30px;
 
-  flex-direction:column;
 
-  gap:16px;
+    display:flex;
+
+
+    flex-direction:column;
+
+
+    gap:16px;
+
 
 }
+
+
 
 
 
@@ -163,28 +242,31 @@ text-transform:capitalize;
 .study-day {
 
 
-display:flex;
+    display:flex;
 
 
-gap:18px;
+    gap:18px;
 
 
-align-items:flex-start;
+    align-items:flex-start;
 
 
-background:white;
+    background:var(--card-color);
 
 
-padding:18px;
+    color:var(--text);
 
 
-border-radius:18px;
+    padding:18px;
 
 
-border:1px solid #e2e8f0;
+    border-radius:18px;
 
 
-transition:0.25s ease;
+    border:1px solid var(--border-color);
+
+
+    transition:.25s ease;
 
 
 }
@@ -196,52 +278,61 @@ transition:0.25s ease;
 .study-day:hover {
 
 
-transform:translateX(5px);
+    transform:translateX(5px);
 
 
-border-color:#c7d2fe;
+    border-color:#c7d2fe;
 
 
 }
 
 
 
+
+
+
+
+/* =========================
+   DAY NUMBER
+========================= */
 
 
 .day-number {
 
 
-min-width:65px;
+    min-width:65px;
 
 
-height:35px;
+    height:35px;
 
 
-display:flex;
+    display:flex;
 
 
-align-items:center;
+    align-items:center;
 
 
-justify-content:center;
+    justify-content:center;
 
 
-background:#eef2ff;
+    background:#eef2ff;
 
 
-color:#4f46e5;
+    color:#4f46e5;
 
 
-border-radius:12px;
+    border-radius:12px;
 
 
-font-weight:700;
+    font-weight:700;
 
 
-font-size:14px;
+    font-size:14px;
 
 
 }
+
+
 
 
 
@@ -250,13 +341,13 @@ font-size:14px;
 .study-day h3 {
 
 
-margin:0;
+    margin:0;
 
 
-font-size:17px;
+    font-size:17px;
 
 
-color:#111827;
+    color:var(--text-h);
 
 
 }
@@ -268,16 +359,19 @@ color:#111827;
 .study-day p {
 
 
-margin-top:6px;
+    margin-top:6px;
 
 
-color:#64748b;
+    color:var(--text);
 
 
-font-size:14px;
+    opacity:.75;
 
 
-line-height:1.5;
+    font-size:14px;
+
+
+    line-height:1.5;
 
 
 }
@@ -286,44 +380,50 @@ line-height:1.5;
 
 
 
+
+
+/* =========================
+   BUTTON
+========================= */
+
+
 .study-plan-card button {
 
 
-margin-top:25px;
+    margin-top:25px;
 
 
-padding:13px 25px;
+    padding:13px 25px;
 
 
-border:none;
+    border:none;
 
 
-border-radius:14px;
+    border-radius:14px;
 
 
-background:
+    background:
 
-linear-gradient(
-135deg,
-#4f46e5,
-#7c3aed
-);
-
-
-
-color:white;
+    linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
 
 
-font-weight:600;
+    color:white;
 
 
-font-size:15px;
+    font-weight:600;
 
 
-cursor:pointer;
+    font-size:15px;
 
 
-transition:0.25s ease;
+    cursor:pointer;
+
+
+    transition:.25s ease;
 
 
 }
@@ -335,37 +435,52 @@ transition:0.25s ease;
 .study-plan-card button:hover {
 
 
-transform:translateY(-3px);
+    transform:translateY(-3px);
 
 
-box-shadow:
+    box-shadow:
 
-0 12px 25px rgba(79,70,229,0.3);
+    0 12px 25px rgba(79,70,229,.3);
 
 
 }
 
 
 
+
+
+
+
+/* =========================
+   MOBILE
+========================= */
 
 
 @media(max-width:700px){
 
 
-.study-plan-header{
-
-flex-direction:column;
-
-gap:15px;
-
-}
+    .study-plan-header{
 
 
-.study-day{
+        flex-direction:column;
 
-flex-direction:column;
 
-}
+        gap:15px;
+
+
+    }
+
+
+
+
+
+    .study-day{
+
+
+        flex-direction:column;
+
+
+    }
 
 
 }

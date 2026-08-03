@@ -6,6 +6,7 @@ import { AnnouncementService } from "./announcements.service";
 export class AnnouncementController {
 
 
+
   static async createAnnouncement(
     req: AuthenticatedRequest,
     res: Response
@@ -21,27 +22,42 @@ export class AnnouncementController {
 
 
 
-      const postedBy = req.user?.id;
+      const postedBy =
+        req.user?.id;
 
 
 
-      if(!postedBy){
+      if (!postedBy) {
 
         return res.status(401).json({
-          message:"Unauthorized"
+          message: "Unauthorized"
         });
 
       }
 
 
 
-      if(!course_id){
+
+      if (!course_id) {
 
         return res.status(400).json({
-          message:"Course id is required"
+          message: "Course id is required"
         });
 
       }
+
+
+
+
+      if (!content) {
+
+        return res.status(400).json({
+          message: "Announcement content is required"
+        });
+
+      }
+
+
 
 
 
@@ -54,9 +70,12 @@ export class AnnouncementController {
 
 
 
+
+
       return res.status(201).json({
 
-        message:"Announcement created successfully",
+        message:
+          "Announcement created successfully",
 
         announcement
 
@@ -64,7 +83,8 @@ export class AnnouncementController {
 
 
 
-    } catch(error:any){
+    }
+    catch (error:any) {
 
 
       console.error(
@@ -73,11 +93,12 @@ export class AnnouncementController {
       );
 
 
+
       return res.status(500).json({
 
         message:
-        error.message ||
-        "Server error while creating announcement"
+          error.message ||
+          "Server error while creating announcement"
 
       });
 
@@ -90,16 +111,24 @@ export class AnnouncementController {
 
 
 
+
+
+
   static async getCourseAnnouncements(
     req: AuthenticatedRequest,
     res: Response
-  ){
+  ) {
 
-    try{
+    try {
+
 
 
       const courseId =
-        req.params.id as string;
+        String(
+          req.params.id
+        );
+
+
 
 
 
@@ -107,6 +136,8 @@ export class AnnouncementController {
         await AnnouncementService.getCourseAnnouncements(
           courseId
         );
+
+
 
 
 
@@ -118,7 +149,9 @@ export class AnnouncementController {
 
 
 
-    }catch(error){
+
+    }
+    catch (error) {
 
 
       console.error(
@@ -127,16 +160,20 @@ export class AnnouncementController {
       );
 
 
+
+
       return res.status(500).json({
 
         message:
-        "Server error while fetching announcements"
+          "Server error while fetching announcements"
 
       });
+
 
     }
 
   }
+
 
 
 }

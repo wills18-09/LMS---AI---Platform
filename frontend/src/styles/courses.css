@@ -1,0 +1,297 @@
+/* =========================
+   COURSE CATALOG PAGE
+========================= */
+
+
+.courses-page {
+
+    min-height:100vh;
+
+    padding:40px;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+}
+
+
+
+
+
+.courses-page h1 {
+
+    font-size:36px;
+
+    margin-bottom:25px;
+
+    color:var(--text-h);
+
+}
+
+
+
+
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+
+.course-message {
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    padding:15px 20px;
+
+    border-radius:12px;
+
+    margin-bottom:25px;
+
+    font-weight:600;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   COURSE GRID
+========================= */
+
+
+.available-course-grid {
+
+
+    display:grid;
+
+
+    grid-template-columns:
+
+    repeat(
+        auto-fit,
+        minmax(280px,1fr)
+    );
+
+
+    gap:25px;
+
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+   COURSE CARD
+========================= */
+
+
+.available-course-card {
+
+
+    background:var(--card-color);
+
+
+    border:
+
+    1px solid var(--border-color);
+
+
+
+    border-radius:22px;
+
+
+    padding:25px;
+
+
+
+    box-shadow:
+
+    var(--shadow);
+
+
+
+    transition:.3s;
+
+
+}
+
+
+
+
+.available-course-card:hover {
+
+
+    transform:
+
+    translateY(-5px);
+
+
+}
+
+
+
+
+
+
+
+.available-course-card h2 {
+
+
+    color:var(--text-h);
+
+
+    font-size:22px;
+
+
+    margin-bottom:12px;
+
+
+}
+
+
+
+
+
+.available-course-card p {
+
+
+    color:var(--text);
+
+
+    opacity:.75;
+
+
+    line-height:1.6;
+
+
+    min-height:70px;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   ENROLL BUTTON
+========================= */
+
+
+.available-course-card button {
+
+
+    width:100%;
+
+
+    margin-top:20px;
+
+
+    padding:13px;
+
+
+    border:none;
+
+
+    border-radius:12px;
+
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
+
+
+    color:white;
+
+
+    font-weight:600;
+
+
+    font-size:15px;
+
+
+    cursor:pointer;
+
+
+    transition:.3s;
+
+
+}
+
+
+
+
+
+.available-course-card button:hover {
+
+
+    transform:
+
+    translateY(-3px);
+
+
+    box-shadow:
+
+    0 10px 25px
+
+    rgba(
+        102,
+        126,
+        234,
+        .35
+    );
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   MOBILE
+========================= */
+
+
+@media(max-width:700px){
+
+
+    .courses-page {
+
+        padding:20px;
+
+    }
+
+
+
+    .courses-page h1 {
+
+
+        font-size:28px;
+
+
+    }
+
+
+}

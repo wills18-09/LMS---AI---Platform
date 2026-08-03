@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 
 import Login from "../pages/auth/Login";
+import Register from "../pages/auth/Register";
+
 import Dashboard from "../pages/dashboard/dashboard";
 import CourseDetails from "../pages/CourseDetails";
 import CoursePlayer from "../pages/coursePlayer/CoursePlayer";
@@ -27,6 +29,9 @@ import Certificates from "../pages/student/certificates";
 
 import AdminDashboard from "../pages/adminPanel/adminDashboard";
 
+import Layout from "../components/common/Layout";
+
+import Courses from "../pages/student/Courses";
 
 function AppRoutes() {
 
@@ -45,6 +50,14 @@ element={<Login />}
 
 />
 
+
+<Route
+ path="/register"
+ element={<Register/>}
+/>
+
+
+<Route element={<Layout />}>
 
 
 
@@ -66,7 +79,10 @@ element={
 />
 
 
-
+<Route
+    path="/courses"
+    element={<Courses/>}
+/>
 
 
 <Route
@@ -394,6 +410,10 @@ element={
 
 />
 
+
+
+
+
 <Route
 
 path="/certificates"
@@ -411,7 +431,12 @@ element={
 />
 
 
+
+
+
 {/* Admin Dashboard */}
+
+
 
 <Route
 
@@ -429,6 +454,11 @@ element={
 
 />
 
+
+
+
+
+</Route>
 
 
 

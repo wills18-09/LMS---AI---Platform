@@ -27,6 +27,8 @@ import flashcardRoutes from "./modules/flashcards/flashcards.routes";
 import quizAIRoutes from "./modules/quizzes/quizzes.ai.routes";
 import summaryRoutes from "./modules/ai/summary.routes";
 import masteryRoutes from "./modules/mastery/mastery.routes";
+import preferencesRoutes from "./modules/preferences/preferences.routes";
+import recommendationsRoutes from "./modules/recommendations/recommendations.routes";
 
 
 const app = express();
@@ -107,6 +109,10 @@ app.use("/api/v1/quizzes/ai",quizAIRoutes);
 app.use("/api/v1/ai/summary",summaryRoutes);
 
 app.use("/api/v1/mastery",masteryRoutes);
+
+app.use("/api/v1/preferences",preferencesRoutes);
+
+app.use("/api/v1/recommendations",recommendationsRoutes);
 
 
 

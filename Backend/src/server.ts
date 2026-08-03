@@ -29,6 +29,7 @@ import summaryRoutes from "./modules/ai/summary.routes";
 import masteryRoutes from "./modules/mastery/mastery.routes";
 import preferencesRoutes from "./modules/preferences/preferences.routes";
 import recommendationsRoutes from "./modules/recommendations/recommendations.routes";
+import studyPlansRoutes from "./modules/studyPlans/studyPlans.routes";
 
 
 const app = express();
@@ -114,7 +115,7 @@ app.use("/api/v1/preferences",preferencesRoutes);
 
 app.use("/api/v1/recommendations",recommendationsRoutes);
 
-
+app.use("/api/v1/study-plans",studyPlansRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('LMS AI Platform Backend Engine is running smoothly.');

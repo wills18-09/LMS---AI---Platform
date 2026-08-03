@@ -77,29 +77,38 @@ function Login() {
       );
 
 
+      if(user.role==="admin"){
 
+    navigate(
+        "/admin"
+    );
 
-      if(user.role==="instructor"){
+}
 
-        navigate(
-          "/instructor/dashboard"
-        );
+else if(user.role==="instructor"){
 
-      }
-      else if(user.role==="student"){
+    navigate(
+        "/instructor/dashboard"
+    );
 
-        navigate(
-          "/dashboard"
-        );
+}
 
-      }
-      else{
+else if(user.role==="student"){
 
-        navigate(
-          "/dashboard"
-        );
+    navigate(
+        "/dashboard"
+    );
 
-      }
+}
+
+else{
+
+    navigate(
+        "/dashboard"
+    );
+
+}
+
 
 
 

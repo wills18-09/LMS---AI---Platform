@@ -37,7 +37,31 @@ router.put(
   AdminController.suspendUser
 );
 
+// Pending courses
+router.get(
+  "/courses/pending",
+  authenticateToken,
+  authorizeRoles("admin"),
+  AdminController.getPendingCourses
+);
 
+
+// Approve course
+router.put(
+  "/courses/:id/approve",
+  authenticateToken,
+  authorizeRoles("admin"),
+  AdminController.approveCourse
+);
+
+
+// Reject course
+router.put(
+  "/courses/:id/reject",
+  authenticateToken,
+  authorizeRoles("admin"),
+  AdminController.rejectCourse
+);
 
 // Platform analytics
 router.get(

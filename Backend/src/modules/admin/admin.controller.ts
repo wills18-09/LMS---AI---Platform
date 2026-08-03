@@ -109,6 +109,128 @@ export class AdminController {
   }
 
 
+  // Get pending courses
+static async getPendingCourses(
+  req: Request,
+  res: Response
+) {
+
+  try {
+
+    const courses =
+      await AdminService.getPendingCourses();
+
+    res.json({
+      courses
+    });
+
+  }
+  catch (error) {
+
+    console.error(
+      "GET PENDING COURSES ERROR:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Failed to fetch pending courses"
+    });
+
+  }
+
+}
+
+
+
+// Approve course
+// Approve course
+static async approveCourse(
+  req: Request,
+  res: Response
+) {
+
+  try {
+
+    const { id } = req.params as {
+      id: string;
+    };
+
+
+    const course =
+      await AdminService.approveCourse(
+        id
+      );
+
+
+    res.json({
+      message: "Course approved successfully",
+      course
+    });
+
+
+  }
+  catch (error) {
+
+    console.error(
+      "APPROVE COURSE ERROR:",
+      error
+    );
+
+
+    res.status(500).json({
+      message: "Failed to approve course"
+    });
+
+  }
+
+}
+
+
+
+
+
+// Reject course
+static async rejectCourse(
+  req: Request,
+  res: Response
+) {
+
+  try {
+
+    const { id } = req.params as {
+      id: string;
+    };
+
+
+    const course =
+      await AdminService.rejectCourse(
+        id
+      );
+
+
+    res.json({
+      message: "Course rejected successfully",
+      course
+    });
+
+
+  }
+  catch (error) {
+
+    console.error(
+      "REJECT COURSE ERROR:",
+      error
+    );
+
+
+    res.status(500).json({
+      message: "Failed to reject course"
+    });
+
+  }
+
+}
+
 
 
   // Platform analytics overview

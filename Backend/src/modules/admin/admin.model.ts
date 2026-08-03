@@ -1,6 +1,9 @@
 import pool from "../../db";
 
+
 export class AdminModel {
+
+
 
   // Get all users with their roles
   static async getUsers() {
@@ -26,8 +29,12 @@ export class AdminModel {
       `
     );
 
+
     return result.rows;
+
   }
+
+
 
 
 
@@ -37,7 +44,7 @@ export class AdminModel {
     roleName: string
   ) {
 
-    // Find role id
+
     const roleResult = await pool.query(
       `
       SELECT id
@@ -50,18 +57,26 @@ export class AdminModel {
     );
 
 
+
     if (roleResult.rows.length === 0) {
-      throw new Error("Role not found");
+
+      throw new Error(
+        "Role not found"
+      );
+
     }
 
 
-    const roleId = roleResult.rows[0].id;
+
+    const roleId =
+      roleResult.rows[0].id;
 
 
-    // Remove existing role
+
     await pool.query(
       `
       DELETE FROM user_roles
+
       WHERE user_id = $1
       `,
       [
@@ -70,7 +85,9 @@ export class AdminModel {
     );
 
 
-    // Add new role
+
+
+
     const result = await pool.query(
       `
       INSERT INTO user_roles(
@@ -89,9 +106,12 @@ export class AdminModel {
     );
 
 
+
     return result.rows[0];
 
   }
+
+
 
 
 
@@ -100,11 +120,13 @@ export class AdminModel {
     userId: string
   ) {
 
+
     const result = await pool.query(
       `
       UPDATE users
 
-      SET is_active = false
+      SET
+        is_active = false
 
       WHERE id = $1
 
@@ -119,23 +141,150 @@ export class AdminModel {
     );
 
 
+
     return result.rows[0];
 
   }
 
 
 
-  // Admin dashboard overview stats
-  static async getOverview() {
+
+
+  // Get all pending courses
+  static async getPendingCourses() {
+
 
     const result = await pool.query(
       `
       SELECT
 
+        c.id,
+        c.title,
+        c.description,
+        c.category,
+        c.difficulty,
+        c.price,
+        c.status,
+        c.created_at,
+
+        u.full_name AS instructor_name
+
+
+      FROM courses c
+
+
+      JOIN users u
+
+      ON c.instructor_id = u.id
+
+
+      WHERE c.status = 'pending'
+
+
+      ORDER BY c.created_at ASC;
+      `
+    );
+
+
+
+    return result.rows;
+
+  }
+
+
+
+
+
+  // Approve course
+  static async approveCourse(
+    courseId: string
+  ) {
+
+
+    const result = await pool.query(
+      `
+      UPDATE courses
+
+
+      SET
+
+        status = 'approved',
+
+        updated_at = NOW()
+
+
+      WHERE id = $1
+
+
+      RETURNING *;
+      `,
+      [
+        courseId
+      ]
+    );
+
+
+
+    return result.rows[0];
+
+  }
+
+
+
+
+
+  // Reject course
+  static async rejectCourse(
+    courseId: string
+  ) {
+
+
+    const result = await pool.query(
+      `
+      UPDATE courses
+
+
+      SET
+
+        status = 'rejected',
+
+        updated_at = NOW()
+
+
+      WHERE id = $1
+
+
+      RETURNING *;
+      `,
+      [
+        courseId
+      ]
+    );
+
+
+
+    return result.rows[0];
+
+  }
+
+
+
+
+
+  // Admin dashboard overview stats
+  static async getOverview() {
+
+
+    const result = await pool.query(
+      `
+      SELECT
+
+
       (
         SELECT COUNT(*)
         FROM users
       ) AS total_users,
+
 
 
       (
@@ -144,10 +293,12 @@ export class AdminModel {
       ) AS total_courses,
 
 
+
       (
         SELECT COUNT(*)
         FROM enrollments
       ) AS total_enrollments,
+
 
 
       (
@@ -159,8 +310,11 @@ export class AdminModel {
     );
 
 
+
     return result.rows[0];
 
   }
+
+
 
 }

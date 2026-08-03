@@ -1,7 +1,9 @@
 import { AdminModel } from "./admin.model";
 
 
+
 export class AdminService {
+
 
 
   static async getUsers() {
@@ -9,6 +11,8 @@ export class AdminService {
     return await AdminModel.getUsers();
 
   }
+
+
 
 
 
@@ -26,6 +30,8 @@ export class AdminService {
 
 
 
+
+
   static async suspendUser(
     userId: string
   ) {
@@ -38,10 +44,55 @@ export class AdminService {
 
 
 
+
+
+  // Get courses waiting for admin approval
+  static async getPendingCourses() {
+
+    return await AdminModel.getPendingCourses();
+
+  }
+
+
+
+
+
+  // Approve course
+  static async approveCourse(
+    courseId: string
+  ) {
+
+    return await AdminModel.approveCourse(
+      courseId
+    );
+
+  }
+
+
+
+
+
+  // Reject course
+  static async rejectCourse(
+    courseId: string
+  ) {
+
+    return await AdminModel.rejectCourse(
+      courseId
+    );
+
+  }
+
+
+
+
+
   static async getOverview() {
 
     return await AdminModel.getOverview();
 
   }
+
+
 
 }

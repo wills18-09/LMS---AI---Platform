@@ -25,6 +25,8 @@ import InstructorQuiz from "../pages/instructor/instructorQuiz";
 
 import Certificates from "../pages/student/certificates";
 
+import AdminDashboard from "../pages/adminPanel/adminDashboard";
+
 
 function AppRoutes() {
 
@@ -408,6 +410,24 @@ element={
 
 />
 
+
+{/* Admin Dashboard */}
+
+<Route
+
+path="/admin"
+
+element={
+
+<ProtectedRoute>
+
+<AdminDashboard />
+
+</ProtectedRoute>
+
+}
+
+/>
 
 
 

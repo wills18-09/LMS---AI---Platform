@@ -30,7 +30,7 @@ import masteryRoutes from "./modules/mastery/mastery.routes";
 import preferencesRoutes from "./modules/preferences/preferences.routes";
 import recommendationsRoutes from "./modules/recommendations/recommendations.routes";
 import studyPlansRoutes from "./modules/studyPlans/studyPlans.routes";
-
+import chatSessionRoutes from "./modules/ai/chatSession.routes";
 
 const app = express();
 app.use(
@@ -102,6 +102,8 @@ app.use("/api/v1",announcementRoutes);
 app.use("/api/v1",uploadRoutes);
 
 app.use("/api/v1/ai",aiRoutes);
+
+app.use("/api/v1/ai",chatSessionRoutes);
 
 app.use("/api/v1/flashcards",flashcardRoutes);
 

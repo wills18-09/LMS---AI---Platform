@@ -1,6 +1,8 @@
 import {
   generateFlashcards,
-  generateSummary
+  generateSummary,
+  createChatSession,
+  updateChatMode
 } from "../../services/ai.service";
 
 import {
@@ -175,34 +177,80 @@ useState<
 >("notes");
 
 
-
 const [question,setQuestion] =
 useState("");
+
+
 
 const [aiAnswer,setAiAnswer] =
 useState("");
 
+
+
+const [sessionId,setSessionId] =
+useState<string | null>(null);
+
+
+
+const [chatMode,setChatMode] =
+useState(
+"intermediate"
+);
+
+
+
+const [chatMessages,setChatMessages] =
+useState<
+{
+  role:"user" | "assistant";
+  text:string;
+}[]
+>([]);
+
+
+
 const [aiLoading,setAiLoading] =
 useState(false);
+
+
 
 const [showAI,setShowAI] =
 useState(false);
 
+
+
 const [flashcards,setFlashcards] =
 useState<any[]>([]);
 
-const [summary,setSummary] = useState("");
 
-const [quiz,setQuiz] = useState<any>(null);
 
-const [quizAnswers,setQuizAnswers] = useState<any[]>([]);
+const [summary,setSummary] =
+useState("");
+
+
+
+const [quiz,setQuiz] =
+useState<any>(null);
+
+
+
+const [quizAnswers,setQuizAnswers] =
+useState<any[]>([]);
+
+
 
 const [currentQuizQuestion,setCurrentQuizQuestion] =
 useState(0);
 
-const [quizLoading,setQuizLoading] = useState(false);
 
-const [quizResult,setQuizResult] = useState<any>(null);
+
+const [quizLoading,setQuizLoading] =
+useState(false);
+
+
+
+const [quizResult,setQuizResult] =
+useState<any>(null);
 
 
 
@@ -1166,6 +1214,47 @@ await api.post(
 
 };
 
+const openAITutor = async()=>{
+
+try{
+
+
+if(!courseId){
+
+return;
+
+}
+
+
+const response =
+await createChatSession(
+courseId
+);
+
+
+setSessionId(
+response.session.id
+);
+
+
+setShowAI(true);
+
+
+}
+catch(error){
+
+console.error(
+"Creating AI session failed:",
+error
+);
+
+
+}
+
+};
+
+
+
 // AI TUTOR
 
 
@@ -1181,16 +1270,32 @@ setAiLoading(true);
 
 const response =
 await api.post(
-"/ai/chat",
+"/ai/chat/sessions/"+sessionId+"/messages",
 {
 message:question
 }
 );
 
-setAiAnswer(
-    response.data.reply
+setChatMessages(
+previous => [
+
+...previous,
+
+{
+role:"user",
+text:question
+},
+
+{
+role:"assistant",
+text:response.data.reply
+}
+
+]
 );
 
+
+setQuestion("");
 
 }
 catch(error){
@@ -1823,7 +1928,7 @@ Resource {index+1}
 
 className="ai-floating-btn"
 
-onClick={()=>setShowAI(!showAI)}
+onClick={openAITutor}
 
 >
 
@@ -1843,74 +1948,289 @@ onClick={()=>setShowAI(!showAI)}
     <div className="ai-header">
 
 
-        <div>
+<div>
 
-            <h2>
-                🤖 AI Study Assistant
-            </h2>
-
-            <p>
-                Ask questions or generate study material.
-            </p>
-
-        </div>
+<h2>
+🤖 AI Study Assistant
+</h2>
 
 
-
-        <button
-
-            className="close-btn"
-
-            onClick={() => setShowAI(false)}
-
-        >
-
-            ✕
-
-        </button>
+<p>
+Ask questions from this lecture.
+</p>
 
 
-    </div>
+</div>
 
 
 
+<select
+
+className="ai-mode-select"
+
+value={chatMode}
+
+onChange={
+e=>setChatMode(e.target.value)
+}
+
+>
+
+<option value="beginner">
+Beginner
+</option>
 
 
-    <div className="ai-chat-section">
+<option value="intermediate">
+Intermediate
+</option>
 
 
-        <input
+<option value="advanced">
+Advanced
+</option>
 
-            placeholder="Ask anything about this lecture..."
 
-            value={question}
-
-            onChange={(e)=>setQuestion(e.target.value)}
-
-        />
+</select>
 
 
 
-        <button
+<button
 
-            onClick={askAI}
+className="close-btn"
 
-            disabled={aiLoading}
+onClick={() => setShowAI(false)}
 
-        >
+>
 
-            {
-            aiLoading
-            ?
-            "Thinking..."
-            :
-            "Ask AI"
-            }
+✕
 
-        </button>
+</button>
 
 
-    </div>
+</div>
+
+
+
+<div className="ai-chat-window">
+
+<div className="ai-mode-container">
+
+
+<div className="mode-title">
+
+<span className="mode-icon">
+🧠
+</span>
+
+
+<div>
+
+<h4>
+AI Explanation Style
+</h4>
+
+
+<p>
+Choose how your tutor explains concepts
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+<select
+
+className="ai-mode-select"
+
+value={chatMode}
+
+onChange={async(e)=>{
+
+
+const mode =
+e.target.value;
+
+
+setChatMode(mode);
+
+
+
+if(sessionId){
+
+await updateChatMode(
+sessionId,
+mode
+);
+
+}
+
+
+}}
+
+>
+
+
+<option value="beginner">
+🌱 Beginner Friendly
+</option>
+
+
+<option value="intermediate">
+📘 Balanced Explanation
+</option>
+
+
+<option value="advanced">
+🚀 Advanced Deep Dive
+</option>
+
+
+</select>
+
+
+
+</div>
+
+
+
+
+
+<div className="chat-messages">
+
+
+{
+
+chatMessages.map(
+
+(message,index)=>(
+
+
+<div
+
+key={index}
+
+className={
+
+message.role === "user"
+
+?
+
+"chat-message user-message"
+
+:
+
+"chat-message ai-message"
+
+}
+
+>
+
+
+<p>
+
+{message.text}
+
+</p>
+
+
+</div>
+
+
+)
+
+)
+
+}
+
+
+
+
+
+{
+
+aiLoading &&
+
+
+<div className="chat-message ai-message typing">
+
+🤖 Thinking...
+
+</div>
+
+
+}
+
+
+
+</div>
+
+
+
+
+
+
+<div className="chat-input-area">
+
+
+<input
+
+placeholder="Ask anything about this lecture..."
+
+value={question}
+
+onChange={
+
+(e)=>
+
+setQuestion(
+e.target.value
+)
+
+}
+
+
+/>
+
+
+
+<button
+
+onClick={askAI}
+
+disabled={aiLoading}
+
+>
+
+{
+
+aiLoading
+
+?
+
+"Thinking..."
+
+:
+
+"Send"
+
+}
+
+
+</button>
+
+
+
+</div>
+
+
+
+</div>
 
 
 

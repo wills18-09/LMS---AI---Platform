@@ -69,3 +69,39 @@ export const generateSummary = async(
     return response.data;
 
 };
+
+export const createChatSession = async(
+courseId:string
+)=>{
+
+const response =
+await api.post(
+"/ai/chat/sessions",
+{
+course_id:courseId
+}
+);
+
+return response.data;
+
+};
+
+
+
+
+export const updateChatMode = async(
+sessionId:string,
+mode:string
+)=>{
+
+const response =
+await api.put(
+`/ai/chat/sessions/${sessionId}/mode`,
+{
+mode
+}
+);
+
+return response.data;
+
+};
